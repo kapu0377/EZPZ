@@ -1,80 +1,119 @@
-"use client"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "./ProhibitedItems.css";
 
-import { useState } from "react"
-import "./ProhibitedItems.css"
+const CATEGORY_NAMES = {
+  "화학물질 및 유독성 물질": "화학물질",
+  "국토해양부장관이 지정한 고위험이 예상되는 비행편 또는 항공보안 등급 경계경보(Orange) 단계이상": "고위험 비행편",
+  "액체/겔(gel)류 물질": "액체/겔",
+  "폭발물과 인화성 물질": "폭발/인화성",
+  "화기류, 총기류,무기류": "화기류",
+  "끝이 뾰족한 무기및 날카로운 물체": "날붙이"
+};
 
-const categories = [
-  { id: "liquids", name: "액체/겔" },
-  { id: "firearms", name: "화기류" },
-  { id: "chemicals", name: "화학물질" },
-  { id: "flammables", name: "인화성 물질" },
-  { id: "blunt", name: "둔기" },
-  { id: "sharp", name: "날카로운 물체" },
-  { id: "alert", name: "경계경보" },
-]
+const CATEGORY_ICONS = {
+  "화학물질": "🧪",
+  "고위험 비행편": "✈️",
+  "액체/겔": "💧",
+  "폭발/인화성": "💥",
+  "화기류": "🔫",
+  "날붙이": "🔪",
+  "둔기":"🔨"
+};
 
-const itemsData = {
-  liquids: {
-    items: ["물", "음료수", "샴푸", "로션"],
-    description: "100ml 이상의 액체는 기내 반입이 금지됩니다.",
-  },
-  firearms: {
-    items: ["총기", "모의 총기", "장난감 총"],
-    description: "모든 종류의 총기류는 기내 반입이 엄격히 금지됩니다.",
-  },
-  chemicals: {
-    items: ["산성 물질", "알칼리성 물질", "독성 물질"],
-    description: "위험한 화학 물질은 기내 반입이 금지됩니다.",
-  },
-  flammables: {
-    items: ["라이터", "성냥", "가연성 스프레이"],
-    description: "인화성 물질은 화재의 위험이 있어 기내 반입이 금지됩니다.",
-  },
-  blunt: {
-    items: ["야구 방망이", "골프 클럽", "하키 스틱"],
-    description: "무기로 사용될 수 있는 둔기는 기내 반입이 금지됩니다.",
-  },
-  sharp: {
-    items: ["칼", "가위", "면도칼"],
-    description: "날카로운 물체는 위험하여 기내 반입이 금지됩니다.",
-  },
-  alert: {
-    items: ["폭발물", "방사성 물질", "생물학적 위험 물질"],
-    description: "고위험 물질은 절대 기내에 반입할 수 없습니다.",
-  },
-}
+const CATEGORY_DESCRIPTIONS = {
+  "화학물질": "인체에 해롭거나 위험한 화학물질은 기내 반입이 제한됩니다.",
+  "고위험 비행편": "안전상의 이유로 고위험 비행편에서는 추가 제한이 적용됩니다.",
+  "둔기": "무겁고 둔탁한 손상을 입힐 수 있는 도구는 기내 반입이 제한됩니다.",
+  "액체/겔": "액체 및 젤류는 일정 용량 이상 반입이 제한됩니다.",
+  "폭발/인화성": "폭발성 또는 인화성 물질은 기내 반입이 금지됩니다.",
+  "화기류": "모든 종류의 화기 및 무기류는 기내 반입이 금지됩니다.",
+  "날붙이": "날카로운 물체나 끝이 뾰족한 도구는 기내 반입이 제한됩니다."
+};
+
 
 function ProhibitedItems() {
-  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [itemsData, setItemsData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/prohibit-items")
+      .then((response) => {
+        setItemsData(response.data);
+      })
+      .catch((error) => console.error("API 요청 오류:", error));
+  }, []);
+
+  const categories = [...new Set(itemsData.map(item => item.gubun))];
+
+  const openModal = (category) => {
+    setSelectedCategory(category);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="prohibited-items">
-      <h1>기내 금지 물품 목록</h1>
-      <div className="categories">
-        {categories.map((category) => (
-          <button
-            key={category.id}
-            className={`category-button ${selectedCategory === category.id ? "active" : ""}`}
-            onClick={() => setSelectedCategory(category.id)}
+      <div className="description-section">
+        <h1>기내 금지 물품 목록</h1>
+        <p>
+          항공 안전을 위해 기내 반입이 금지된 물품 목록입니다. 
+          각 카테고리를 클릭하면 상세 정보를 확인할 수 있습니다.
+        </p>
+      </div>
+
+      <div className="cards-container">
+        {categories.map((category, index) => (
+          <div
+            key={index}
+            className="card"
+            onClick={() => openModal(category)}
           >
-            {category.name}
-          </button>
+            <div className="card-header">
+              <span className="icon">{CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}</span>
+              <h2>{CATEGORY_NAMES[category] || category}</h2>
+            </div>
+            <div className="card-body">
+              <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
+            </div>
+          </div>
         ))}
       </div>
-      {selectedCategory && (
-        <div className="category-details">
-          <h2>{categories.find((c) => c.id === selectedCategory).name}</h2>
-          <p>{itemsData[selectedCategory].description}</p>
-          <ul>
-            {itemsData[selectedCategory].items.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+
+      {isModalOpen && selectedCategory && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={closeModal}>✖</button>
+            <h2>{CATEGORY_NAMES[selectedCategory] || selectedCategory}</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>금지 물품</th>
+                  <th>기내 반입 여부</th>
+                </tr>
+              </thead>
+              <tbody>
+                {itemsData
+                  .filter(item => item.gubun === selectedCategory)
+                  .map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{item.carryBan}</td>
+                      <td>{item.cabin === "Y" ? "허용" : "금지"}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default ProhibitedItems
-
+export default ProhibitedItems;
