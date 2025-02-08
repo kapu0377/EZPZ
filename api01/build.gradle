@@ -54,6 +54,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'io.jsonwebtoken:jjwt:0.12.6'
 
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+
     //querydsl : 동적쿼리용 라이브러리
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta")
