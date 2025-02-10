@@ -1,8 +1,9 @@
 package org.zerock.api01.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,9 +13,12 @@ import lombok.*;
 @ToString
 public class APIUser {
   @Id
-  private String mid;
-  private String mpw;
-  public void changePw(String mpw){
-    this.mpw = mpw;
-  }
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private String username;
+  private String password;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Checklist> checklists;
 }

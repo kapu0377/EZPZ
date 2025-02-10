@@ -3,5 +3,8 @@ package org.zerock.api01.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.zerock.api01.domain.APIUser;
 
-public interface APIUserRepository extends JpaRepository<APIUser, String> {
+import java.util.Optional;
+
+public interface APIUserRepository extends JpaRepository<APIUser, Long> {
+    Optional<APIUser> findByUsername(String username);
 }
