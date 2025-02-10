@@ -1,0 +1,10 @@
+ezpacking/src/main/resources/Oracle_JDK-21/
+ezpacking/build/
+ezpacking/target/
+ezpacking/bin/main/Oracle_JDK-21/
+
+*.jar
+*.class
+
+.idea/
+.vscode/
