@@ -23,13 +23,13 @@ public class APIUserDetailService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     // 데이터베이스에서 user정보를 취득
-    Optional<APIUser> result = apiUserRepository.findById(username);
+    Optional<APIUser> result = apiUserRepository.findById(Long.valueOf(username));
     // Optional데이터를 일반 entity로 변경
     APIUser apiUser = result.orElseThrow(() -> new UsernameNotFoundException(username));
     // Entity 데이터를 dto로 변경
     APIUserDTO dto = new APIUserDTO(
-        apiUser.getMid(),
-        apiUser.getMpw(),
+        apiUser.getUsername(),
+        apiUser.getPassword(),
         List.of(new SimpleGrantedAuthority("ROLE_USER"))
     );
     // 완성한 dto데이터를 반환
