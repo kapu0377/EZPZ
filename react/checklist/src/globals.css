@@ -179,6 +179,24 @@ body {
   .delete-button:hover {
     color: #a3001a;
   }
+
+  .save-button {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+
+  .save-button:hover {
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    transform: translateY(-3px);
+  }
   
   
   @media (max-width: 1024px) {

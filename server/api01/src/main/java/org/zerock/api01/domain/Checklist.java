@@ -2,12 +2,14 @@ package org.zerock.api01.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "checklists")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Checklist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +19,4 @@ public class Checklist {
     private String item;
     private Boolean isChecked = false;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private APIUser user;
-
-    public void setUser(APIUser user) {
-    }
 }

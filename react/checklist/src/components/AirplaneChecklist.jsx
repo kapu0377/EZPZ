@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../';
+import { addChecklistItem, updateChecklistItem, deleteChecklistItem } from '../services/checklistApi';
+import '../globals.css';
 
 const initialData = {
   '필수 준비물': ['여권', '신분증', '탑승권'],
@@ -37,6 +38,23 @@ export default function AirplaneChecklist() {
 
   const handleInputChange = (category, value) => {
     setNewItem({ ...newItem, [category]: value });
+  };
+
+  const handleSave = async () => {
+    try {
+      for (const category in checklist) {
+        for (const item of checklist[category]) {
+          const isChecked = item.startsWith('✅ ');
+          const cleanItem = isChecked ? item.slice(2) : item;
+
+          await addChecklistItem(category, cleanItem, isChecked);
+        }
+      }
+      alert('체크리스트가 성공적으로 저장되었습니다.');
+    } catch (error) {
+      console.error('저장 오류:', error);
+      alert('저장 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -77,6 +95,7 @@ export default function AirplaneChecklist() {
           </div>
         ))}
       </div>
+      <button className="save-button" onClick={handleSave}>저장</button>
     </div>
   );
 }

@@ -19,6 +19,4 @@ public class APIUser {
   private String username;
   private String password;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private List<Checklist> checklists;
 }

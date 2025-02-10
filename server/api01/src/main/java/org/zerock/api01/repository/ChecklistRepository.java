@@ -6,5 +6,5 @@ import org.zerock.api01.domain.Checklist;
 import java.util.List;
 
 public interface ChecklistRepository extends JpaRepository<Checklist, Long> {
-    List<Checklist> findByUserId(Long userId);
+    List<Checklist> findByCategory(String category);
 }

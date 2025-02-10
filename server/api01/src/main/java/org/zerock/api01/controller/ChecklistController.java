@@ -2,48 +2,42 @@ package org.zerock.api01.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.zerock.api01.domain.APIUser;
 import org.zerock.api01.domain.Checklist;
-import org.zerock.api01.repository.APIUserRepository;
 import org.zerock.api01.repository.ChecklistRepository;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/checklists")
+@RequestMapping("/api/checklist")
 public class ChecklistController {
+
     @Autowired
     private ChecklistRepository checklistRepository;
 
-    @Autowired
-    private APIUserRepository userRepository;
-
-    // 특정 유저의 체크리스트 불러오기
-    @GetMapping("/{userId}")
-    public List<Checklist> getUserChecklist(@PathVariable Long userId) {
-        return checklistRepository.findByUserId(userId);
+    // ✅ 모든 항목 조회
+    @GetMapping
+    public List<Checklist> getAllItems() {
+        return checklistRepository.findAll();
     }
 
-    // 체크리스트 추가
-    @PostMapping("/{userId}")
-    public Checklist addChecklist(@PathVariable Long userId, @RequestBody Checklist checklist) {
-        APIUser user = userRepository.findById(userId).orElseThrow();
-        checklist.setUser(user);
-        return checklistRepository.save(checklist);
+    // ✅ 항목 추가
+    @PostMapping
+    public Checklist addItem(@RequestBody Checklist item) {
+        return checklistRepository.save(item);
     }
 
-    // 체크 상태 업데이트
+    // ✅ 항목 업데이트
     @PutMapping("/{id}")
-    public Checklist updateChecklist(@PathVariable Long id, @RequestBody Checklist updatedChecklist) {
-        Checklist checklist = checklistRepository.findById(id).orElseThrow();
-        checklist.setIsChecked(updatedChecklist.getIsChecked());
-        return checklistRepository.save(checklist);
+    public Checklist updateItem(@PathVariable Long id, @RequestBody Checklist updatedItem) {
+        Checklist item = checklistRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+        item.setIsChecked(updatedItem.getIsChecked());
+        return checklistRepository.save(item);
     }
 
-    // 항목 삭제
+    // ✅ 항목 삭제
     @DeleteMapping("/{id}")
-    public void deleteChecklist(@PathVariable Long id) {
+    public void deleteItem(@PathVariable Long id) {
         checklistRepository.deleteById(id);
     }
 }
-
