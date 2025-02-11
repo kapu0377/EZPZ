@@ -9,7 +9,7 @@ const EZPackingLayout = () => {
       <div className="main-content">
         <div className="content-box">금지물품</div>
         <div className="content-box">체크리스트</div>
-        <div className="content-box">공항 별 적발현황</div>
+        <div className="content-box">공항 별 주차현황</div>
         <div className="content-box">게시판</div>
       </div>
       <Footer />
