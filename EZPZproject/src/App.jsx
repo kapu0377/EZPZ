@@ -7,6 +7,7 @@ import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
 import "./App.css";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
+import Notice from "./components/board/Notice.css";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/prohibit" element={<ProhibitedItems />} />
+            <Route path="/board" element={<Notice />} />
           </Routes>
         </div>
       </Router>

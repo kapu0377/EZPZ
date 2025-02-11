@@ -18,7 +18,7 @@ const Header = () => {
           </div>
         )}
         <nav className="main-nav">
-          <Link to="/prohibited">금지물품</Link>
+          <Link to="/prohibit">금지물품</Link>
           <Link to="/detection">적발현황</Link>
           {user && <Link to="/mypage">마이페이지</Link>}
           {!user && <Link to="/login">로그인</Link>}

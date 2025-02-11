@@ -33,6 +33,7 @@ const CATEGORY_DESCRIPTIONS = {
 
 
 function ProhibitedItems() {
+  console.log("dd")
   const [itemsData, setItemsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,6 +41,7 @@ function ProhibitedItems() {
   useEffect(() => {
     axios.get("http://localhost:8080/api/prohibit-items")
       .then((response) => {
+        console.log("dd", response)
         setItemsData(response.data);
       })
       .catch((error) => console.error("API 요청 오류:", error));
