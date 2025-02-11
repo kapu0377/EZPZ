@@ -1,8 +1,9 @@
 package com.example.apiezpz.service;
 
+import com.example.apiezpz.domain.Prohibit;
+import com.example.apiezpz.repository.ProhibitedItemsRepository;
 import org.springframework.stereotype.Service;
-import org.zerock.api01.domain.Prohibit;
-import org.zerock.api01.repository.ProhibitedItemsRepository;
+
 
 import java.util.List;
 

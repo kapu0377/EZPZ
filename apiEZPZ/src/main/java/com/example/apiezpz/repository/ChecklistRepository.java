@@ -1,7 +1,8 @@
 package com.example.apiezpz.repository;
 
+import com.example.apiezpz.domain.Checklist;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.zerock.api01.domain.Checklist;
+
 
 import java.util.List;
 

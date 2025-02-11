@@ -1,5 +1,6 @@
 package com.example.apiezpz.security.handler;
 
+import com.example.apiezpz.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +10,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.zerock.api01.util.JWTUtil;
 
 import java.io.IOException;
 import java.util.Map;

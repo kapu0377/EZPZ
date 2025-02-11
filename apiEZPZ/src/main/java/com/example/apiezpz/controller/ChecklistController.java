@@ -1,9 +1,9 @@
 package com.example.apiezpz.controller;
 
+import com.example.apiezpz.domain.Checklist;
+import com.example.apiezpz.repository.ChecklistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.zerock.api01.domain.Checklist;
-import org.zerock.api01.repository.ChecklistRepository;
 
 import java.util.List;
 

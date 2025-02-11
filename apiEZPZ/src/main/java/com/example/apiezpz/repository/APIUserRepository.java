@@ -1,7 +1,8 @@
 package com.example.apiezpz.repository;
 
+import com.example.apiezpz.domain.APIUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.zerock.api01.domain.APIUser;
+
 
 import java.util.Optional;
 

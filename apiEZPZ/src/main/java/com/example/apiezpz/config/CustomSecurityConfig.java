@@ -1,5 +1,8 @@
 package com.example.apiezpz.config;
 
+import com.example.apiezpz.security.APIUserDetailService;
+import com.example.apiezpz.security.filter.TokenCheckFilter;
+import com.example.apiezpz.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -16,9 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.zerock.api01.security.APIUserDetailService;
-import org.zerock.api01.security.filter.TokenCheckFilter;
-import org.zerock.api01.util.JWTUtil;
 
 import java.util.Arrays;
 

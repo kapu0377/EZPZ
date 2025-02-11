@@ -87,7 +87,7 @@
   color: white; /* 배경 이미지 위에 잘 보이도록 */
   padding: 20px;
   margin-bottom: 20px;
-  background: url('../assets/img/airport.jpg') no-repeat center center;
+  background: url('../../assets/img/airport.jpg') no-repeat center center;
   background-size: cover; /* 배경 이미지를 영역에 맞게 조정 */
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);

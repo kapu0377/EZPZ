@@ -1,5 +1,7 @@
 package com.example.apiezpz.security.filter;
 
+import com.example.apiezpz.security.exception.AccessTokenException;
+import com.example.apiezpz.util.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -10,8 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.zerock.api01.security.exception.AccessTokenException;
-import org.zerock.api01.util.JWTUtil;
 
 import java.io.IOException;
 import java.util.Map;
