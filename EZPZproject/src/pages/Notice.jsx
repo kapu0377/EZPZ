@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {createPost, updatePost, deletePost} from "../api/postApi";
-import './Notice.css';
+import '../components/board/Notice.css';
 
 const App = () => {
   const [posts, setPosts] = useState([]);

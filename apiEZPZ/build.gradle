@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.1'
+    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'org.zerock'
+group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -12,17 +12,7 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
-tasks.jar{
-    duplicatesStrategy = 'exclude'
-    from{
-        configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
-    }
-    manifest{
-        attributes(
-                'Main-Class': 'Potatonet.PortScan.Main'
-        )
-    }
-}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -66,4 +56,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-

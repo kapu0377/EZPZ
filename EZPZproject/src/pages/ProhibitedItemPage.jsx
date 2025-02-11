@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Card } from "../components/ui/Card";
-import { Button } from "../components/ui/Button";
+import { Card } from "../components/prohibited-items/Card";
+import { Button } from "../components/prohibited-items/Button";
 
 const categories = ["액체/겔", "화기류", "화학물질", "인화성 물질", "둔기", "날카로운 물체", "경계경보"];
 
