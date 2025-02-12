@@ -76,7 +76,7 @@ const App = () => {
   // 게시글 목록 불러오기
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:8088/api/posts');  // API 엔드포인트 주소
+      const response = await fetch('http://localhost:8080/api/posts');  // API 엔드포인트 주소
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -111,8 +111,8 @@ const App = () => {
   
     try {
       const url = editId 
-        ? `http://localhost:8088/api/posts/${editId}`
-        : 'http://localhost:8088/api/posts';
+        ? `http://localhost:8080/api/posts/${editId}`
+        : 'http://localhost:8080/api/posts';
       
       // POST 요청 데이터 구조 수정
       const postData = {
@@ -223,7 +223,7 @@ const App = () => {
   // 댓글 관련 함수들 추가
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/post/${selectedPost.id}`);
+      const response = await fetch(`http://localhost:8080/api/comments/post/${selectedPost.id}`);
       const data = await response.json();
       setComments(data);
     } catch (error) {
@@ -235,7 +235,7 @@ const App = () => {
     if (!commentText.trim()) return;
 
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/post/${selectedPost.id}`, {
+      const response = await fetch(`http://localhost:8080/api/comments/post/${selectedPost.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ const App = () => {
     if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
         method: 'DELETE',
       });
 
@@ -281,7 +281,7 @@ const App = () => {
   // 게시글 삭제 함수 추가
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8088/api/posts/${id}`, {
+      const response = await fetch(`http://localhost:8080/api/posts/${id}`, {
         method: 'DELETE',
       });
 
