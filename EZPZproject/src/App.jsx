@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
+import Notice from "./pages/Notice"
 import "./App.css";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
 import Notice from "./components/board/Notice.css";
@@ -19,7 +20,7 @@ function App() {
             <Route path="/" element={<EZPackingLayout />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/prohibit" element={<ProhibitedItems />} />
+            <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
           </Routes>
         </div>
