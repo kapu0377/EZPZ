@@ -72,7 +72,7 @@ const App = () => {
   // 게시글 목록 불러오기
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/posts');  // API 엔드포인트 주소
+      const response = await fetch('http://localhost:8088/api/posts');  // API 엔드포인트 주소
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -107,8 +107,8 @@ const App = () => {
   
     try {
       const url = editId 
-        ? `http://localhost:8080/api/posts/${editId}`
-        : 'http://localhost:8080/api/posts';
+        ? `http://localhost:8088/api/posts/${editId}`
+        : 'http://localhost:8088/api/posts';
       
       // POST 요청 데이터 구조 수정
       const postData = {
