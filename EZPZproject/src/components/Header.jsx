@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import Logo from "../logo/Logo"
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -10,7 +9,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <Logo />  {/* Link to="/" className="logo">EZPacking</Link 대신 Logo 컴포넌트 사용 */}
+      <Link to="/" className="logo">EZPacking</Link>
       <div className="nav-container">
         {user && (
           <div className="user-menu">
