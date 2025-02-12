@@ -32,9 +32,10 @@
   display: inline-block;
   overflow: hidden;
   width: 0;
-  transition: width 0.3s ease;
-  transform: translateY(8px); /* 추가: 아래로 이동 */
+  transition: all 0.3s ease;
+  transform: translateY(8px);
   margin-right: -5px;
+  opacity: 1;
 }
 
 .logo:hover .logo-text {
@@ -46,5 +47,17 @@
 }
 
 .logo:hover .logo-hover .small {
-  width: 82px; /* 85px에서 82px로 조정 */
+  width: 82px;
+}
+
+/* 텍스트 변경 애니메이션 */
+.small {
+  transition: all 0.3s ease;
+}
+
+/* 텍스트 변경 시 슬라이드 효과 */
+.small.changing {
+  width: 0 !important;
+  opacity: 0;
+  transform: translateX(-20px) translateY(8px);
 }
