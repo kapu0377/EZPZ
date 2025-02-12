@@ -8,8 +8,9 @@ import EZPackingLayout from "./components/EZPackingLayout";
 import Notice from "./pages/Notice"
 import "./App.css";
 import "./components/board/Notice.css";
+import "./components/parking/AirportParking.css";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
-
+import AirportParkingPage from "./pages/AirportParkingPage";
 function App() {
   return (
     <AuthProvider>
@@ -21,6 +22,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
+            <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>
       </Router>
