@@ -8,7 +8,7 @@ const AirportTerminal = ({ terminal, getCongestionColor }) => {
         <div
           className="occupancy-bar"
           style={{
-            width: `${terminal.occupancy}%`,
+            width: `${Math.min(terminal.occupancy, 100)}%`,
             backgroundColor: getCongestionColor(terminal.occupancy),
           }}
         >
