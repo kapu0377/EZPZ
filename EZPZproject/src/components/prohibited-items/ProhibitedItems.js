@@ -31,8 +31,47 @@ const CATEGORY_DESCRIPTIONS = {
   "날붙이": "날카로운 물체나 끝이 뾰족한 도구는 기내 반입이 제한됩니다."
 };
 
+// 조건부 반입 가능 물품 정보 추가
+const CONDITIONAL_ITEMS = {
+  "화학물질": [
+    "의약품 (처방전 필요)",
+    "화장품 (100ml 이하)",
+    "개인용 위생용품"
+  ],
+  "액체/겔": [
+    "100ml 이하 용기",
+    "1L 투명 지퍼백 내 보관",
+    "유아용 음료/식품",
+    "의약품 (처방전 필요)"
+  ],
+  "날붙이": [
+    "손톱깎이 (날길이 6cm 미만)",
+    "면도기 (날 분리 가능)",
+    "가위 (날길이 6cm 미만)"
+  ],
+  "화기류": [
+    "라이터 1개 (개인소지)",
+    "성냥 1개 (개인소지)"
+  ],
+  "둔기": [
+    "지팡이 (의료 목적)",
+    "우산",
+    "운동용품 (특별 승인 필요)"
+  ],
+  "폭발/인화성": [
+    "배터리 (160Wh 미만)",
+    "드라이아이스 (2.5kg 미만)",
+    "의료용 산소통 (사전 승인 필요)"
+  ],
+  "고위험 비행편": [
+    "보안 위협이 높다고 평가되는 항공편",
+    "사실상 조건부 허용이 없음"
+  ]
+  };
+
 
 function ProhibitedItems() {
+  console.log("dd")
   const [itemsData, setItemsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,6 +79,7 @@ function ProhibitedItems() {
   useEffect(() => {
     axios.get("http://localhost:8088/api/prohibit-items")
       .then((response) => {
+        console.log("dd", response)
         setItemsData(response.data);
       })
       .catch((error) => console.error("API 요청 오류:", error));
@@ -79,6 +119,15 @@ function ProhibitedItems() {
             </div>
             <div className="card-body">
               <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
+            </div>
+            {/* 슬라이드 패널 추가 */}
+            <div className="slide-panel">
+              <h3>조건부 반입 가능 물품</h3>
+              <ul>
+                {CONDITIONAL_ITEMS[CATEGORY_NAMES[category] || category]?.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
         ))}
