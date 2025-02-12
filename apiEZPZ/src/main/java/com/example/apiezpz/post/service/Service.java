@@ -1,7 +1,8 @@
-package com.example.ez.post.service;
+package com.example.apiezpz.post.service;
 
-import com.example.ez.post.domain.Post;
-import com.example.ez.post.repository.PostRepository;
+
+import com.example.apiezpz.post.domain.Post;
+import com.example.apiezpz.post.repository.PostRepository;
 
 import java.util.List;
 import java.util.Optional;

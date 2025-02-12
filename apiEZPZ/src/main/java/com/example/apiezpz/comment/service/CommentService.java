@@ -1,9 +1,9 @@
-package com.example.ez.comment.service;
+package com.example.apiezpz.comment.service;
 
-import com.example.ez.comment.domain.Comment;
-import com.example.ez.comment.repository.CommentRepository;
-import com.example.ez.post.domain.Post;
-import com.example.ez.post.repository.PostRepository;
+import com.example.apiezpz.comment.domain.Comment;
+import com.example.apiezpz.comment.repository.CommentRepository;
+import com.example.apiezpz.post.domain.Post;
+import com.example.apiezpz.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
