@@ -21,7 +21,6 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/prohibit" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
-            
           </Routes>
         </div>
       </Router>
