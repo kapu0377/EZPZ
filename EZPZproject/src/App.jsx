@@ -19,7 +19,7 @@ function App() {
             <Route path="/" element={<EZPackingLayout />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/prohibit" element={<ProhibitedItems />} />
+            <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
           </Routes>
         </div>

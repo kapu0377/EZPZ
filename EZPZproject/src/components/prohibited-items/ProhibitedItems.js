@@ -38,7 +38,7 @@ function ProhibitedItems() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/prohibit-items")
+    axios.get("http://localhost:8088/api/prohibit-items")
       .then((response) => {
         setItemsData(response.data);
       })
