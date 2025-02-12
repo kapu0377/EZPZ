@@ -1,7 +1,7 @@
-package com.example.ez.post.controller;
+package com.example.apiezpz.post.controller;
 
-import com.example.ez.post.domain.Post;
-import com.example.ez.post.service.Service;
+import com.example.apiezpz.post.domain.Post;
+import com.example.apiezpz.post.service.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

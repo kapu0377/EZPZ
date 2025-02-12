@@ -1,6 +1,6 @@
-package com.example.ez.post.repository;
+package com.example.apiezpz.post.repository;
 
-import com.example.ez.post.domain.Post;
+import com.example.apiezpz.post.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
