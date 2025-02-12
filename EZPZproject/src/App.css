@@ -1,3 +1,7 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 /* 전역 스타일 */
 :root {
   --primary-black: #1a1a1a;
@@ -21,20 +25,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: rgb(175, 175, 175);  /* 또는 원하는 배경색 */
-  z-index: 1000;
   padding: 1rem 2rem;
   background-color: var(--secondary-white);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* 메인 콘텐츠를 위한 스타일 */
-main, .main-content {  /* 메인 콘텐츠를 감싸는 요소의 클래스명에 따라 수정 */
-  padding-top: 100px;  /* 헤더의 높이만큼 여백 추가 */
 }
 
 .nav-container {
