@@ -2,22 +2,21 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Logo.css';
 
+const LOGO_TEXTS = ['acking', 'assing', 'arking'];
+
 const Logo = () => {
   const [currentText, setCurrentText] = useState('acking');
   const [isChanging, setIsChanging] = useState(false);
-  const texts = ['acking', 'assing', 'arking'];
   
   useEffect(() => {
     let currentIndex = 0;
     const interval = setInterval(() => {
       setIsChanging(true);
       
-      // 텍스트가 들어간 후에 변경
       setTimeout(() => {
-        currentIndex = (currentIndex + 1) % texts.length;
-        setCurrentText(texts[currentIndex]);
+        currentIndex = (currentIndex + 1) % LOGO_TEXTS.length;
+        setCurrentText(LOGO_TEXTS[currentIndex]);
         
-        // 약간의 딜레이 후 다시 나타나기
         setTimeout(() => {
           setIsChanging(false);
         }, 150);

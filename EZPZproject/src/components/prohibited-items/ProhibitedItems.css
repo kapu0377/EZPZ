@@ -1,8 +1,9 @@
 .prohibited-items {
-  padding: 20px;
+  padding: 20px 0; /* 좌우 패딩 제거, 상하 패딩만 유지 */
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   text-align: center;
+  width: 100%; /* 전체 너비로 확장 */
 }
 
 .description {
@@ -12,11 +13,13 @@
 }
 
 .cards-container {
+  max-width: 1200px; /* 또는 원하는 최대 너비 */
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 한 줄에 3개씩 배치 */
   gap: 60px; /* 카드 간격을 15px로 줄임 */
   justify-items: center;
-  padding: 20px;
   position: relative;
   overflow: visible; /* 추가: 컨테이너의 overflow를 visible로 설정 */
 }
@@ -98,19 +101,19 @@
 }
 
 .description-section {
+  width: 100%; /* 전체 너비로 확장 */
   font-size: 16px;
-  color: white; /* 배경 이미지 위에 잘 보이도록 */
-  padding: 20px;
+  color: white;
+  padding: 40px 20px; /* 상하 패딩 증가 */
   margin-bottom: 20px;
   background: url('../../assets/img/airport.jpg') no-repeat center center;
-  background-size: cover; /* 배경 이미지를 영역에 맞게 조정 */
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-size: cover;
   position: relative;
   z-index: 1;
+  border-radius: 0; /* 모서리 둥글게 제거 */
 }
 
-/* 텍스트 가독성을 높이기 위한 어두운 오버레이 */
+/* description-section의 오버레이도 전체 너비로 확장 */
 .description-section::before {
   content: '';
   position: absolute;
@@ -120,7 +123,7 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.4); /* 반투명한 검은색 오버레이 */
   z-index: -1;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 /* 모달 오버레이 */

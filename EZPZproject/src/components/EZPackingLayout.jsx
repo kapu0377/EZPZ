@@ -1,6 +1,5 @@
 import React from "react";
 import SearchSection from "./SearchSection";
-import Footer from "./Footer";
 
 const EZPackingLayout = () => {
   return (
