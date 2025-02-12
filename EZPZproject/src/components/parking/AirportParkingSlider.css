@@ -1,0 +1,198 @@
+.airport-parking-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .airport-content {
+    margin: 20px 0;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .parking-area {
+    margin: 15px 0;
+  }
+  
+  .progress-bar {
+    background: #e9ecef;
+    height: 8px;
+    border-radius: 4px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+  
+  .progress {
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+  
+  .parking-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .status-badge.full {
+    background-color: #ffe0e0;
+    color: #ff4b4b;
+  }
+  
+  .status-badge.busy {
+    background-color: #fff3e0;
+    color: #ffa502;
+  }
+  
+  .status-badge.available {
+    background-color: #e3f2fd;
+    color: #4b7bec;
+  }
+  
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dot.active {
+    background: #4b7bec;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 20px;
+    font-size: 1rem;
+  }
+  
+  .error {
+    color: #ff4b4b;
+  }
+
+  .airport-parking-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.airport-content {
+  margin: 20px 0;
+}
+
+h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+h3 {
+  margin: 10px 0;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.parking-area {
+  margin: 15px 0;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.parking-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.parking-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.parking-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-badge.available {
+  background-color: #4b7bec;
+  color: white;
+}
+
+.status-badge.busy {
+  background-color: #ffa502;
+  color: white;
+}
+
+.status-badge.full {
+  background-color: #ff4b4b;
+  color: white;
+}
+
+.available-spots {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background: #4b7bec;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}

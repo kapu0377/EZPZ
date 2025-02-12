@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cef199cd-709a-47d4-9db0-c935a2b866d3" name="변경" comment="" />
+    <list default="true" id="cef199cd-709a-47d4-9db0-c935a2b866d3" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/EZPZproject/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EZPZproject/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EZPZproject/src/components/EZPackingLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EZPZproject/src/components/EZPackingLayout.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,10 +56,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.ApiEzpzApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "parking",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/MY LENOVO/EZPZ/apiEZPZ/src/main/java/com/example/apiezpz",
+    "last_opened_file_path": "C:/Users/it/Documents/EZPZ",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -83,8 +86,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
       </set>
     </attachedChunks>
   </component>
@@ -98,6 +101,7 @@
       <updated>1739249940841</updated>
       <workItem from="1739249942293" duration="4298000" />
       <workItem from="1739318872559" duration="5854000" />
+      <workItem from="1739336293577" duration="741000" />
     </task>
     <servers />
   </component>

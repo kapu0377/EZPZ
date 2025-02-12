@@ -22,7 +22,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
-              <Route path="/parking" element={<AirportParkingPage />} />
+            <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>
       </Router>

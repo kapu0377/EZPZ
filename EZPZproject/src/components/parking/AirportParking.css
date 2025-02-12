@@ -57,12 +57,6 @@
     color: #777;
     margin: 5px 0;
   }
-
-  .airport-parking-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
   
   .airport-buttons {
     display: grid;
@@ -125,9 +119,18 @@
   .error {
     color: #ff4d4d;
   }
+
+  .airport-parking-container {
+    min-height: calc(100vh - 400px);
+    padding: 40px 20px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   
   .airports-grid {
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
+
+  

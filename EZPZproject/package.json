@@ -46,5 +46,5 @@
     "postcss": "^8.5.2",
     "tailwindcss": "^4.0.6"
   },
-  "proxy": "http://openapi.airport.co.kr"
+  "proxy": "http://openapi.airport.co.kr/"
 }
