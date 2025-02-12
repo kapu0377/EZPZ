@@ -1,6 +1,6 @@
-package com.example.ez.comment.domain;
+package com.example.apiezpz.comment.domain;
 
-import com.example.ez.post.domain.Post;
+import com.example.apiezpz.post.domain.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

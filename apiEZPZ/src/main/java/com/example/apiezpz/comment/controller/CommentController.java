@@ -1,7 +1,7 @@
-package com.example.ez.comment.controller;
+package com.example.apiezpz.comment.controller;
 
-import com.example.ez.comment.domain.Comment;
-import com.example.ez.comment.service.CommentService;
+import com.example.apiezpz.comment.domain.Comment;
+import com.example.apiezpz.comment.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

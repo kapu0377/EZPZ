@@ -1,6 +1,6 @@
-package com.example.ez.post.domain;
+package com.example.apiezpz.post.domain;
 
-import com.example.ez.comment.domain.Comment;
+import com.example.apiezpz.comment.domain.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
