@@ -15,9 +15,10 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String name;
-    private boolean checked;    //체크여부
+    @Column(nullable = false)
+    private boolean checked = false;   //체크여부
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

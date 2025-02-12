@@ -1,5 +1,6 @@
 package com.example.apiezpz.checklist.domain;
 
+import com.example.apiezpz.domain.APIUser;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -23,10 +24,21 @@ public class Checklist {
     private LocalDate departureDate;    //출발일
     private LocalDate returnDate;   //도착일
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)   //회원과 연결
+    private APIUser member;
 
     @OneToMany(mappedBy = "checklist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> categories = new ArrayList<>();
+
+    //Setter 대신 사용
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+    public void changeDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
+    }
+    public void changeReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
 }

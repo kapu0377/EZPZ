@@ -9,4 +9,5 @@ public class ItemDTO {
     private Long id;
     private String name;
     private boolean checked;
+    private Long categoryId;
 }

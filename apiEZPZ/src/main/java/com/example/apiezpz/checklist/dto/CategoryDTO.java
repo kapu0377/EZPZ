@@ -9,5 +9,6 @@ import java.util.List;
 public class CategoryDTO {
     private Long id;
     private String name;
-    private List<ItemDTO> items;
+    private Long checklistId; // 체크리스트 ID
+    private List<ItemDTO> items;    //아이템 리스트 포함
 }

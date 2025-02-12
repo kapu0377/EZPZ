@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ChecklistDTO {
     private Long id;
+    private String title;
     private LocalDate departureDate;
     private LocalDate returnDate;
     private List<CategoryDTO> categories;
