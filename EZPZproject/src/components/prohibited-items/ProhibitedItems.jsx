@@ -69,27 +69,6 @@ const CONDITIONAL_ITEMS = {
   ]
   };
 
-const CATEGORY_GROUPS = {
-  "신체상해류 (객내 반입 금지, 위탁 수화물 가능)": {
-    color: "#4B89DC",
-    categories: ["날붙이", "둔기", "화기류"]
-  },
-  "인체위험류 (객내 반입, 위탁 수화물 금지)": {
-    color: "#E74C3C",
-    categories: ["화학물질", "폭발/인화성", "액체/겔"]
-  }
-};
-
-// 반입 금지 규정 데이터 추가
-const PROHIBITION_RULES = {
-  "날붙이": "기내 반입 금지 품목:날붙이류: 나이프, 식칼, 가위, 커터칼 등 날이 있는 물품은 기내 반입이 금지됩니다. 센트레아소형 스위스 아미 나이프: 키홀더 형태의 소형 나이프도 기내 반입이 허용되지 않습니다..",
-  "둔기": "항공보안법 제44조에 따라, 타격이나 상해를 입힐 수 있는 도구는 기내 반입이 금지됩니다.",
-  "화기류": "항공보안법 제44조에 따라, 모든 종류의 화기 및 무기류는 기내 반입이 절대 금지됩니다.",
-  "화학물질": "항공보안법 제44조에 따라, 인체에 해롭거나 위험한 화학물질은 기내 반입이 제한됩니다.",
-  "폭발/인화성": "항공보안법 제44조에 따라, 폭발성 또는 인화성 물질은 기내 반입이 절대 금지됩니다.",
-  "액체/겔": "항공보안법 제44조에 따라, 100ml 이하의 용기에 담긴 액체만 기내 반입이 가능합니다.",
-  "고위험 비행편": "항공보안 등급 경계경보(Orange) 단계 이상 시 추가 제한이 적용됩니다."
-};
 
 function ProhibitedItems() {
   console.log("dd")
@@ -128,42 +107,27 @@ function ProhibitedItems() {
       </div>
 
       <div className="cards-container">
-        {Object.entries(CATEGORY_GROUPS).map(([groupName, groupInfo]) => (
-          <div 
-            key={groupName} 
-            className={`category-group ${groupName === "신체상해류 (객내 반입 금지, 위탁 수화물 가능)" ? "physical" : "hazardous"}`}
+        {categories.map((category, index) => (
+          <div
+            key={index}
+            className="card"
+            onClick={() => openModal(category)}
           >
-            <h2 className="category-group-title">{groupName}</h2>
-            <div className="category-group-cards">
-              {categories
-                .filter(category => 
-                  groupInfo.categories.includes(CATEGORY_NAMES[category] || category)
-                )
-                .map((category, index) => (
-                  <div
-                    key={index}
-                    className="card"
-                    onClick={() => openModal(category)}
-                  >
-                    <div className="card-header">
-                      <span className="icon">
-                        {CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}
-                      </span>
-                      <h2>{CATEGORY_NAMES[category] || category}</h2>
-                    </div>
-                    <div className="card-body">
-                      <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
-                    </div>
-                    <div className="slide-panel">
-                      <h3>조건부 반입 가능 물품</h3>
-                      <ul>
-                        {CONDITIONAL_ITEMS[CATEGORY_NAMES[category] || category]?.map((item, i) => (
-                          <li key={i}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+            <div className="card-header">
+              <span className="icon">{CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}</span>
+              <h2>{CATEGORY_NAMES[category] || category}</h2>
+            </div>
+            <div className="card-body">
+              <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
+            </div>
+            {/* 슬라이드 패널 추가 */}
+            <div className="slide-panel">
+              <h3>조건부 반입 가능 물품</h3>
+              <ul>
+                {CONDITIONAL_ITEMS[CATEGORY_NAMES[category] || category]?.map((item, i) => (
+                  <li key={i}>{item}</li>
                 ))}
+              </ul>
             </div>
           </div>
         ))}
@@ -174,19 +138,12 @@ function ProhibitedItems() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-btn" onClick={closeModal}>✖</button>
             <h2>{CATEGORY_NAMES[selectedCategory] || selectedCategory}</h2>
-            
-            <div className="prohibition-rule">
-              <h3>반입 금지 규정</h3>
-              <p>{PROHIBITION_RULES[CATEGORY_NAMES[selectedCategory] || selectedCategory]}</p>
-            </div>
-
             <table>
               <thead>
                 <tr>
                   <th>번호</th>
                   <th>금지 물품</th>
-                  <th>기내 반입</th>
-                  <th>위탁 수하물</th>
+                  <th>기내 반입 여부</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,7 +154,6 @@ function ProhibitedItems() {
                       <td>{index + 1}</td>
                       <td>{item.carryBan}</td>
                       <td>{item.cabin === "Y" ? "허용" : "금지"}</td>
-                      <td>{item.cargo === "Y" ? "허용" : "금지"}</td>
                     </tr>
                   ))}
               </tbody>
