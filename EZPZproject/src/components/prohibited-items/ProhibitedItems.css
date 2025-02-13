@@ -1,8 +1,9 @@
 .prohibited-items {
-  padding: 20px;
+  padding: 20px 0; /* 좌우 패딩 제거, 상하 패딩만 유지 */
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   text-align: center;
+  width: 100%; /* 전체 너비로 확장 */
 }
 
 .description {
@@ -12,13 +13,42 @@
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 한 줄에 3개씩 배치 */
-  gap: 60px; /* 카드 간격을 15px로 줄임 */
-  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  position: relative;
-  overflow: visible; /* 추가: 컨테이너의 overflow를 visible로 설정 */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.category-group {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-group-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.category-group-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* 카테고리 그룹별 스타일 */
+.category-group.physical {
+  background: linear-gradient(to right, rgba(75, 137, 220, 0.1), rgba(75, 137, 220, 0.05));
+}
+
+.category-group.hazardous {
+  background: linear-gradient(to right, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.05));
 }
 
 .card {
@@ -109,25 +139,19 @@
 }
 
 .description-section {
+  width: 100%; /* 전체 너비로 확장 */
   font-size: 16px;
   color: white;
-  padding: 20px;
+  padding: 40px 20px; /* 상하 패딩 증가 */
   margin-bottom: 20px;
   background: url('../../assets/img/airport.jpg') no-repeat center center;
   background-size: cover;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
+  z-index: 1;
+  border-radius: 0; /* 모서리 둥글게 제거 */
 }
 
-.description-section h1,
-.description-section p {
-  position: relative;
-  z-index: 2;
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 텍스트 가독성 향상 */
-}
-
+/* description-section의 오버레이도 전체 너비로 확장 */
 .description-section::before {
   content: '';
   position: absolute;
@@ -135,8 +159,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6); /* 오버레이를 좀 더 진하게 */
-  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.4); /* 반투명한 검은색 오버레이 */
+  z-index: -1;
+  border-radius: 0;
 }
 
 /* 모달 오버레이 */
@@ -257,9 +283,8 @@ tr:hover {
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 표시 */
-    gap: 10px; /* 태블릿에서는 더 좁은 간격 */
+  .category-group-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .slide-panel {
@@ -281,9 +306,8 @@ tr:hover {
   }
 }
 
-@media (max-width: 600px) {
-  .cards-container {
-    grid-template-columns: 1fr; /* 모바일에서는 1개씩 표시 */
-    gap: 8px; /* 모바일에서는 최소 간격 */
+@media (max-width: 768px) {
+  .category-group-cards {
+    grid-template-columns: 1fr;
   }
 }
