@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchPreviewParkingData } from '../../api/parking/PreviewApi';
-<<<<<<< HEAD
-=======
 import { fetchICNParkingData } from '../../api/parking/ICNPreviewApi';
->>>>>>> main
 import './ParkingSlider.css';
 
 const ParkingSlider = () => {
@@ -16,11 +13,6 @@ const ParkingSlider = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-<<<<<<< HEAD
-        const data = await fetchPreviewParkingData();
-        console.log('일반 공항 데이터:', data);
-        setParkingData(data);
-=======
         setError(null);
   
         let allAirportsData = [];
@@ -50,7 +42,6 @@ const ParkingSlider = () => {
         }
   
         setParkingData(allAirportsData);
->>>>>>> main
       } catch (err) {
         setError('데이터를 불러오는데 실패했습니다.');
         console.error('데이터 로딩 에러:', err);
@@ -58,20 +49,13 @@ const ParkingSlider = () => {
         setLoading(false);
       }
     };
-<<<<<<< HEAD
-
-=======
   
->>>>>>> main
     loadData();
     const interval = setInterval(loadData, 300000);
     return () => clearInterval(interval);
   }, []);
-<<<<<<< HEAD
-=======
   ;
 
->>>>>>> main
 
   useEffect(() => {
     if (parkingData.length > 0) {
@@ -79,11 +63,7 @@ const ParkingSlider = () => {
         setCurrentIndex((prevIndex) => 
           prevIndex === parkingData.length - 1 ? 0 : prevIndex + 1
         );
-<<<<<<< HEAD
-      }, 5000);
-=======
       }, 10000);
->>>>>>> main
 
       return () => clearInterval(slideInterval);
     }
