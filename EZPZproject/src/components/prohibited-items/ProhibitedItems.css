@@ -13,15 +13,42 @@
 }
 
 .cards-container {
-  max-width: 1200px; /* 또는 원하는 최대 너비 */
-  margin: 0 auto; /* 중앙 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.category-group {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-group-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.category-group-cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 한 줄에 3개씩 배치 */
-  gap: 60px; /* 카드 간격을 15px로 줄임 */
-  justify-items: center;
-  position: relative;
-  overflow: visible; /* 추가: 컨테이너의 overflow를 visible로 설정 */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* 카테고리 그룹별 스타일 */
+.category-group.physical {
+  background: linear-gradient(to right, rgba(75, 137, 220, 0.1), rgba(75, 137, 220, 0.05));
+}
+
+.category-group.hazardous {
+  background: linear-gradient(to right, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.05));
 }
 
 .card {
@@ -244,9 +271,8 @@ tr:hover {
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 표시 */
-    gap: 10px; /* 태블릿에서는 더 좁은 간격 */
+  .category-group-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .slide-panel {
@@ -268,9 +294,8 @@ tr:hover {
   }
 }
 
-@media (max-width: 600px) {
-  .cards-container {
-    grid-template-columns: 1fr; /* 모바일에서는 1개씩 표시 */
-    gap: 8px; /* 모바일에서는 최소 간격 */
+@media (max-width: 768px) {
+  .category-group-cards {
+    grid-template-columns: 1fr;
   }
 }

@@ -8,19 +8,49 @@ const ProhibitedItemsSlider = () => {
   const sliderContentRef = useRef(null);
   const navigate = useNavigate();
 
-  // 슬라이드 데이터를 직접 그룹화하여 정의
   const slides = [
-    [
-      { icon: "🧪", title: "화학물질", description: "인체에 해롭거나 위험한 화학물질" },
-      { icon: "💧", title: "액체/겔", description: "100ml 이상의 액체 및 젤류" },
-      { icon: "💥", title: "폭발/인화성", description: "폭발성 또는 인화성 물질" },
-      { icon: "🔫", title: "화기류", description: "모든 종류의 화기 및 무기류" }
-    ],
-    [
-      { icon: "🔪", title: "날붙이", description: "날카로운 물체나 끝이 뾰족한 도구" },
-      { icon: "🔨", title: "둔기", description: "무겁고 둔탁한 손상을 입힐 수 있는 도구" },
-      { icon: "✈️", title: "고위험 비행편", description: "보안 위협이 높은 항공편 제한 물품" }
-    ]
+    {
+      type: "신체상해류",
+      color: "#4B89DC",
+      items: [
+        { 
+          icon: "🔪", 
+          title: "날붙이", 
+          examples: "칼, 송곳, 도끼, 드릴날, 가위, 면도칼, 작살" 
+        },
+        { 
+          icon: "🔨", 
+          title: "둔기", 
+          examples: "망치, 곡괭이, 야구방망이, 골프채, 쇠파이프" 
+        },
+        { 
+          icon: "🔫", 
+          title: "화기류", 
+          examples: "총기, 전자충격기, 총알, 스프레이, 라이터" 
+        }
+      ]
+    },
+    {
+      type: "인체위험류",
+      color: "#E74C3C",
+      items: [
+        { 
+          icon: "🧪", 
+          title: "화학물질", 
+          examples: "산성물질, 염기성물질, 수은, 표백제, 농약" 
+        },
+        { 
+          icon: "💥", 
+          title: "폭발/인화성", 
+          examples: "폭죽, 화약, 부탄가스, 산소통, 성냥" 
+        },
+        { 
+          icon: "💧", 
+          title: "액체/겔", 
+          examples: "음료수, 화장품, 샴푸, 젤, 로션(100ml 초과)" 
+        }
+      ]
+    }
   ];
 
   const changeSlide = () => {
@@ -50,17 +80,21 @@ const ProhibitedItemsSlider = () => {
 
   return (
     <div className="prohibited-items-slider" onClick={handleClick}>
+      <div className="slider-header">
+        <h2>{slides[currentSlide].type}</h2>
+      </div>
       <div className="slider-wrapper">
         <div 
           ref={sliderContentRef}
-          className={`slider-content ${currentSlide === 0 ? 'four-items' : 'three-items'}`}
+          className="slider-content"
+          style={{ '--slide-color': slides[currentSlide].color }}
         >
-          {slides[currentSlide].map((item, index) => (
+          {slides[currentSlide].items.map((item, index) => (
             <div key={index} className="slide-item">
               <div className="slide-icon">{item.icon}</div>
               <div className="slide-text">
                 <h3>{item.title}</h3>
-                <p>{item.description}</p>
+                <p>{item.examples}</p>
               </div>
             </div>
           ))}

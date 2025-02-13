@@ -69,6 +69,16 @@ const CONDITIONAL_ITEMS = {
   ]
   };
 
+const CATEGORY_GROUPS = {
+  "신체상해류": {
+    color: "#4B89DC",
+    categories: ["날붙이", "둔기", "화기류"]
+  },
+  "인체위험류": {
+    color: "#E74C3C",
+    categories: ["화학물질", "폭발/인화성", "액체/겔"]
+  }
+};
 
 function ProhibitedItems() {
   console.log("dd")
@@ -107,27 +117,42 @@ function ProhibitedItems() {
       </div>
 
       <div className="cards-container">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="card"
-            onClick={() => openModal(category)}
+        {Object.entries(CATEGORY_GROUPS).map(([groupName, groupInfo]) => (
+          <div 
+            key={groupName} 
+            className={`category-group ${groupName === "신체상해류" ? "physical" : "hazardous"}`}
           >
-            <div className="card-header">
-              <span className="icon">{CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}</span>
-              <h2>{CATEGORY_NAMES[category] || category}</h2>
-            </div>
-            <div className="card-body">
-              <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
-            </div>
-            {/* 슬라이드 패널 추가 */}
-            <div className="slide-panel">
-              <h3>조건부 반입 가능 물품</h3>
-              <ul>
-                {CONDITIONAL_ITEMS[CATEGORY_NAMES[category] || category]?.map((item, i) => (
-                  <li key={i}>{item}</li>
+            <h2 className="category-group-title">{groupName}</h2>
+            <div className="category-group-cards">
+              {categories
+                .filter(category => 
+                  groupInfo.categories.includes(CATEGORY_NAMES[category] || category)
+                )
+                .map((category, index) => (
+                  <div
+                    key={index}
+                    className="card"
+                    onClick={() => openModal(category)}
+                  >
+                    <div className="card-header">
+                      <span className="icon">
+                        {CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}
+                      </span>
+                      <h2>{CATEGORY_NAMES[category] || category}</h2>
+                    </div>
+                    <div className="card-body">
+                      <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
+                    </div>
+                    <div className="slide-panel">
+                      <h3>조건부 반입 가능 물품</h3>
+                      <ul>
+                        {CONDITIONAL_ITEMS[CATEGORY_NAMES[category] || category]?.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 ))}
-              </ul>
             </div>
           </div>
         ))}
