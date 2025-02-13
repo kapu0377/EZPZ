@@ -13,13 +13,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.1.5",
-<<<<<<< HEAD
-    "react-scripts": "^5.0.1",
-    "swiper": "^11.2.2",
-=======
     "react-scripts": "5.0.1",
     "swiper": "^11.2.3",
->>>>>>> prohibit
     "tailwind-merge": "^3.0.1",
     "web-vitals": "^2.1.4"
   },

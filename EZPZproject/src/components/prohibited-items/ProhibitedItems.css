@@ -151,7 +151,22 @@
   border-radius: 0; /* 모서리 둥글게 제거 */
 }
 
-/* description-section의 오버레이도 전체 너비로 확장 */
+/* 제목 텍스트 색상 변경 */
+.description-section h1 {
+  color: #ffffff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+}
+
+/* 설명 텍스트 색상 변경 */
+.description-section p {
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* 기존 오버레이 투명도 조정 (필요한 경우) */
 .description-section::before {
   content: '';
   position: absolute;
@@ -160,7 +175,7 @@
   right: 0;
   bottom: 0;
 
-  background: rgba(0, 0, 0, 0.4); /* 반투명한 검은색 오버레이 */
+  background: rgba(0, 0, 0, 0.5); /* 배경 오버레이 투명도 조정 */
   z-index: -1;
   border-radius: 0;
 }

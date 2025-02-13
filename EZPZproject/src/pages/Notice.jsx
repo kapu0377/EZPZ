@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {createPost, updatePost, deletePost} from "../api/postApi";
-import '../notice/Notice.css';
+import '../components/notice/Notice.css';
 import { getComments, createComment, updateComment, deleteComment } from '../api/commentApi';
 
 const App = () => {
