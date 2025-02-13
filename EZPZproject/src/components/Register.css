@@ -1,0 +1,196 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+}
+
+.register-container {
+  background-color: var(--primary-white);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.register-form {
+  padding: 2rem;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  width: 100%;
+}
+
+.form-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-black);
+  margin: 0;
+}
+
+.close-button {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-gray);
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-button:hover {
+  color: var(--primary-black);
+}
+
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-black);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.register-form input,
+.register-form select {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid var(--accent-gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+  outline: none;
+  border-color: var(--primary-black);
+}
+
+.register-form input[type="number"]::-webkit-inner-spin-button,
+.register-form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.register-form select {
+  background-color: var(--primary-white);
+  cursor: pointer;
+}
+
+.register-form button[type="submit"] {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary-black);
+  color: var(--primary-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 1rem;
+}
+
+.register-form button[type="submit"]:hover {
+  background-color: var(--secondary-black);
+}
+
+.register-form button[type="submit"]:disabled {
+  background-color: var(--accent-gray);
+  cursor: not-allowed;
+}
+
+.input-error {
+  border-color: #f44336;
+}
+
+.error {
+  color: #f44336;
+  font-size: 0.9rem;
+  margin: -10px 0 10px 2px;
+}
+
+.password-input-group {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.password-input-group input {
+  margin-bottom: 0.5rem;
+}
+
+.password-message {
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  color: var(--text-gray);
+}
+
+.password-message.valid {
+  color: #4caf50;
+}
+
+.password-message.invalid {
+  color: #f44336;
+}
+
+input.valid {
+  border-color: #4caf50;
+}
+
+input.invalid {
+  border-color: #f44336;
+}
+
+.button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  background-color: var(--accent-gray) !important;
+}
+
+.button-disabled:hover {
+  background-color: var(--accent-gray) !important;
+}
+
+.gender-group {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  color: var(--secondary-black);
+  width: 100%;
+}
+
+.gender-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.gender-group input[type="radio"] {
+  width: auto;
+  margin: 0;
+} 

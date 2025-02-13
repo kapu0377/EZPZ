@@ -22,8 +22,6 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<EZPackingLayout />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
             <Route path="/parking" element={<AirportParkingPage />} />
