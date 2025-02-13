@@ -32,6 +32,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
   }
   
   .parking-name {
@@ -42,7 +43,7 @@
   .parking-status {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1px;
   }
   
   .status-badge {
@@ -50,10 +51,11 @@
     border-radius: 15px;
     font-size: 0.9rem;
     font-weight: 500;
+    margin-right: 8px; 
   }
   
   .status-badge.available {
-    background-color: #4b7bec;
+    background-color: #1a861a;
     color: white;
   }
   
@@ -68,6 +70,8 @@
   }
   
   .available-spots {
+    min-width: 100px; /* 주차가능 대수 텍스트를 위한 고정 너비 */
+    text-align: right;
     color: #666;
     font-size: 0.9rem;
   }
