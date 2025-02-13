@@ -1,24 +1,28 @@
 package com.example.apiezpz.item.service;
 
-import com.example.apiezpz.item.dto.ItemSearchResponse;
-import com.example.apiezpz.item.entity.Item;
-import com.example.apiezpz.item.repository.ItemRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.example.apiezpz.item.dto.ItemSearchResponse;
+import com.example.apiezpz.item.entity.Item;
+import com.example.apiezpz.item.repository.ItemRepository;
+import com.example.apiezpz.search.service.SearchService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class ItemSearchService {
     private final ItemRepository itemRepository;
+    private final SearchService searchService;
 
-    @Transactional(readOnly = true)
-    public ItemSearchResponse searchItems(String keyword) {
+    @Transactional
+    public ItemSearchResponse searchItems(String keyword, String username) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return ItemSearchResponse.builder()
                     .isAllowed(true)
@@ -49,6 +53,9 @@ public class ItemSearchService {
                 .anyMatch(Item::isConditional);
 
         Item representativeItem = items.iterator().next();
+
+        // 검색 기록 저장
+        searchService.recordSearch(username, representativeItem.getCategory());
 
         if (hasProhibitedItem) {
             // 완전 금지 물품이 있는 경우

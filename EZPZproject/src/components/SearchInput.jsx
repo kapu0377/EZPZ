@@ -36,6 +36,14 @@ const SearchInput = ({ onSearchResult, onReset }) => {
         
         onSearchResult(newResult);
         setInputValue("");
+        
+        // 검색 후 랭킹 즉시 업데이트
+        const updatedRankings = await itemApi.getSearchRankings();
+        // Rankings 컴포넌트에 업데이트된 데이터를 전달하기 위한 이벤트 발생
+        window.dispatchEvent(new CustomEvent('rankingsUpdated', { 
+          detail: updatedRankings 
+        }));
+        
       } catch (error) {
         console.error("검색 오류:", error);
         alert("물품 검색 중 오류가 발생했습니다.");

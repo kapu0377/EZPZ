@@ -38,7 +38,7 @@ public class SecurityConfig {
                         // 🔹 로그인과 회원가입은 인증 없이 허용
                         .requestMatchers("/api/auth/**").permitAll()
                         // 🔹 그 외 모든 요청은 인증 필수
-                        .anyRequest().authenticated()
+                     .anyRequest().permitAll()//    authenticated()
                 );
 
         // 🔹 JWT 필터 추가
