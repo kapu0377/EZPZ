@@ -6,7 +6,7 @@ const BASE_URL = "http://apis.data.go.kr";
 export const fetchIncheonParkingData = async () => {
   const param = {
     "serviceKey": INCHEON_API_KEY,
-    "numOfRows": 10,
+    "numOfRows": 20,
     "pageNo": 1,
     "type": "json"
   }

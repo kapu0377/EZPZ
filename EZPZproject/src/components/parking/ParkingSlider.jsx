@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchPreviewParkingData } from '../../api/parking/PreviewApi';
+import { fetchICNParkingData } from '../../api/parking/ICNPreviewApi';
 import './ParkingSlider.css';
 
 const ParkingSlider = () => {
@@ -12,9 +13,35 @@ const ParkingSlider = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const data = await fetchPreviewParkingData();
-        console.log('일반 공항 데이터:', data);
-        setParkingData(data);
+        setError(null);
+  
+        let allAirportsData = [];
+        
+        try {
+          const icnDataArray = await fetchICNParkingData(); // T1, T2 데이터 배열로 받음
+          console.log('인천공항 데이터:', icnDataArray);
+          if (icnDataArray && Array.isArray(icnDataArray)) {
+            allAirportsData.push(...icnDataArray); // 배열 spread로 추가
+          }
+        } catch (icnError) {
+          console.error('인천공항 데이터 로딩 에러:', icnError);
+        }
+  
+        try {
+          const otherData = await fetchPreviewParkingData();
+          console.log('일반 공항 데이터:', otherData);
+          if (otherData && Array.isArray(otherData)) {
+            allAirportsData = [...allAirportsData, ...otherData];
+          }
+        } catch (otherError) {
+          console.error('일반 공항 데이터 로딩 에러:', otherError);
+        }
+  
+        if (allAirportsData.length === 0) {
+          throw new Error('공항 주차장 데이터를 불러오는데 실패했습니다.');
+        }
+  
+        setParkingData(allAirportsData);
       } catch (err) {
         setError('데이터를 불러오는데 실패했습니다.');
         console.error('데이터 로딩 에러:', err);
@@ -22,11 +49,13 @@ const ParkingSlider = () => {
         setLoading(false);
       }
     };
-
+  
     loadData();
     const interval = setInterval(loadData, 300000);
     return () => clearInterval(interval);
   }, []);
+  ;
+
 
   useEffect(() => {
     if (parkingData.length > 0) {
@@ -34,7 +63,7 @@ const ParkingSlider = () => {
         setCurrentIndex((prevIndex) => 
           prevIndex === parkingData.length - 1 ? 0 : prevIndex + 1
         );
-      }, 5000);
+      }, 10000);
 
       return () => clearInterval(slideInterval);
     }
