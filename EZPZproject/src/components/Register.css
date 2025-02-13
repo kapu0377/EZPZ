@@ -1,0 +1,40 @@
+/* ... 기존 CSS ... */
+
+.password-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.password-message {
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  padding-left: 0.5rem;
+}
+
+.password-message.valid {
+  color: #2196f3;
+}
+
+.password-message.invalid {
+  color: #f44336;
+}
+
+input.valid {
+  border-color: #2196f3 !important;
+}
+
+input.invalid {
+  border-color: #f44336 !important;
+}
+
+.button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  background-color: #cccccc !important;
+}
+
+.button-disabled:hover {
+  background-color: #cccccc !important;
+}
