@@ -1,0 +1,103 @@
+.airport-parking-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .airport-content {
+    margin: 20px 0;
+  }
+  
+  h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    margin: 10px 0;
+    color: #666;
+    font-size: 1.2rem;
+  }
+  
+  .parking-area {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .parking-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .parking-name {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .parking-status {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+  }
+  
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-right: 8px; 
+  }
+  
+  .status-badge.available {
+    background-color: #1a861a;
+    color: white;
+  }
+  
+  .status-badge.busy {
+    background-color: #ffa502;
+    color: white;
+  }
+  
+  .status-badge.full {
+    background-color: #ff4b4b;
+    color: white;
+  }
+  
+  .available-spots {
+    min-width: 100px; /* 주차가능 대수 텍스트를 위한 고정 너비 */
+    text-align: right;
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .dot.active {
+    background: #4b7bec;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
