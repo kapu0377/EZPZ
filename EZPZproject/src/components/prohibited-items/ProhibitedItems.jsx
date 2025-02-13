@@ -70,11 +70,11 @@ const CONDITIONAL_ITEMS = {
   };
 
 const CATEGORY_GROUPS = {
-  "신체상해류": {
+  "신체상해류 (객내 반입 금지, 위탁 수화물 가능)": {
     color: "#4B89DC",
     categories: ["날붙이", "둔기", "화기류"]
   },
-  "인체위험류": {
+  "인체위험류 (객내 반입, 위탁 수화물 금지)": {
     color: "#E74C3C",
     categories: ["화학물질", "폭발/인화성", "액체/겔"]
   }
