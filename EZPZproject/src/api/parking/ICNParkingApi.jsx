@@ -12,7 +12,7 @@ export const fetchIncheonParkingData = async () => {
   }
 
   try {
-    const response = await axios.get(`${BASE_URL}/B551177/StatusOfParking/getTrackingParking`, {params: param});
+    const response = await axios.get(`${BASE_URL}/B551177/StatusOfParking/getTrackingParking`, {params: param});;
 
     const items = response.data.response.body.items;
     

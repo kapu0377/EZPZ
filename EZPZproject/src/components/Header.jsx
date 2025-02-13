@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Logo from "../logo/Logo";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -9,7 +10,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <Link to="/" className="logo">EZPacking</Link>
+      <Logo />
       <div className="nav-container">
         {user && (
           <div className="user-menu">
@@ -19,10 +20,10 @@ const Header = () => {
         )}
         <nav className="main-nav">
           <Link to="/prohibited">금지물품</Link>
-          <Link to="/detection">적발현황</Link>
+          <Link to="/board">게시판</Link>
           {user && <Link to="/mypage">마이페이지</Link>}
           {!user && <Link to="/login">로그인</Link>}
-          <Link to="/board">게시판</Link>
+          <Link to="/parking">주차현황</Link>
         </nav>
       </div>
     </header>
