@@ -63,7 +63,7 @@ const ParkingSlider = () => {
         setCurrentIndex((prevIndex) => 
           prevIndex === parkingData.length - 1 ? 0 : prevIndex + 1
         );
-      }, 10000);
+      }, 7000);
 
       return () => clearInterval(slideInterval);
     }

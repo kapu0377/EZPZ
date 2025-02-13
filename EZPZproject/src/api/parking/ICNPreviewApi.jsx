@@ -93,8 +93,8 @@ const calculateOccupancyRate = (total, occupied) => {
 const calculateStatus = (total, occupied) => {
   const occupancyRate = calculateOccupancyRate(total, occupied);
   
-  if (occupancyRate >= 95) return '만차';
-  if (occupancyRate >= 70) return '혼잡';
+  if (occupancyRate >= 100) return '만차';
+  if (occupancyRate >= 80) return '혼잡';
   return '여유';
 };
 
