@@ -61,6 +61,11 @@
   align-items: center;
 }
 
+.card-header h2 {
+  color: white;
+  margin-bottom: 10px;
+}
+
 .card-header .icon {
   font-size: 40px;
   margin-bottom: 10px;
@@ -71,6 +76,11 @@
   text-align: left;
 }
 
+.card-body p {
+  color: #333;
+  margin: 5px 0;
+}
+
 .card-body ul {
   list-style: none;
   padding: 0;
@@ -78,8 +88,9 @@
 }
 
 .card-body li {
-  font-size: 20px; /* 글자 크기 증가 */
-  padding: 6px 0; /* 항목 간격 약간 조정 */
+  font-size: 20px;
+  color: #333;
+  padding: 6px 0;
   border-bottom: 1px solid #eee;
   line-height: 1.4;
 }
@@ -99,18 +110,24 @@
 
 .description-section {
   font-size: 16px;
-  color: white; /* 배경 이미지 위에 잘 보이도록 */
+  color: white;
   padding: 20px;
   margin-bottom: 20px;
   background: url('../../assets/img/airport.jpg') no-repeat center center;
-  background-size: cover; /* 배경 이미지를 영역에 맞게 조정 */
+  background-size: cover;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 1;
 }
 
-/* 텍스트 가독성을 높이기 위한 어두운 오버레이 */
+.description-section h1,
+.description-section p {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 텍스트 가독성 향상 */
+}
+
 .description-section::before {
   content: '';
   position: absolute;
@@ -118,8 +135,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4); /* 반투명한 검은색 오버레이 */
-  z-index: -1;
+  background: rgba(0, 0, 0, 0.6); /* 오버레이를 좀 더 진하게 */
   border-radius: 10px;
 }
 

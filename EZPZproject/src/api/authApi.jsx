@@ -25,7 +25,7 @@ const authApi = {
   refresh: async (refreshToken) => {
     try {
       const response = await axios.create({
-        baseURL: 'http://localhost:8080',
+        baseURL: 'http://localhost:8088',
         headers: {
           'Content-Type': 'application/json',
         }
