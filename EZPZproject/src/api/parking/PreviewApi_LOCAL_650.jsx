@@ -149,11 +149,7 @@ const getParkingLotName = (airportCode, defaultName) => {
 };
 
 const getStatusFromOccupancy = (occupancy) => {
-<<<<<<< HEAD
   if (occupancy >= 100) return '만차';
-=======
-  if (occupancy >= 95) return '만차';
->>>>>>> main
   if (occupancy >= 70) return '혼잡';
   return '여유';
 };
