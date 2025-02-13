@@ -31,14 +31,14 @@ public class Checklist {
     @OneToMany(mappedBy = "checklist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> categories = new ArrayList<>();
 
-    //Setter 대신 사용
-    public void changeTitle(String title) {
-        this.title = title;
-    }
-    public void changeDepartureDate(LocalDate departureDate) {
-        this.departureDate = departureDate;
-    }
-    public void changeReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
+    //Setter로 대체
+//    public void changeTitle(String title) {
+//        this.title = title;
+//    }
+//    public void changeDepartureDate(LocalDate departureDate) {
+//        this.departureDate = departureDate;
+//    }
+//    public void changeReturnDate(LocalDate returnDate) {
+//        this.returnDate = returnDate;
+//    }
 }

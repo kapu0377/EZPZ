@@ -1,6 +1,7 @@
 package com.example.apiezpz.checklist.service;
 
 import com.example.apiezpz.checklist.domain.Checklist;
+import com.example.apiezpz.checklist.dto.CategoryDTO;
 import com.example.apiezpz.checklist.dto.ChecklistDTO;
 import com.example.apiezpz.checklist.repository.ChecklistRepository;
 import com.example.apiezpz.domain.APIUser;
@@ -39,15 +40,36 @@ public class ChecklistServiceImpl implements ChecklistService {
     public ChecklistDTO readChecklist(Long id) {
         Optional<Checklist> result = checklistRepository.findById(id);
         Checklist checklist = result.orElseThrow(() -> new RuntimeException("해당 체크리스트 존재하지 않음"));
-        return modelMapper.map(checklist, ChecklistDTO.class);
+        ChecklistDTO checklistDTO = modelMapper.map(checklist, ChecklistDTO.class);
+
+        // 체크리스트의 카테고리 목록을 DTO로 변환해서 추가
+        List<CategoryDTO> categories = checklist.getCategories().stream()
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
+                .collect(Collectors.toList());
+
+        checklistDTO.setCategories(categories);
+        return checklistDTO;
     }
 
     @Override
     public List<ChecklistDTO> list(Long memberId) {
-        List<Checklist> result = checklistRepository.findByMemberId(memberId);
+//        List<Checklist> result = checklistRepository.findByMemberId(memberId);
+//
+//        return result.stream()
+//                .map(i -> modelMapper.map(i,ChecklistDTO.class))
+//                .collect(Collectors.toList());
+
+        List<Checklist> result = checklistRepository.findByMemberIdWithCategories(memberId);
 
         return result.stream()
-                .map(i -> modelMapper.map(i,ChecklistDTO.class))
+                .map(checklist -> {
+                    ChecklistDTO checklistDTO = modelMapper.map(checklist, ChecklistDTO.class);
+                    List<CategoryDTO> categories = checklist.getCategories().stream()
+                            .map(category -> modelMapper.map(category, CategoryDTO.class))
+                            .collect(Collectors.toList());
+                    checklistDTO.setCategories(categories);
+                    return checklistDTO;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -69,9 +91,9 @@ public class ChecklistServiceImpl implements ChecklistService {
         if (!checklist.getMember().getId().equals(memberId)) {
             throw new RuntimeException("이 체크리스트를 수정할 권한이 없습니다.");
         }
-        checklist.changeTitle(checklistDTO.getTitle());
-        checklist.changeDepartureDate(checklistDTO.getDepartureDate());
-        checklist.changeReturnDate(checklistDTO.getReturnDate());
+        checklist.setTitle(checklistDTO.getTitle());
+        checklist.setDepartureDate(checklistDTO.getDepartureDate());
+        checklist.setReturnDate(checklistDTO.getReturnDate());
 //        checklistRepository.save(checklist);
     }
 }

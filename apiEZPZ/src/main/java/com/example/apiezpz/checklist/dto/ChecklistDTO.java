@@ -13,5 +13,5 @@ public class ChecklistDTO {
     private String title;
     private LocalDate departureDate;
     private LocalDate returnDate;
-    private List<CategoryDTO> categories;
+    private List<CategoryDTO> categories;   //카테고리 목록
 }

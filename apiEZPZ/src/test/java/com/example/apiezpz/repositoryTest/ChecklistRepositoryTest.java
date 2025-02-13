@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.stream.IntStream;
 
+import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Log4j2
@@ -34,7 +36,7 @@ public class ChecklistRepositoryTest {
         // 특정 회원 가져오기
         APIUser member1 = apiUserRepository.findById(1L).orElseThrow(() -> new RuntimeException("회원 없음"));
 
-        IntStream.rangeClosed(1,10).forEach(i -> {
+        IntStream.rangeClosed(11,20).forEach(i -> {
             Checklist checklist = Checklist.builder()
                     .title("title"+i)
                     .departureDate(LocalDate.of(2025, 3, 1))
@@ -47,7 +49,7 @@ public class ChecklistRepositoryTest {
     @Test
     public void insertCategory() {
         // 특정 checklist 가져오기
-        Checklist checklist = checklistRepository.findById(77L).orElseThrow(() -> new RuntimeException("체크리스트 없음"));
+        Checklist checklist = checklistRepository.findById(88L).orElseThrow(() -> new RuntimeException("체크리스트 없음"));
 
         IntStream.rangeClosed(1,10).forEach(i -> {
             Category category = Category.builder()
@@ -60,7 +62,7 @@ public class ChecklistRepositoryTest {
     @Test
     public void insertItem() {
         //특정 카테고리 가져오기
-        Category category = categoryRepository.findById(11L).orElseThrow(() -> new RuntimeException("아이템 없음"));
+        Category category = categoryRepository.findById(21L).orElseThrow(() -> new RuntimeException("아이템 없음"));
 
         IntStream.rangeClosed(1,10).forEach(i -> {
             Item item = Item.builder()
@@ -101,5 +103,40 @@ public class ChecklistRepositoryTest {
         // 체크리스트 삭제 (연관된 카테고리 및 아이템도 삭제되는지 확인)
         checklistRepository.delete(checklist);
         log.info("체크리스트 삭제 완료.");
+    }
+    @Test
+//    @Transactional // 트랜잭션 적용 (테스트 종료 후 자동 롤백되지 않도록 설정 가능)
+    public void testFindByCategoryIdOrderByNameAsc() {
+        // 실제 DB에서 카테고리를 생성 및 저장
+        Category category = Category.builder()
+                .name("여행 준비물")
+                .build();
+        category = categoryRepository.save(category); // DB에 저장 후 다시 가져오기
+
+        // 해당 카테고리에 아이템 추가 (랜덤 순서)
+        Item item1 = Item.builder().name("여권").category(category).checked(false).build();
+        Item item2 = Item.builder().name("충전기").category(category).checked(false).build();
+        Item item3 = Item.builder().name("선글라스").category(category).checked(false).build();
+        Item item4 = Item.builder().name("의류").category(category).checked(false).build();
+
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+        itemRepository.save(item4);
+
+        // 실제 DB에서 아이템을 이름순으로 정렬하여 조회
+        List<Item> sortedItems = itemRepository.findByCategoryIdOrderByNameAsc(category.getId());
+
+        // 4️⃣ 정렬 결과 검증
+        assertThat(sortedItems).isNotNull();
+        assertThat(sortedItems.size()).isEqualTo(4);
+        assertThat(sortedItems.get(0).getName()).isEqualTo("선글라스");
+        assertThat(sortedItems.get(1).getName()).isEqualTo("여권");
+        assertThat(sortedItems.get(2).getName()).isEqualTo("의류");
+        assertThat(sortedItems.get(3).getName()).isEqualTo("충전기");
+
+        // 5️⃣ 로그 출력 (테스트 실행 후 실제 DB에서 확인 가능)
+        log.info("✔ 실제 DB에서 정렬된 아이템 목록:");
+        sortedItems.forEach(item -> log.info(item.getName()));
     }
 }
