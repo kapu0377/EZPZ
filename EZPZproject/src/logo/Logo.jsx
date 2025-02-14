@@ -11,10 +11,11 @@ const Icons = {
   arking: <img src={carIcon} alt="car" />
 };
 
+const LOGO_TEXTS = ['acking', 'assing', 'arking'];
+
 const Logo = () => {
   const [currentText, setCurrentText] = useState('acking');
   const [isChanging, setIsChanging] = useState(false);
-  const texts = ['acking', 'assing', 'arking'];
   
   useEffect(() => {
     let currentIndex = 0;
@@ -22,8 +23,8 @@ const Logo = () => {
       setIsChanging(true);
       
       setTimeout(() => {
-        currentIndex = (currentIndex + 1) % texts.length;
-        setCurrentText(texts[currentIndex]);
+        currentIndex = (currentIndex + 1) % LOGO_TEXTS.length;
+        setCurrentText(LOGO_TEXTS[currentIndex]);
         
         setTimeout(() => {
           setIsChanging(false);

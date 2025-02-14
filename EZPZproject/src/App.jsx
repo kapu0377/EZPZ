@@ -5,13 +5,15 @@ import Layout from "./components/layout/Layout";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
-import Notice from "./pages/Notice"
+import MyPage from "./api/checklistApi"
+// import MyPage from "./components/checklist/ChecklistPage";
 import "./App.css";
-import "./components/board/Notice.css";
-import "./components/parking/AirportParking.css";
+import "./components/notice/Notice.css";
+import Notice from "./pages/Notice";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
+import CategoryItemPage from "./components/checklist/CategoryItemPage";
+
 import AirportParkingPage from "./pages/AirportParkingPage";
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';  // 기본 스타일
 import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
 import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경우)
@@ -22,10 +24,10 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<EZPackingLayout />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/checklist/:checklistId" element={<CategoryItemPage />} />
             <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>
