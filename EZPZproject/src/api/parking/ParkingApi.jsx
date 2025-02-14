@@ -8,12 +8,12 @@ export const AIRPORT_CODES = {
   PUS: { code: 'PUS', name: '김해국제공항' },
   CJU: { code: 'CJU', name: '제주국제공항' },
   TAE: { code: 'TAE', name: '대구국제공항' },
+  CJJ: { code: 'CJJ', name: '청주국제공항' },
   KWJ: { code: 'KWJ', name: '광주공항' },
   RSU: { code: 'RSU', name: '여수공항' },
   USN: { code: 'USN', name: '울산공항' },
   KUV: { code: 'KUV', name: '군산공항' },
-  WJU: { code: 'WJU', name: '원주공항' },
-  CJJ: { code: 'CJJ', name: '청주국제공항' }
+  WJU: { code: 'WJU', name: '원주공항' }
 };
 
 export const fetchAirportParkingData = async (airportCode) => {
@@ -38,7 +38,7 @@ export const fetchAirportParkingData = async (airportCode) => {
         terminal: item.parkingAirportCodeName,
         occupancy: parseFloat(item.parkingCongestionDegree.replace('%', '')),
         totalSpots: parseInt(item.parkingTotalSpace),
-        availableSpots: parseInt(item.parkingOccupiedSpace),
+        availableSpots: parseInt(item.parkingTotalSpace) - parseInt(item.parkingOccupiedSpace),
       }))
     };
   } catch (error) {

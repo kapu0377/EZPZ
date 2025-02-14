@@ -248,11 +248,18 @@ body {
   overflow: visible;
 }
 
-.content-box h2 {
+/* .content-box h2 {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--accent-gray);
+} */
+
+.content-box h2 {
+  font-size: 1.5rem;
+  margin: 0;  /* margin-bottom 제거 */
+  padding: 0; /* padding-bottom 제거 */
+  border-bottom: none; /* border 제거 */
 }
 
 .content-box .content-area {
