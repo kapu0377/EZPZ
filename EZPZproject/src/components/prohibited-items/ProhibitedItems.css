@@ -1,8 +1,9 @@
 .prohibited-items {
-  padding: 20px;
+  padding: 20px 0; /* 좌우 패딩 제거, 상하 패딩만 유지 */
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   text-align: center;
+  width: 100%; /* 전체 너비로 확장 */
 }
 
 .description {
@@ -12,28 +13,80 @@
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 한 줄에 3개씩 배치 */
-  gap: 60px; /* 카드 간격을 15px로 줄임 */
-  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.category-group {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-group-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.category-group-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* 카테고리 그룹별 스타일 */
+.category-group.physical {
+  background: linear-gradient(to right, rgba(75, 137, 220, 0.1), rgba(75, 137, 220, 0.05));
+}
+
+.category-group.hazardous {
+  background: linear-gradient(to right, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.05));
 }
 
 .card {
   width: 90%;
-  max-width: 500px; /* 카드 최대 너비 유지 */
+  max-width: 500px;
   background: white;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
+  transition: none; /* 모든 전환 효과 제거 */
+  overflow: visible; /* hidden에서 visible로 변경 */
+  position: relative;
+  z-index: 1;
+}
+
+/* hover 효과 제거 (원래 있던 opacity 및 transform, box-shadow 효과 삭제) */
+/*
+.cards-container:has(.card:hover) .card:not(:hover) {
+  opacity: 0.6;
 }
 
 .card:hover {
-  transform: translateY(-8px); /* 약간 더 부드러운 호버 효과 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
+
+.card:hover .card-body {
+  background: rgba(255, 255, 255, 1);
+}
+
+.card:hover .slide-panel {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+*/
 
 .card-header {
   background: linear-gradient(135deg, #616161, #3b3b3b);
@@ -46,6 +99,11 @@
   align-items: center;
 }
 
+.card-header h2 {
+  color: white;
+  margin-bottom: 10px;
+}
+
 .card-header .icon {
   font-size: 40px;
   margin-bottom: 10px;
@@ -56,6 +114,11 @@
   text-align: left;
 }
 
+.card-body p {
+  color: #333;
+  margin: 5px 0;
+}
+
 .card-body ul {
   list-style: none;
   padding: 0;
@@ -63,8 +126,9 @@
 }
 
 .card-body li {
-  font-size: 20px; /* 글자 크기 증가 */
-  padding: 6px 0; /* 항목 간격 약간 조정 */
+  font-size: 20px;
+  color: #333;
+  padding: 6px 0;
   border-bottom: 1px solid #eee;
   line-height: 1.4;
 }
@@ -83,19 +147,34 @@
 }
 
 .description-section {
+  width: 100%; /* 전체 너비로 확장 */
   font-size: 16px;
-  color: white; /* 배경 이미지 위에 잘 보이도록 */
-  padding: 20px;
+  color: white;
+  padding: 40px 20px; /* 상하 패딩 증가 */
   margin-bottom: 20px;
   background: url('../../assets/img/airport.jpg') no-repeat center center;
-  background-size: cover; /* 배경 이미지를 영역에 맞게 조정 */
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-size: cover;
   position: relative;
   z-index: 1;
+  border-radius: 0; /* 모서리 둥글게 제거 */
 }
 
-/* 텍스트 가독성을 높이기 위한 어두운 오버레이 */
+/* 제목 텍스트 색상 변경 */
+.description-section h1 {
+  color: #ffffff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+}
+
+/* 설명 텍스트 색상 변경 */
+.description-section p {
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* 기존 오버레이 투명도 조정 (필요한 경우) */
 .description-section::before {
   content: '';
   position: absolute;
@@ -103,9 +182,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4); /* 반투명한 검은색 오버레이 */
+  background: rgba(0, 0, 0, 0.5); /* 배경 오버레이 투명도 조정 */
   z-index: -1;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 /* 모달 오버레이 */
@@ -172,19 +251,72 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
+/* 새로운 슬라이드 패널 스타일 */
+.slide-panel {
+  position: absolute;
+  left: 105%; /* 왼쪽 카드는 오른쪽으로 슬라이드 */
+  top: 0;
+  width: 300px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: none; /* 전환 효과 제거 */
+  pointer-events: none;
+  z-index: 3;
+}
 
+/* 오른쪽 카드의 슬라이드 패널 위치 조정 */
+.card:nth-child(2n) .slide-panel {
+  left: auto; /* 기존 left: 105% 제거 */
+  right: 105%; /* 오른쪽 카드는 왼쪽으로 슬라이드 */
+}
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 표시 */
-    gap: 10px; /* 태블릿에서는 더 좁은 간격 */
+  .category-group-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .slide-panel {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) translateY(10px);
+    width: 90%;
+    max-width: 300px;
+  }
+  
+  /* hover 효과 제거된 상태 */
+  /* .card:hover .slide-panel {
+    transform: translateX(-50%) translateY(0);
+  } */
+}
+
+@media (max-width: 768px) {
+  .category-group-cards {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 600px) {
-  .cards-container {
-    grid-template-columns: 1fr; /* 모바일에서는 1개씩 표시 */
-    gap: 8px; /* 모바일에서는 최소 간격 */
-  }
+.prohibited-items-slider {
+  position: relative;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.slider-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.slide-panel {
+  z-index: 10;
+  max-height: none; /* 최대 높이 제한 제거 */
 }

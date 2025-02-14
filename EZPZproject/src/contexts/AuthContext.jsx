@@ -8,60 +8,28 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // 초기화 및 토큰 복구 시도
   useEffect(() => {
     const initializeAuth = async () => {
-      const refreshToken = localStorage.getItem("refreshToken");
       const storedAccessToken = localStorage.getItem("accessToken");
-
-      // 토큰이 모두 없는 경우 나머지 인증 관련 데이터도 제거합니다.
-      if (!storedAccessToken && !refreshToken) {
-        clearAuthData();
-      } else if (refreshToken && !storedAccessToken) {
+      
+      if (storedAccessToken) {
         try {
-          // 리프레시 토큰으로 새 액세스 토큰 발급 시도
-          const data = await authApi.refresh(refreshToken);
-          if (data.accessToken) {
-            localStorage.setItem("accessToken", data.accessToken);
-            setToken(data.accessToken);
+          // 액세스 토큰이 있는 경우 사용자 정보 복구
+          const username = localStorage.getItem("username");
+          const name = localStorage.getItem("name");
 
-            // 사용자 정보 복구
-            const mid = localStorage.getItem("mid");
-            const username = localStorage.getItem("username");
-            const name = localStorage.getItem("name");
-
-            if (mid && username) {
-              setUser({
-                mid,
-                username,
-                name: name || username,
-              });
-            } else {
-              // 인증에 필요한 정보가 누락되었다면 클리어
-              clearAuthData();
-            }
+          if (username) {
+            setToken(storedAccessToken);
+            setUser({
+              username,
+              name: name || username,
+            });
           } else {
-            handleLogout();
+            clearAuthData();
           }
         } catch (error) {
-          console.error("토큰 갱신 실패:", error);
+          console.error("인증 초기화 실패:", error);
           handleLogout();
-        }
-      } else if (storedAccessToken) {
-        // 액세스 토큰이 있는 경우 사용자 정보 복구
-        const mid = localStorage.getItem("mid");
-        const username = localStorage.getItem("username");
-        const name = localStorage.getItem("name");
-
-        if (mid && username) {
-          setToken(storedAccessToken);
-          setUser({
-            mid,
-            username,
-            name: name || username,
-          });
-        } else {
-          clearAuthData();
         }
       }
       setIsInitialized(true);
@@ -70,36 +38,59 @@ export const AuthProvider = ({ children }) => {
     initializeAuth();
   }, []);
 
-  const handleLogout = () => {
-    clearAuthData();
-    setToken(null);
-    setUser(null);
-    window.location.href = '/';
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    } finally {
+      clearAuthData();
+      setToken(null);
+      setUser(null);
+      window.location.href = '/';
+    }
   };
 
   const login = async (credentials) => {
     try {
+      console.log('로그인 시도:', credentials);
       const data = await authApi.login(credentials);
+      console.log('로그인 응답:', data);
       
       if (data.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        localStorage.setItem("mid", data.mid);
-        localStorage.setItem("username", credentials.username);
-        localStorage.setItem("name", data.name);
+        // 토큰과 사용자 정보를 localStorage에 저장
+        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('name', data.name);
         
+        // Context 상태 업데이트
         setToken(data.accessToken);
         setUser({
-          mid: data.mid,
-          username: credentials.username,
+          username: data.username,
           name: data.name
         });
+        
+        console.log('로그인 성공 - 상태 업데이트 완료');
+        window.location.href = '/';
         return true;
       }
+      
+      console.error('토큰이 없는 응답:', data);
       return false;
     } catch (error) {
-      console.error("로그인 에러:", error);
-      alert("로그인 실패: " + error.message);
+      console.error('로그인 에러:', error);
+      // 에러 발생 시 저장된 데이터 초기화
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('username');
+      localStorage.removeItem('name');
+      setToken(null);
+      setUser(null);
+      
+      if (error.response?.data) {
+        alert(error.response.data);
+      } else {
+        alert("로그인에 실패했습니다.");
+      }
       return false;
     }
   };
@@ -125,8 +116,6 @@ export const useAuth = () => {
 
 function clearAuthData() {
   localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("mid");
   localStorage.removeItem("username");
   localStorage.removeItem("name");
   sessionStorage.removeItem("searchResults");
