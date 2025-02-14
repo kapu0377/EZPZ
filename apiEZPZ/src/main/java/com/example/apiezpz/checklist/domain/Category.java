@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"checklist", "items"})
+@ToString(exclude = {"checklist", "checklistItems"})
 public class Category {
 
     @Id
@@ -25,17 +25,17 @@ public class Category {
     private Checklist checklist;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Item> items = new ArrayList<>();
+    private List<ChecklistItem> checklistItems = new ArrayList<>();
 
     // 아이템 추가 편의 메서드
-    public void addItem(Item item) {
-        items.add(item);
-        item.setCategory(this);
+    public void addItem(ChecklistItem checklistItem) {
+        checklistItems.add(checklistItem);
+        checklistItem.setCategory(this);
     }
 
     // 아이템 삭제 편의 메서드
-    public void removeItem(Item item) {
-        items.remove(item);
-        item.setCategory(null);
+    public void removeItem(ChecklistItem checklistItem) {
+        checklistItems.remove(checklistItem);
+        checklistItem.setCategory(null);
     }
 }
