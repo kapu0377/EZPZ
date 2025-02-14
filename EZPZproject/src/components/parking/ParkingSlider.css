@@ -5,10 +5,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .airport-content {
-    margin: 20px 0;
+  .airport-content h3 {
+    margin-top: 0px;
+    margin-bottom: 20px;
   }
-  
+
   h2 {
     margin: 0;
     color: #333;
@@ -102,30 +103,51 @@
     color: #666;
   }
 
-  /* 기존 CSS에 추가 */
-.card-header {
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    width: 100%;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 5px;
+  }
+
+.title-with-arrow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 0 10px;
+  gap: 8px;
+}
+
+.title-with-arrow h2 {
+  margin: 0;
+  display: inline-block;
+}
+
+.card-header h2 {
+  margin: 0;
 }
 
 .more-button {
-  background-color: #007bff;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background: none;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
+  height: 20px; /* 버튼 높이 축소 */
 }
 
-.more-button:hover {
-  background-color: #0056b3;
+.arrow-icon {
+  width: 12px; /* 이미지 크기 축소 */
+  height: 12px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  margin-left: 2px; /* 제목과의 간격 조정 */
+  margin-top: 1px; /* 수직 정렬 미세 조정 */
 }
 
-.more-button:active {
-  background-color: #004085;
+.more-button:hover .arrow-icon {
+  opacity: 1;
 }

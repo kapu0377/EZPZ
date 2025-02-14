@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cef199cd-709a-47d4-9db0-c935a2b866d3" name="변경" comment="" />
+    <list default="true" id="cef199cd-709a-47d4-9db0-c935a2b866d3" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EZPZproject/src/api/parking/ParkingApi.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EZPZproject/src/api/parking/ParkingApi.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EZPZproject/src/components/parking/ParkingSlider.css" beforeDir="false" afterPath="$PROJECT_DIR$/EZPZproject/src/components/parking/ParkingSlider.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EZPZproject/src/components/parking/ParkingSlider.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EZPZproject/src/components/parking/ParkingSlider.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -100,6 +105,7 @@
       <workItem from="1739318872559" duration="5854000" />
       <workItem from="1739336293577" duration="741000" />
       <workItem from="1739410912592" duration="27000" />
+      <workItem from="1739496733839" duration="599000" />
     </task>
     <servers />
   </component>

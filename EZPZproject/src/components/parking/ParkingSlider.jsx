@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { fetchPreviewParkingData } from '../../api/parking/PreviewApi';
 import { fetchICNParkingData } from '../../api/parking/ICNPreviewApi';
 import './ParkingSlider.css';
+import { useNavigate } from 'react-router-dom';
+import arrow from '../../assets/img/arrow.png';
 
 const ParkingSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [parkingData, setParkingData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
@@ -89,9 +92,18 @@ const ParkingSlider = () => {
 
   const currentAirport = parkingData[currentIndex];
 
+  const handleMoreClick = () => {
+    navigate('/parking');
+  };
+
   return (
     <div className="airport-parking-card">
-      <h2>공항 별 주차현황</h2>
+      <div className="title-with-arrow">
+        <h2>공항 별 주차현황</h2>
+        <button onClick={handleMoreClick} className="more-button">
+        <img src={arrow} alt="더보기" className="arrow-icon" />
+        </button>
+      </div>
       <div className="airport-content">
         <h3>{currentAirport?.airportName}</h3>
         {currentAirport?.parkingLots?.map((lot, index) => (

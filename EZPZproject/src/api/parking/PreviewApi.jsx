@@ -41,6 +41,16 @@ export const AIRPORT_CODES = {
       'P2': '화물'
     }
   },
+  CJJ: { 
+    code: 'CJJ', 
+    name: '청주국제공항',
+    parkingLots: {
+      'P1': '여객 제1주차장',
+      'P2': '여객 제2주차장',
+      'P3': '여객 제3주차장',
+      'P4': '여객 제4주차장'
+    }
+  },
   KWJ: { 
     code: 'KWJ', 
     name: '광주공항',
@@ -76,17 +86,6 @@ export const AIRPORT_CODES = {
       'P1': '여객주차장'
     }
   },
-  CJJ: { 
-    code: 'CJJ', 
-    name: '청주국제공항',
-    parkingLots: {
-      'P1': '여객 제1주차장',
-      'P2': '여객 제2주차장',
-      'P3': '여객 제3주차장',
-      'P4': '여객 제4주차장'
-    }
-  },
-
 };
 
 export const fetchPreviewParkingData = async () => {
