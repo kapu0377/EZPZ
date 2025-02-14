@@ -35,9 +35,9 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        // 🔹 로그인과 회원가입은 인증 없이 허용
+                        //  로그인과 회원가입은 인증 없이 허용
                         .requestMatchers("/api/auth/**").permitAll()
-                        // 🔹 그 외 모든 요청은 인증 필수
+                        // 그 외 모든 요청은 인증 필수
                      .anyRequest().permitAll()//    authenticated()
                 );
 

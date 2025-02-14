@@ -326,3 +326,23 @@ tr:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.prohibited-items-slider {
+  position: relative;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.slider-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.slide-panel {
+  z-index: 10;
+  max-height: none; /* 최대 높이 제한 제거 */
+}

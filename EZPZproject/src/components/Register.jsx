@@ -89,7 +89,7 @@ const Register = ({ isOpen, onClose }) => {
   return (
     <div className="modal-overlay">
       <div className="register-container">
-        <form onSubmit={handleSubmit} className="register-form">
+        <form onSubmit={handleSubmit} className="register-form" autoComplete="off">
           <div className="form-header">
             <h2>회원가입</h2>
             <button type="button" className="close-button" onClick={onClose}>×</button>
@@ -100,6 +100,10 @@ const Register = ({ isOpen, onClose }) => {
             value={formData.username}
             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             required
+            autoComplete="off"
+            onCopy={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCut={(e) => e.preventDefault()}
           />
           <div className="password-input-group">
             <input
@@ -109,6 +113,10 @@ const Register = ({ isOpen, onClose }) => {
               onChange={handlePasswordChange}
               className={formData.passwordConfirm && (passwordMatch.isValid ? "valid" : "invalid")}
               required
+              autoComplete="new-password"
+              onCopy={(e) => e.preventDefault()}
+              onPaste={(e) => e.preventDefault()}
+              onCut={(e) => e.preventDefault()}
             />
             <input
               type="password"
@@ -117,6 +125,10 @@ const Register = ({ isOpen, onClose }) => {
               onChange={handlePasswordConfirmChange}
               className={formData.passwordConfirm && (passwordMatch.isValid ? "valid" : "invalid")}
               required
+              autoComplete="new-password"
+              onCopy={(e) => e.preventDefault()}
+              onPaste={(e) => e.preventDefault()}
+              onCut={(e) => e.preventDefault()}
             />
             {formData.passwordConfirm && (
               <span className={`password-message ${passwordMatch.isValid ? "valid" : "invalid"}`}>
@@ -130,6 +142,10 @@ const Register = ({ isOpen, onClose }) => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
+            autoComplete="off"
+            onCopy={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCut={(e) => e.preventDefault()}
           />
           <input
             type="number"
@@ -137,6 +153,10 @@ const Register = ({ isOpen, onClose }) => {
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             required
+            autoComplete="off"
+            onCopy={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCut={(e) => e.preventDefault()}
           />
           <input
             type="email"
@@ -144,6 +164,10 @@ const Register = ({ isOpen, onClose }) => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
+            autoComplete="off"
+            onCopy={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCut={(e) => e.preventDefault()}
           />
           <div className="gender-group">
             <label>
@@ -174,6 +198,10 @@ const Register = ({ isOpen, onClose }) => {
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
             required
+            autoComplete="off"
+            onCopy={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCut={(e) => e.preventDefault()}
           />
           <button 
             type="submit" 

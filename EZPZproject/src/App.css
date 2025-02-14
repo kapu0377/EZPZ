@@ -241,9 +241,11 @@ body {
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
-  min-height: 400px;
+  min-height: 450px;
+  height: auto;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
 .content-box h2 {

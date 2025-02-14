@@ -5,6 +5,7 @@ import './Rankings.css';
 const Rankings = () => {
   const [searchRankings, setSearchRankings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const MAX_DISPLAY_ITEMS = 6; // 최대 표시 항목 수 설정
 
   useEffect(() => {
     const fetchRankings = async () => {
@@ -15,7 +16,7 @@ const Rankings = () => {
           console.log('순위 데이터가 없습니다.');
           setSearchRankings([]);
         } else {
-          setSearchRankings(data);
+                    setSearchRankings(data.slice(0, MAX_DISPLAY_ITEMS));
         }
       } catch (error) {
         console.error('Failed to fetch rankings:', error);
@@ -39,7 +40,8 @@ const Rankings = () => {
   // 검색 직후 즉시 업데이트를 위한 이벤트 리스너
   useEffect(() => {
     const handleRankingsUpdate = (event) => {
-      setSearchRankings(event.detail);
+      // 업데이트 시에도 6개로 제한
+      setSearchRankings(event.detail.slice(0, MAX_DISPLAY_ITEMS));
     };
 
     window.addEventListener('rankingsUpdated', handleRankingsUpdate);
