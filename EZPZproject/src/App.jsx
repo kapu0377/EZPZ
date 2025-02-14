@@ -7,8 +7,10 @@ import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
 import Notice from "./pages/Notice"
 import MyPage from "./api/checklistApi"
+// import MyPage from "./components/checklist/ChecklistPage";
 import "./App.css";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
+import CategoryItemPage from "./components/checklist/CategoryItemPage";
 
 function App() {
   return (
@@ -23,7 +25,7 @@ function App() {
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
             <Route path="/mypage" element={<MyPage />} />
-            
+            <Route path="/checklist/:checklistId" element={<CategoryItemPage />} />
           </Routes>
         </div>
       </Router>

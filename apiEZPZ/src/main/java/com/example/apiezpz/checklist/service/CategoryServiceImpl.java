@@ -9,7 +9,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +30,12 @@ public class CategoryServiceImpl implements CategoryService {
     public void addCategory(Long checklistId, CategoryDTO categoryDTO) {
         Checklist checklist = checklistRepository.findById(checklistId)
                 .orElseThrow(() -> new RuntimeException("해당 체크리스트가 존재하지 않습니다."));
+
+        // 이미 존재하는 카테고리인지 확인
+        boolean exists = categoryRepository.existsByChecklistIdAndName(checklistId, categoryDTO.getName());
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 카테고리입니다.");
+        }
 
         Category category = modelMapper.map(categoryDTO, Category.class);
         category.setChecklist(checklist); // 체크리스트와 연결

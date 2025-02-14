@@ -49,4 +49,10 @@ public class ChecklistController {
         checklistDTO.setId(id);
         checklistService.modifyChecklist(memberId, checklistDTO);
     }
+
+    // 모든 아이템의 체크 상태를 해제하는 엔드포인트
+    @PutMapping("/{checklistId}/reset")
+    public void resetPacking(@PathVariable Long checklistId) {
+        checklistService.resetPacking(checklistId);
+    }
 }
