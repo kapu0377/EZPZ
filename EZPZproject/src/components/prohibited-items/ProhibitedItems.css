@@ -58,13 +58,14 @@
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: none; /* 모든 전환 효과 제거 */
   overflow: visible; /* hidden에서 visible로 변경 */
   position: relative;
   z-index: 1;
 }
 
-/* 수정된 코드 */
+/* hover 효과 제거 (원래 있던 opacity 및 transform, box-shadow 효과 삭제) */
+/*
 .cards-container:has(.card:hover) .card:not(:hover) {
   opacity: 0.6;
 }
@@ -79,6 +80,13 @@
 .card:hover .card-body {
   background: rgba(255, 255, 255, 1);
 }
+
+.card:hover .slide-panel {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+*/
 
 .card-header {
   background: linear-gradient(135deg, #616161, #3b3b3b);
@@ -174,7 +182,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-
   background: rgba(0, 0, 0, 0.5); /* 배경 오버레이 투명도 조정 */
   z-index: -1;
   border-radius: 0;
@@ -256,38 +263,9 @@ tr:hover {
   padding: 20px;
   opacity: 0;
   transform: translateX(-20px);
-  transition: all 0.3s ease;
+  transition: none; /* 전환 효과 제거 */
   pointer-events: none;
   z-index: 3;
-}
-
-.card:hover .slide-panel {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-.slide-panel h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 1.2em;
-}
-
-.slide-panel ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.slide-panel li {
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 0.9em;
-  color: #666;
-}
-
-.slide-panel li:last-child {
-  border-bottom: none;
 }
 
 /* 오른쪽 카드의 슬라이드 패널 위치 조정 */
@@ -311,14 +289,10 @@ tr:hover {
     max-width: 300px;
   }
   
-  .card:nth-child(2n) .slide-panel {
-    left: 50%;
-    right: auto;
-  }
-  
-  .card:hover .slide-panel {
+  /* hover 효과 제거된 상태 */
+  /* .card:hover .slide-panel {
     transform: translateX(-50%) translateY(0);
-  }
+  } */
 }
 
 @media (max-width: 768px) {

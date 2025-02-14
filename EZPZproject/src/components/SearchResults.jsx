@@ -29,17 +29,19 @@ const SearchResults = ({ results, onRemoveItem }) => {
             <div className="item-header">
               <span className="item-name">{result.item}</span>
               <span className={`item-status ${
-                result.status === "반입가능" ? "allowed" : "prohibited"
+                result.status === "반입가능" ? "allowed" : 
+                result.status === "부분허용" ? "conditional" :
+                "prohibited"
               }`}>
                 {result.status}
               </span>
             </div>
             <div className="item-details">
               {result.details}
-              {result.isConditional && (
-                <span className="conditional-notice">
+              {result.isConditional && result.details !== "기내 반입 가능, 특별 제한 없음" && (
+                <div className="conditional-notice">
                   * 조건부 반입 가능 물품입니다. 자세한 내용은 상세정보를 확인해주세요.
-                </span>
+                </div>
               )}
             </div>
           </div>

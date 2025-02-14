@@ -56,9 +56,9 @@ const SearchInput = ({ onSearchResult, onReset }) => {
 
   const handleSearch = async () => {
     if (inputValue.trim()) {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const result = await itemApi.searchItems(inputValue.trim())
+        const result = await itemApi.searchItems(inputValue.trim());
         let newResult;
         
         // 배터리 검색어 확인
@@ -68,23 +68,32 @@ const SearchInput = ({ onSearchResult, onReset }) => {
           return;
         }
         
-        if (!result || 
-            result.error === "NOT_FOUND" || 
-            result.originalText === "해당 물품은 기본적으로 기내 반입이 가능합니다.") {
+        // DB에 데이터가 있는 경우
+        if (result && !result.error && result.restrictions) {
+          let status;
+          let details = result.restrictions;
+          const actualAllowed = !result.isAllowed;
+          const actualConditional = !result.isConditional;
+
+          if (actualAllowed) {
+            status = "반입가능";
+          } else {
+            status = actualConditional ? "부분허용" : "반입금지";
+          }
+          
+          newResult = {
+            item: inputValue.trim(),
+            status: status,
+            details: details,
+            isConditional: actualConditional
+          };
+        } else {
+          // DB에 데이터가 없는 경우
           newResult = {
             item: inputValue.trim(),
             status: "반입가능",
-            details: "해당 물품은 기본적으로 기내 반입이 가능합니다.",
+            details: "기내 반입 가능, 특별 제한 없음",
             isConditional: false
-          };
-        } else {
-          newResult = {
-            item: inputValue.trim(),
-            status: result.isAllowed ? "반입가능" : "반입금지",
-            details: result.restrictions || (result.isAllowed
-              ? "기내 반입이 가능한 물품입니다."
-              : "비행기 내부 및 수화물이 불가능합니다."),
-            isConditional: result.isConditional
           };
         }
         
@@ -103,7 +112,7 @@ const SearchInput = ({ onSearchResult, onReset }) => {
         setIsLoading(false);
       }
     }
-  }
+  };
 
   return (
     <div className="search-input">

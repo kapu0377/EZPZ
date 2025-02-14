@@ -1,5 +1,6 @@
 package com.example.apiezpz.search.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -54,13 +55,10 @@ public class SearchService {
         return searchHistoryRepository.findByUserOrderBySearchDateDesc(user);
     }
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Tokyo")  // 매일 자정(JST) 실행
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Tokyo")  // 매일 자정에 실행
     @Transactional
     public void resetDailyRankings() {
-        List<CategoryRank> rankings = categoryRankRepository.findAll();
-        for (CategoryRank rank : rankings) {
-            rank.setSearchCount(0L);
-        }
-        categoryRankRepository.saveAll(rankings);
+        categoryRankRepository.deleteAll();
+        System.out.println("카테고리 랭크 항목들이 리셋되었습니다: " + LocalDateTime.now());
     }
 } 

@@ -9,7 +9,6 @@ const EZPackingLayout = () => {
       <SearchSection />
       <div className="main-content">
         <div className="content-box">
-          <p>금지물품</p>
           <ProhibitedItemsSlider />
         </div>
         <div className="content-box">체크리스트</div>

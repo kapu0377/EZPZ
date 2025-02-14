@@ -240,7 +240,7 @@ body {
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  transition: none;
   min-height: 450px;
   height: auto;
   display: flex;
@@ -261,9 +261,9 @@ body {
   padding: 1rem;
 }
 
-.content-box:hover {
+/* .content-box:hover {
   transform: translateY(-4px);
-}
+} */
 
 /* 푸터 스타일 */
 .footer {
@@ -359,6 +359,10 @@ body {
 .item-status.prohibited {
   background-color: #f44336;
   color: white;
+}
+
+.item-status.conditional {
+  color: orange;
 }
 
 .item-details {
