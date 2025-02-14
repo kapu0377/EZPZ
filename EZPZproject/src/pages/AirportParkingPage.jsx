@@ -126,34 +126,17 @@ const AirportParkingPage = () => {
 
       {incheonData && (
         <div className="info-buttons">
-          <button 
-            className="airport-button fee-info-button"
-            onClick={() => setIsModalOpen(true)}
-          >
+          <button className="airport-button fee-info-button" onClick={() => setIsModalOpen(true)}>
             인천공항 주차요금
           </button>
-          <a 
-            href="https://www.airport.kr/ap_ko/970/subview.do" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="airport-button fee-info-button">
+          <a href="https://www.airport.kr/ap_ko/970/subview.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
           전기차 충전소</a>
-          <a 
-            href="https://www.airport.kr/ap_ko/6600/subview.do" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="airport-button fee-info-button">
+          <a href="https://www.airport.kr/ap_ko/6600/subview.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
            공항-주차장 셔틀버스</a>
-          <button 
-            className="airport-button fee-info-button"
-            onClick={() => setIsContactModalOpen(true)}>
+          <button className="airport-button fee-info-button" onClick={() => setIsContactModalOpen(true)}>
           긴급전화 번호
           </button>
-          <a 
-            href="https://www.airport.kr/sites/ap_ko/index.do" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="airport-button fee-info-button">
+          <a href="https://www.airport.kr/sites/ap_ko/index.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
           인천공항 홈페이지</a>
         </div>
       )}
@@ -170,18 +153,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'GMP' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="airport-button fee-info-button"
-              onClick={() => setIsGmpModalOpen(true)}
-            >
+            <button className="airport-button fee-info-button" onClick={() => setIsGmpModalOpen(true)}>
             김포공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/gimpo/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/gimpo/index.do" target="_blank" rel="noopener noreferrer"className="fee-info-button">
             김포공항 홈페이지
             </a>
           </div>
@@ -199,18 +174,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'PUS' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsPusModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsPusModalOpen(true)}>
             김해공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/gimhae/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/gimhae/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             김해공항 홈페이지
             </a>
           </div>
@@ -228,18 +195,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'CJU' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsCJUModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsCJUModalOpen(true)}>
             제주공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/jeju/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/jeju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             제주공항 홈페이지
             </a>
           </div>
@@ -257,18 +216,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'TAE' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsTAEModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsTAEModalOpen(true)}>
             대구공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/daegu/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/daegu/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             대구공항 홈페이지
             </a>
           </div>
@@ -286,18 +237,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'CJJ' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsCJJModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsCJJModalOpen(true)}>
             청주공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/cheongju/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/cheongju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             청주공항 홈페이지
             </a>
           </div>
@@ -315,18 +258,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'KWJ' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsKWJModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsKWJModalOpen(true)}>
             광주공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/gwangju/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/gwangju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             광주공항 홈페이지
             </a>
           </div>
@@ -343,18 +278,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'RSU' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsRSUModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsRSUModalOpen(true)}>
             여수공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/yeosu/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/yeosu/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             여수공항 홈페이지
             </a>
           </div>
@@ -371,18 +298,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'USN' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsUSNModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsUSNModalOpen(true)}>
             울산공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/ulsan/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/ulsan/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             울산공항 홈페이지
             </a>
           </div>
@@ -399,18 +318,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'KUV' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsKUVModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsKUVModalOpen(true)}>
             군산공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/gunsan/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/gunsan/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             군산공항 홈페이지
             </a>
           </div>
@@ -427,18 +338,10 @@ const AirportParkingPage = () => {
       {selectedAirport?.id === 'WJU' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button 
-              className="fee-info-button"
-              onClick={() => setIsWJUModalOpen(true)}
-            >
+            <button className="fee-info-button" onClick={() => setIsWJUModalOpen(true)}>
             원주공항 주차요금
             </button>
-            <a 
-              href="https://www.airport.co.kr/wonju/index.do" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="fee-info-button"
-            >
+            <a href="https://www.airport.co.kr/wonju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
             원주공항 홈페이지
             </a>
           </div>
