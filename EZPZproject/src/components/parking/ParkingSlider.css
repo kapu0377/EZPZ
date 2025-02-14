@@ -113,12 +113,14 @@
     padding-bottom: 5px;
   }
 
-.title-with-arrow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
+  .title-with-arrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 15px; 
+    width: 100%;
+  }
 
 .title-with-arrow h2 {
   margin: 0;

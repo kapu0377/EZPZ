@@ -125,19 +125,24 @@ const AirportParkingPage = () => {
       </div>
 
       {incheonData && (
-        <div className="info-buttons">
-          <button className="airport-button fee-info-button" onClick={() => setIsModalOpen(true)}>
-            인천공항 주차요금
-          </button>
-          <a href="https://www.airport.kr/ap_ko/970/subview.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
-          전기차 충전소</a>
-          <a href="https://www.airport.kr/ap_ko/6600/subview.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
-           공항-주차장 셔틀버스</a>
-          <button className="airport-button fee-info-button" onClick={() => setIsContactModalOpen(true)}>
-          긴급전화 번호
-          </button>
-          <a href="https://www.airport.kr/sites/ap_ko/index.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
-          인천공항 홈페이지</a>
+        <div className="info-section">
+          <div className="contact-text-container">
+            <p className="contact-info">-(마이너스)로 표시된 주차공간은 이중주차로 인한 현상입니다.</p>
+          </div>
+          <div className="info-buttons">
+            <button className="airport-button fee-info-button" onClick={() => setIsModalOpen(true)}>
+              인천공항 주차요금
+            </button>
+            <a href="https://www.airport.kr/ap_ko/970/subview.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
+            전기차 충전소</a>
+            <a href="https://www.airport.kr/ap_ko/6600/subview.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
+            공항-주차장 셔틀버스</a>
+            <button className="airport-button fee-info-button" onClick={() => setIsContactModalOpen(true)}>
+            긴급전화 번호
+            </button>
+            <a href="https://www.airport.kr/sites/ap_ko/index.do" target="_blank" rel="noopener noreferrer" className="airport-button fee-info-button">
+            인천공항 홈페이지</a>
+          </div>
         </div>
       )}
 
