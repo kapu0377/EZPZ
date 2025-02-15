@@ -43,10 +43,7 @@
 
 .category-group-cards {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 50px;
-  margin-top: 200px; /* 중앙 카드와의 간격 */
+  justify-content: space-between;
 }
 
 /* 3개씩 그룹화 */
@@ -58,8 +55,8 @@
 
 /* 원형 카드 스타일 */
 .card {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -70,11 +67,15 @@
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
+  grid-column: 2;
+  grid-row: 1;
+  margin: auto;
 }
 
 /* 아이콘 스타일 */
 .card-header {
-  font-size: 40px;
+  font-size: 50px;
+  margin-bottom: 10px;
   z-index: 2;
   transition: all 0.3s ease;
 }
@@ -338,4 +339,76 @@ tr:hover {
 .card:nth-child(2n) .slide-panel {
   left: auto; /* 기존 left: 105% 제거 */
   right: 105%; /* 오른쪽 카드는 왼쪽으로 슬라이드 */
+}
+
+/* 카테고리 섹션 기본 스타일 */
+.category-section {
+  position: relative;
+  margin-bottom: 80px;
+  padding-top: 40px;
+}
+
+/* 제목 스타일 */
+.category-title {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* 각 섹션별 제목 색상 */
+.category-section.physical .category-title {
+  color: #0066FF;
+}
+
+.category-section.high-risk .category-title {
+  color: #00AA00;
+}
+
+.category-section.hazardous .category-title {
+  color: #FF0000;
+}
+
+/* 카드 그룹 스타일 */
+.category-group-cards {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin: 20px 0;
+}
+
+/* 각 섹션별 카드 위치 */
+.category-section.physical .card:nth-child(1) {
+  position: relative;
+  left: 30px;
+  top: 20px;
+}
+
+.category-section.physical .card:nth-child(2) {
+  position: relative;
+  top: -20px;
+}
+
+.category-section.physical .card:nth-child(3) {
+  position: relative;
+  right: 30px;
+  top: 20px;
+}
+
+.category-section.hazardous .card:nth-child(1) {
+  position: relative;
+  left: 20px;
+  bottom: 10px;
+}
+
+.category-section.high-risk .card {
+  margin: 0 auto;
 }
