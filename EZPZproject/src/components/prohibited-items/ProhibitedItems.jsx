@@ -22,13 +22,13 @@ const CATEGORY_ICONS = {
 };
 
 const CATEGORY_DESCRIPTIONS = {
+  "날붙이": "칼, 송곳, 도끼, 드릴날, 가위, 면도칼, 작살 기내 반입이 제한됩니다.",
+  "둔기": "무관한 물건이나 도구는 기내 반입이 제한됩니다.",
+  "화기류": "모든 종류의 화기 및 무기류는 기내 반입이 절대 금지됩니다.",
   "화학물질": "인체에 해롭거나 위험한 화학물질은 기내 반입이 제한됩니다.",
-  "고위험 비행편": "안전상의 이유로 고위험 비행편에서는 추가 제한이 적용됩니다.",
-  "둔기": "무겁고 둔탁한 손상을 입힐 수 있는 도구는 기내 반입이 제한됩니다.",
-  "액체/겔": "액체 및 젤류는 일정 용량 이상 반입이 제한됩니다.",
-  "폭발/인화성": "폭발성 또는 인화성 물질은 기내 반입이 금지됩니다.",
-  "화기류": "모든 종류의 화기 및 무기류는 기내 반입이 금지됩니다.",
-  "날붙이": "날카로운 물체나 끝이 뾰족한 도구는 기내 반입이 제한됩니다."
+  "폭발/인화성": "폭발성 또는 인화성 물질은 기내 반입이 절대 금지됩니다.",
+  "액체/겔": "100ml 이하의 용기에 담긴 액체만 기내 반입이 가능합니다.",
+  "고위험 비행편": "항공보안 등급 경계경보(Orange) 단계 이상 시 추가 제한이 적용됩니다."
 };
 
 // 조건부 반입 가능 물품 정보 추가
@@ -69,6 +69,25 @@ const CONDITIONAL_ITEMS = {
   ]
   };
 
+// 카드를 3개씩 그룹화하는 함수
+const groupCards = (cards) => {
+  const groups = [];
+  for (let i = 0; i < cards.length; i += 3) {
+    groups.push(cards.slice(i, i + 3));
+  }
+  return groups;
+};
+
+// 각 카드의 위치를 원형으로 배치
+const positions = [
+  { top: '20%', left: '-150%' },
+  { top: '20%', left: '-130%' },
+  { top: '-80%', left: '-310%' },
+  { top: '-95%', left: '250%' },
+  { top: '-95%', left: '270%' },
+  { top: '-200%', left: '90%' },
+  { top: '0%', left: '120%' }
+];
 
 function ProhibitedItems() {
   console.log("dd")
@@ -79,13 +98,21 @@ function ProhibitedItems() {
   useEffect(() => {
     axios.get("http://localhost:8088/api/prohibit-items")
       .then((response) => {
-        console.log("dd", response)
+        console.log("API 응답 데이터:", response.data);
         setItemsData(response.data);
       })
       .catch((error) => console.error("API 요청 오류:", error));
   }, []);
 
-  const categories = [...new Set(itemsData.map(item => item.gubun))];
+  const categories = [
+    "날붙이",
+    "둔기",
+    "화기류",
+    "화학물질",
+    "폭발/인화성",
+    "액체/겔",
+    "고위험 비행편"
+  ];
 
   const openModal = (category) => {
     setSelectedCategory(category);
@@ -96,6 +123,13 @@ function ProhibitedItems() {
     setIsModalOpen(false);
   };
 
+  // 데이터 필터링 부분 수정
+  const filteredItems = itemsData.filter(item => {
+    console.log("현재 아이템의 gubun:", item.gubun);
+    console.log("선택된 카테고리:", selectedCategory);
+    return item.gubun === selectedCategory;
+  });
+
   return (
     <div className="prohibited-items">
       <div className="description-section">
@@ -105,32 +139,30 @@ function ProhibitedItems() {
           각 카테고리를 클릭하면 상세 정보를 확인할 수 있습니다.
         </p>
       </div>
-
       <div className="cards-container">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="card"
-            onClick={() => openModal(category)}
-          >
-            <div className="card-header">
-              <span className="icon">{CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}</span>
-              <h2>{CATEGORY_NAMES[category] || category}</h2>
+        <div className="category-group-cards">
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className="card"
+              style={positions[index]}
+              onClick={() => openModal(category)}
+            >
+              <div className="card-header">
+                <span className="icon">
+                  {CATEGORY_ICONS[CATEGORY_NAMES[category] || category]}
+                </span>
+              </div>
+              <div className="card-body">
+                <p>
+                  <strong>{CATEGORY_NAMES[category] || category}</strong>
+                  {" "}
+                  {CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}
+                </p>
+              </div>
             </div>
-            <div className="card-body">
-              <p>{CATEGORY_DESCRIPTIONS[CATEGORY_NAMES[category] || category]}</p>
-            </div>
-            {/* 슬라이드 패널 추가 */}
-            <div className="slide-panel">
-              <h3>조건부 반입 가능 물품</h3>
-              <ul>
-                {CONDITIONAL_ITEMS[CATEGORY_NAMES[category] || category]?.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {isModalOpen && selectedCategory && (
@@ -147,15 +179,19 @@ function ProhibitedItems() {
                 </tr>
               </thead>
               <tbody>
-                {itemsData
-                  .filter(item => item.gubun === selectedCategory)
-                  .map((item, index) => (
+                {filteredItems.length > 0 ? (
+                  filteredItems.map((item, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{item.carryBan}</td>
                       <td>{item.cabin === "Y" ? "허용" : "금지"}</td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">데이터가 없습니다.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

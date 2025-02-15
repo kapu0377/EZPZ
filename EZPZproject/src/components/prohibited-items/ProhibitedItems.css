@@ -12,87 +12,172 @@
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 한 줄에 3개씩 배치 */
-  gap: 60px; /* 카드 간격을 15px로 줄임 */
-  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  position: relative;
-  overflow: visible; /* 추가: 컨테이너의 overflow를 visible로 설정 */
-}
-
-.card {
-  width: 90%;
-  max-width: 500px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  overflow: visible; /* hidden에서 visible로 변경 */
-  position: relative;
-  z-index: 1;
-}
-
-/* 수정된 코드 */
-.cards-container:has(.card:hover) .card:not(:hover) {
-  opacity: 0.6;
-}
-
-.card:hover {
-  opacity: 1;
-  transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-.card:hover .card-body {
-  background: rgba(255, 255, 255, 1);
-}
-
-.card-header {
-  background: linear-gradient(135deg, #616161, #3b3b3b);
-  padding: 20px;
-  color: white;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+}
+
+.center-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.category-group {
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.category-group-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.category-group-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 200px; /* 중앙 카드와의 간격 */
+}
+
+/* 3개씩 그룹화 */
+.card-group {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 30px;
+}
+
+/* 원형 카드 스타일 */
+.card {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* 아이콘 스타일 */
+.card-header {
+  font-size: 40px;
+  z-index: 2;
+  transition: all 0.3s ease;
 }
 
 .card-header h2 {
-  color: white;
-  margin-bottom: 10px;
+  display: none;
 }
 
-.card-header .icon {
-  font-size: 40px;
-  margin-bottom: 10px;
-}
-
+/* 설명 텍스트 스타일 */
 .card-body {
-  padding: 15px;
-  text-align: left;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
 .card-body p {
-  color: #333;
-  margin: 5px 0;
-}
-
-.card-body ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4;
+  text-align: center;
 }
 
-.card-body li {
-  font-size: 20px;
-  color: #333;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-  line-height: 1.4;
+.card-body p strong {
+  font-weight: 700;
+  color: #000;
+}
+
+/* 호버 효과 */
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card:hover .card-header {
+  opacity: 0;
+}
+
+.card:hover .card-body {
+  opacity: 1;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .category-group-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .category-group-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .card {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.category-group.physical .category-group-title {
+  color: #4B89DC;
+}
+
+.category-group.hazardous .category-group-title {
+  color: #E74C3C;
+}
+
+/* 카드 컨테이너 */
+.category-group-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3개씩 그리드 정렬 */
+  gap: 20px;
+}
+
+/* 고위험 비행편 카드 스타일 */
+.high-risk-flight {
+  grid-column: 2; /* 가운데 열에 배치 */
+  justify-self: center;
+  max-width: 400px; /* 카드 최대 너비 제한 */
+}
+
+/* 원형 테두리 제거 */
+.category-group-cards::before {
+  content: none;
+}
+
+.category-group.physical .category-group-cards::before {
+  border-color: #4B89DC;
+}
+
+.category-group.hazardous .category-group-cards::before {
+  border-color: #E74C3C;
 }
 
 .category-details {
@@ -253,37 +338,4 @@ tr:hover {
 .card:nth-child(2n) .slide-panel {
   left: auto; /* 기존 left: 105% 제거 */
   right: 105%; /* 오른쪽 카드는 왼쪽으로 슬라이드 */
-}
-
-/* 반응형 디자인 */
-@media (max-width: 1024px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 표시 */
-    gap: 10px; /* 태블릿에서는 더 좁은 간격 */
-  }
-  
-  .slide-panel {
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    transform: translateX(-50%) translateY(10px);
-    width: 90%;
-    max-width: 300px;
-  }
-  
-  .card:nth-child(2n) .slide-panel {
-    left: 50%;
-    right: auto;
-  }
-  
-  .card:hover .slide-panel {
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-@media (max-width: 600px) {
-  .cards-container {
-    grid-template-columns: 1fr; /* 모바일에서는 1개씩 표시 */
-    gap: 8px; /* 모바일에서는 최소 간격 */
-  }
 }
