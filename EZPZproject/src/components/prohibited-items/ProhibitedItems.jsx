@@ -69,6 +69,43 @@ const CONDITIONAL_ITEMS = {
   ]
   };
 
+// 기내 허가류 추가
+const ALLOWED_ITEMS = {
+  "전자기기": {
+    icon: "📱",
+    description: "휴대폰, 노트북 등 개인 전자기기는 기내 반입이 가능합니다.",
+    items: [
+      "휴대폰",
+      "노트북",
+      "태블릿",
+      "카메라",
+      "보조배터리(160Wh 미만)"
+    ]
+  },
+  "의료용품": {
+    icon: "💊",
+    description: "처방전이 있는 의약품과 의료기기는 기내 반입이 가능합니다.",
+    items: [
+      "처방약",
+      "의료기기",
+      "휠체어",
+      "인슐린",
+      "응급약품"
+    ]
+  },
+  "개인용품": {
+    icon: "👜",
+    description: "필수 개인용품은 규정에 맞게 기내 반입이 가능합니다.",
+    items: [
+      "의류",
+      "세면도구",
+      "도서",
+      "음식물(고체)",
+      "유아용품"
+    ]
+  }
+};
+
 // 카드를 3개씩 그룹화하는 함수
 const groupCards = (cards) => {
   const groups = [];
@@ -103,8 +140,8 @@ const CATEGORY_TO_GUBUN = {
 // 카테고리 그룹 정의
 const CATEGORY_GROUPS = {
   "신체상해류": ["날붙이", "둔기", "화기류"],
-  "인체유해류": ["화학물질", "폭발/인화성", "액체/겔"],
-  "고위험 비행편": ["고위험 비행편"]
+  "기내허가류": ["전자기기", "의료용품", "개인용품"],
+  "인체유해류": ["화학물질", "폭발/인화성", "액체/겔"]
 };
 
 function ProhibitedItems() {
@@ -138,45 +175,48 @@ function ProhibitedItems() {
   return (
     <div className="prohibited-items">
       <div className="description-section">
-        <h1>기내 금지 물품 목록</h1>
-        <p>
-          항공 안전을 위해 기내 반입이 금지된 물품 목록입니다. 
-          각 카테고리를 클릭하면 상세 정보를 확인할 수 있습니다.
-        </p>
+        <h1>항공기 반입 물품 안내</h1>
+        <p>항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
       </div>
-      <div className="cards-container">
+      
+      <div className="all-categories">
         {Object.entries(CATEGORY_GROUPS).map(([groupName, categories]) => (
           <div 
             key={groupName} 
-            className={`category-section ${
+            className={`category-column ${
               groupName === "신체상해류" ? "physical" : 
               groupName === "인체유해류" ? "hazardous" : 
-              "high-risk"
+              "allowed"
             }`}
           >
             <div className="category-title">{groupName}</div>
-            <div className="category-group-cards">
-              {categories.map((category, index) => (
-                <div
-                  key={index}
-                  className="card"
-                  onClick={() => openModal(CATEGORY_TO_GUBUN[category])}
-                >
-                  <div className="card-header">
-                    <span className="icon">
-                      {CATEGORY_ICONS[category]}
-                    </span>
-                  </div>
-                  <div className="card-body">
-                    <p>
-                      <strong>{category}</strong>
-                      {" "}
-                      {CATEGORY_DESCRIPTIONS[category]}
-                    </p>
-                  </div>
+            {categories.map((category, index) => (
+              <div
+                key={index}
+                className="card"
+                onClick={() => {
+                  if (groupName !== "기내허가류") {
+                    openModal(CATEGORY_TO_GUBUN[category]);
+                  }
+                }}
+              >
+                <div className="card-header">
+                  <span className="icon">
+                    {groupName === "기내허가류" 
+                      ? ALLOWED_ITEMS[category].icon 
+                      : CATEGORY_ICONS[category]}
+                  </span>
                 </div>
-              ))}
-            </div>
+                <div className="card-body">
+                  <p>
+                    <strong>{category}</strong>
+                    {groupName === "기내허가류" 
+                      ? ALLOWED_ITEMS[category].description 
+                      : CATEGORY_DESCRIPTIONS[category]}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>
