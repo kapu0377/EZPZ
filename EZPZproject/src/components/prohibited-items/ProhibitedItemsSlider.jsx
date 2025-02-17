@@ -69,8 +69,28 @@ const ProhibitedItemsSlider = () => {
     }, 300);
   };
 
+  const handleDotClick = (index) => {
+    if (isAnimating || index === currentSlide) return;
+    
+    setIsAnimating(true);
+    const content = sliderContentRef.current;
+    content.classList.add('slide-exit');
+
+    setTimeout(() => {
+      setCurrentSlide(index);
+      content.classList.remove('slide-exit');
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 50);
+    }, 300);
+  };
+
   useEffect(() => {
-    const timer = setInterval(changeSlide, 3000);
+    const timer = setInterval(() => {
+      if (!isAnimating) {
+        changeSlide();
+      }
+    }, 3000);
     return () => clearInterval(timer);
   }, [isAnimating]);
 
@@ -105,6 +125,10 @@ const ProhibitedItemsSlider = () => {
           <span
             key={index}
             className={`dot ${index === currentSlide ? 'active' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDotClick(index);
+            }}
           />
         ))}
       </div>
