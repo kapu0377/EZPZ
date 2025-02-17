@@ -31,7 +31,7 @@ const ProhibitedItemsSlider = () => {
       ]
     },
     {
-      type: "인체위험류",
+      type: "인체유해류",
       color: "#E74C3C",
       items: [
         { 
