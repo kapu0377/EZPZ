@@ -1,7 +1,19 @@
 import itemApi from './itemApi';
 
 export const searchItems = async (itemName) => {
-  return itemApi.searchItems(itemName);
+  const result = await itemApi.searchItems(itemName);
+
+
+  return result;
+};
+export const refreshRankings = async () => {
+  try {
+    const rankings = await itemApi.getSearchRankings();
+    return rankings.slice(0, 6); 
+  } catch (error) {
+    console.error('랭킹 갱신 실패:', error);
+    return [];
+  }
 };
 
 export const getSearchRankings = async () => {

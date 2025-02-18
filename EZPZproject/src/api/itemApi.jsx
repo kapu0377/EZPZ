@@ -35,7 +35,7 @@ const itemApi = {
       }));
     } catch (error) {
       console.error('검색 랭킹 조회 실패:', error);
-      return []; // 에러 시 빈 배열 반환
+      return []; 
     }
   },
 
