@@ -106,26 +106,6 @@ const ALLOWED_ITEMS = {
   }
 };
 
-// 카드를 3개씩 그룹화하는 함수
-const groupCards = (cards) => {
-  const groups = [];
-  for (let i = 0; i < cards.length; i += 3) {
-    groups.push(cards.slice(i, i + 3));
-  }
-  return groups;
-};
-
-// 각 카드의 위치를 원형으로 배치
-const positions = [
-  { top: '20%', left: '-150%' },
-  { top: '20%', left: '-130%' },
-  { top: '-80%', left: '-310%' },
-  { top: '-95%', left: '250%' },
-  { top: '-95%', left: '270%' },
-  { top: '-200%', left: '90%' },
-  { top: '0%', left: '120%' }
-];
-
 // gubun과 카테고리 매핑을 위한 객체 추가
 const CATEGORY_TO_GUBUN = {
   "날붙이": "끝이 뾰족한 무기및 날카로운 물체",
@@ -148,6 +128,10 @@ function ProhibitedItems() {
   const [itemsData, setItemsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [airportData, setAirportData] = useState([]); // 공항 리스트
+  const [selectedAirport, setSelectedAirport] = useState(null);
+  const [airportDetections, setAirportDetections] = useState([]); // 공항 적발 내역
+  const [isAirportModalOpen, setIsAirportModalOpen] = useState(false);
 
   useEffect(() => {
     axios.get("http://localhost:8088/api/prohibit-items")
@@ -156,6 +140,11 @@ function ProhibitedItems() {
         setItemsData(response.data);
       })
       .catch((error) => console.error("API 요청 오류:", error));
+      axios.get("http://localhost:8088/api/airport-detections/distinct")
+      .then(response => {
+        setAirportData(response.data.slice(0, 13)); // 13개만 표시
+      })
+      .catch(error => console.error("API 요청 오류:", error));
   }, []);
 
   const openModal = (category) => {
@@ -165,6 +154,22 @@ function ProhibitedItems() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  // 특정 공항을 선택하면, 해당 공항의 적발 내역을 가져옴
+  const openAirportModal = (airport) => {
+    setSelectedAirport(airport);
+
+    axios.get(`http://localhost:8088/api/airport-detections/name/${airport.airportName}`)
+      .then(response => {
+        setAirportDetections(response.data);
+        setIsAirportModalOpen(true);
+      })
+      .catch(error => console.error("공항 적발 내역 불러오기 오류:", error));
+  };
+  
+  const closeAirportModal = () => {
+    setIsAirportModalOpen(false);
   };
 
   // 데이터 필터링 부분 수정
@@ -241,6 +246,53 @@ function ProhibitedItems() {
                       <td>{index + 1}</td>
                       <td>{item.carryBan}</td>
                       <td>{item.cabin === "Y" ? "허용" : "금지"}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">데이터가 없습니다.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+      <div className="airport-section">
+        <h2>공항 별 적발 근황</h2>
+        <p>공항 별 적발 근황을 확인할 수 있습니다.</p>
+        <div className="airport-box-container">
+          {airportData.map((airport, index) => (
+            <div 
+              key={index} 
+              className="airport-box"
+              onClick={() => openAirportModal(airport)}
+            >
+              {airport.airportName} ({airport.detectionCount}건)
+            </div>
+          ))}
+        </div>
+      </div>
+      {isAirportModalOpen && selectedAirport && (
+        <div className="modal-overlay" onClick={closeAirportModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={closeAirportModal}>✖</button>
+            <h2>{selectedAirport.airportName} - 적발 내역</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>적발 물품</th>
+                  <th>적발 건수</th>
+                </tr>
+              </thead>
+              <tbody>
+                {airportDetections.length > 0 ? (
+                  airportDetections.map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{item.category}</td>
+                      <td>{item.detectionCount}</td>
                     </tr>
                   ))
                 ) : (

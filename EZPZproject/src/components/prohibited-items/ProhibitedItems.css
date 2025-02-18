@@ -569,6 +569,39 @@ tr:hover {
   background: #E74C3C;
   color: white;
 }
+/* 공항 별 적발 근황 스타일 */
+/* 공항 별 적발 현황 스타일 */
+.airport-section {
+  margin: 40px 0;
+  text-align: center;
+}
+
+.airport-box-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.airport-box {
+  background: #4B89DC;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: 180px;
+  text-align: center;
+}
+
+.airport-box:hover {
+  transform: translateY(-3px);
+}
+
+
+/* 모달 스타일 유지 */
+
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
