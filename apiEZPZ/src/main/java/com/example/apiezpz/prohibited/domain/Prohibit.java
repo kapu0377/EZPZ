@@ -1,4 +1,4 @@
-package com.example.apiezpz.domain;
+package com.example.apiezpz.prohibited.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

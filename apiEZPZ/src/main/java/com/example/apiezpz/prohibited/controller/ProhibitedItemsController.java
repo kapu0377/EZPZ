@@ -1,7 +1,7 @@
-package com.example.apiezpz.controller;
+package com.example.apiezpz.prohibited.controller;
 
-import com.example.apiezpz.domain.Prohibit;
-import com.example.apiezpz.service.ProhibitedItemsService;
+import com.example.apiezpz.prohibited.domain.Prohibit;
+import com.example.apiezpz.prohibited.service.ProhibitedItemsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
