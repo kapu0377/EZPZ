@@ -13,7 +13,7 @@ public class RatingDTO {
     private Integer satisfaction;
     private Integer cleanliness;
     private Integer convenience;
-    private String comment;
+//    private String comment;
 
     // 유효성 검사를 위한 메서드
     public boolean isValid() {
