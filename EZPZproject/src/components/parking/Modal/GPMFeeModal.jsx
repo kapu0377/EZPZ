@@ -43,7 +43,7 @@ const GMPFeeModal = ({ isOpen, onClose }) => {
                 <tr>
                   <td rowSpan="3">1일(24시간) 주차시</td>
                   <td>
-                    <p>웨부,수목요일</p>
+                    <p>월,화,수,목요일</p>
                     <ul>
                       <li>기본 30분: 1,000원</li>
                       <li>매 15분: 500원 추가</li>
@@ -109,29 +109,6 @@ const GMPFeeModal = ({ isOpen, onClose }) => {
                   </tr>
                 </tbody>
               </table>
-
-              <div className="monthly-parking">
-                <h3>월정주차</h3>
-                <table className="fee-table">
-                  <tbody>
-                    <tr>
-                      <th>대상</th>
-                      <td>김포공항 내 상주기관, 상주업체처장 및 소속직원차량</td>
-                    </tr>
-                    <tr>
-                      <th>이용방법</th>
-                      <td>
-                        상주직원 주차 홈페이지에서 등록, 납부 후 이용<br/>
-                        (https://park.airport.co.kr/login/loginUsr.do)
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>이용요금(1개월)</th>
-                      <td>소형: 70,000원 / 대형: 120,000원</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
             </div>
           )}
         </div>
