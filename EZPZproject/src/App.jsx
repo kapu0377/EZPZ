@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
 import MyPage from "./api/checklistApi"
-//import MyPage from "./components/checklist/Main"
+// import MyPage from "./components/checklist/Main"
 import "./App.css";
 import "./components/notice/Notice.css";
 import Notice from "./pages/Notice";

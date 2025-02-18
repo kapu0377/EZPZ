@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const ChecklistList = ({ checklists, onSelect, onAdd, onUpdate, onDelete }) => {
-    const [memberId] = useState(1);
+const ChecklistList = ({ checklists, onSelect, onAdd, onUpdate, onDelete, memberId }) => {
     const [editingChecklistId, setEditingChecklistId] = useState(null);
     const [editChecklistData, setEditChecklistData] = useState({ title: "", departureDate: "", returnDate: "" });
     const [newChecklist, setNewChecklist] = useState({ title: "", departureDate: "", returnDate: "" });
@@ -9,21 +8,13 @@ const ChecklistList = ({ checklists, onSelect, onAdd, onUpdate, onDelete }) => {
     // ✅ 체크리스트 수정 시작 (input 필드 활성화)
     const handleEditChecklistStart = (checklist) => {
         setEditingChecklistId(checklist.id);
-        setEditChecklistData({
-            title: checklist.title,
-            departureDate: checklist.departureDate,
-            returnDate: checklist.returnDate
-        });
+        setEditChecklistData({ ...checklist });
     };
 
     // ✅ 수정 취소 (원래 값으로 리셋)
-    const handleCancelEdit = (originalChecklist) => {
+    const handleCancelEdit = () => {
         setEditingChecklistId(null);
-        setEditChecklistData({
-            title: originalChecklist.title,
-            departureDate: originalChecklist.departureDate,
-            returnDate: originalChecklist.returnDate
-        });
+        setEditChecklistData({ title: "", departureDate: "", returnDate: "" });
     };
 
     // ✅ 출발일 선택 시 도착일 제한
@@ -38,21 +29,38 @@ const ChecklistList = ({ checklists, onSelect, onAdd, onUpdate, onDelete }) => {
 
     // ✅ 체크리스트 추가
     const handleAddChecklist = () => {
-        if (!newChecklist || !newChecklist.title.trim() || !newChecklist.departureDate || !newChecklist.returnDate) {
+        if (!newChecklist.title.trim() || !newChecklist.departureDate || !newChecklist.returnDate) {
             alert("제목, 가는 날, 오는 날을 모두 입력해주세요.");
             return;
         }
         onAdd(memberId, newChecklist);
-        setNewChecklist({ title: "", departureDate: "", returnDate: "" }); // ✅ 입력 필드 초기화
+        setNewChecklist({ title: "", departureDate: "", returnDate: "" });
     };
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
             <h2 className="text-lg font-semibold mb-2">체크리스트 추가</h2>
             <div className="flex flex-col gap-2">
-                <input type="text" placeholder="제목" value={newChecklist.title} onChange={(e) => setNewChecklist({ ...newChecklist, title: e.target.value })} className="p-2 border rounded" />
-                <input type="date" value={newChecklist.departureDate} onChange={handleDepartureDateChange} className="p-2 border rounded" />
-                <input type="date" value={newChecklist.returnDate} min={newChecklist.departureDate} onChange={(e) => setNewChecklist({ ...newChecklist, returnDate: e.target.value })} className="p-2 border rounded" />
+                <input 
+                    type="text" 
+                    placeholder="제목" 
+                    value={newChecklist.title} 
+                    onChange={(e) => setNewChecklist({ ...newChecklist, title: e.target.value })} 
+                    className="p-2 border rounded" 
+                />
+                <input 
+                    type="date" 
+                    value={newChecklist.departureDate} 
+                    onChange={handleDepartureDateChange} 
+                    className="p-2 border rounded" 
+                />
+                <input 
+                    type="date" 
+                    value={newChecklist.returnDate} 
+                    min={newChecklist.departureDate} 
+                    onChange={(e) => setNewChecklist({ ...newChecklist, returnDate: e.target.value })} 
+                    className="p-2 border rounded" 
+                />
                 <button onClick={handleAddChecklist} className="p-2 bg-blue-500 text-white rounded">체크리스트 추가</button>
             </div>
 
@@ -82,7 +90,7 @@ const ChecklistList = ({ checklists, onSelect, onAdd, onUpdate, onDelete }) => {
                                     className="p-2 border rounded"
                                 />
                                 <button onClick={() => onUpdate(checklist.id, editChecklistData, memberId)} className="p-2 bg-green-500 text-white rounded">저장</button>
-                                <button onClick={() => handleCancelEdit(checklist)} className="p-2 bg-gray-500 text-white rounded">취소</button>
+                                <button onClick={handleCancelEdit} className="p-2 bg-gray-500 text-white rounded">취소</button>
                             </div>
                         ) : (
                             <>

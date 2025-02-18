@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { 
-    getChecklists, addChecklist, updateChecklist, deleteChecklist, 
+import {
+    getChecklists, addChecklist, updateChecklist, deleteChecklistWithCategories,
     getCategoriesWithItems, addCategory, updateCategory, deleteCategory,
-    addItem, updateItem, deleteItem, toggleItemCheck, resetChecklistItems 
+    addItem, updateItem, deleteItem, toggleItemCheck, resetChecklistItems
 } from "./mypageApi";
 import ChecklistList from "./ChecklistList";
 import CategoryItemList from "./CategoryItemList";
@@ -13,11 +13,18 @@ export default function ChecklistApi() {
     const [selectedChecklist, setSelectedChecklist] = useState(null);
     const [categories, setCategories] = useState([]);
 
-    useEffect(() => { loadChecklists(); }, []);
+
+    useEffect(() => {
+        loadChecklists();
+    }, []);
 
     const loadChecklists = async () => {
-        const response = await getChecklists(memberId);
-        setChecklists(response.data);
+        try {
+            const response = await getChecklists(memberId);
+            setChecklists(response.data);
+        } catch (error) {
+            console.error("체크리스트 불러오기 실패:", error);
+        }
     };
 
     const loadCategoriesWithItems = async (checklist) => {
@@ -27,48 +34,48 @@ export default function ChecklistApi() {
     };
 
     // 체크리스트 추가
-    const handleAddChecklist = async (newChecklist) => {
-        if (!newChecklist.title.trim() || !newChecklist.departureDate.trim() || !newChecklist.returnDate.trim()) {
+    const handleAddChecklist = async (memberId, checklist) => {
+        if (!checklist.title.trim() || !checklist.departureDate.trim() || !checklist.returnDate.trim()) {
             alert("제목, 가는 날, 오는 날을 모두 입력해주세요.");
             return;
         }
-    
         try {
-            await addChecklist(newChecklist);
+            await addChecklist(memberId, checklist);
             loadChecklists();
         } catch (error) {
             console.error("체크리스트 추가 실패:", error);
         }
     };
-    
-    // 체크리스트 수정
-    const handleUpdateChecklist = async (id, updatedChecklist) => {
+
+    //체크리스트 수정
+    const handleUpdateChecklist = async (id, checklistData, memberId) => {
         try {
-            await updateChecklist(id, updatedChecklist);
+            await updateChecklist(id, checklistData, memberId);
             loadChecklists();
         } catch (error) {
             console.error("체크리스트 수정 실패:", error);
         }
     };
-    
-    
-    // 체크리스트 삭제
-    const handleDeleteChecklist = async (id) => {
-        if (window.confirm("체크리스트 안의 모든 데이터가 삭제됩니다. 정말 삭제하시겠습니까?")) {
+
+    // ✅ 체크리스트 삭제 시, 관련 카테고리 & 아이템 삭제
+    const handleDeleteChecklist = async (checklistId, memberId) => {
+        if (window.confirm("체크리스트와 모든 카테고리 및 아이템이 삭제됩니다. 진행하시겠습니까?")) {
             try {
-                await deleteChecklist(id);
+                await deleteChecklistWithCategories(checklistId, memberId);
+                setCategories([]);
+                setSelectedChecklist(null);
                 loadChecklists();
+                loadChecklists(); // ✅ 삭제 후 리스트 새로고침
             } catch (error) {
                 console.error("체크리스트 삭제 실패:", error);
             }
         }
     };
-    
 
     // 카테고리 추가
     const handleAddCategory = async (category) => {
         if (!selectedChecklist) return;
-    
+
         try {
             await addCategory(selectedChecklist.id, category);
             loadCategoriesWithItems(selectedChecklist);
@@ -80,7 +87,6 @@ export default function ChecklistApi() {
             }
         }
     };
-    
 
     // 카테고리 수정
     const handleEditCategory = async (categoryId, updatedCategory) => {
@@ -95,7 +101,6 @@ export default function ChecklistApi() {
             }
         }
     };
-    
 
     // 카테고리 삭제
     const handleDeleteCategory = async (categoryId) => {
@@ -111,15 +116,13 @@ export default function ChecklistApi() {
             await addItem(categoryId, item);
             loadCategoriesWithItems(selectedChecklist);
         } catch (error) {
-            if (error.response && error.response.status === 400) {  
+            if (error.response && error.response.status === 400) {
                 alert("이미 존재하는 아이템입니다.");  // 🚨 경고창 띄우기
             } else {
                 console.error("아이템 추가 실패:", error);
             }
         }
     };
-    
-    
 
     // 아이템 수정
     const handleUpdateItem = async (itemId, updatedItem) => {
@@ -134,7 +137,6 @@ export default function ChecklistApi() {
             }
         }
     };
-    
 
     // 아이템 삭제
     const handleDeleteItem = async (itemId) => {
@@ -162,20 +164,21 @@ export default function ChecklistApi() {
         <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
             {/* 체크리스트 목록 */}
             <ChecklistList 
-                checklists={checklists} 
-                onSelect={loadCategoriesWithItems} 
-                onAdd={handleAddChecklist} 
-                onUpdate={handleUpdateChecklist} 
-                onDelete={handleDeleteChecklist} 
+                checklists={checklists}
+                onSelect={loadCategoriesWithItems}
+                onAdd={handleAddChecklist}
+                onUpdate={handleUpdateChecklist}
+                onDelete={handleDeleteChecklist}
+                memberId={memberId}
             />
 
             {selectedChecklist && (
                 <>
                     {/* 카테고리 및 아이템 목록 */}
-                    <CategoryItemList 
+                    <CategoryItemList
                         categories={categories}
                         onAddCategory={handleAddCategory}
-                        onEditCategory={handleEditCategory} 
+                        onEditCategory={handleEditCategory}
                         onDeleteCategory={handleDeleteCategory}
                         onToggleItem={handleToggleItemCheck}
                         onDeleteItem={handleDeleteItem}
@@ -183,7 +186,6 @@ export default function ChecklistApi() {
                         onUpdateItem={handleUpdateItem}
                         onResetPacking={handleResetPacking}
                     />
-
                 </>
             )}
         </div>
