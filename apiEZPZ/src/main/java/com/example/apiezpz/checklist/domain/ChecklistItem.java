@@ -4,13 +4,13 @@ import lombok.*;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "items")
+@Table(name = "checklist_items")
 @Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "category") //순환 참조 방지를 위해 연관 엔터티 필드는 제외
-public class Item {
+public class ChecklistItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

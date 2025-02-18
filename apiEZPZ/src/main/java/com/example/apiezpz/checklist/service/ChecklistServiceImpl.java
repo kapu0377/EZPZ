@@ -1,11 +1,11 @@
 package com.example.apiezpz.checklist.service;
 
 import com.example.apiezpz.checklist.domain.Checklist;
-import com.example.apiezpz.checklist.domain.Item;
+import com.example.apiezpz.checklist.domain.ChecklistItem;
 import com.example.apiezpz.checklist.dto.CategoryDTO;
 import com.example.apiezpz.checklist.dto.ChecklistDTO;
 import com.example.apiezpz.checklist.repository.ChecklistRepository;
-import com.example.apiezpz.checklist.repository.ItemRepository;
+import com.example.apiezpz.checklist.repository.ChecklistItemRepository;
 import com.example.apiezpz.domain.APIUser;
 import com.example.apiezpz.repository.APIUserRepository;
 import jakarta.transaction.Transactional;
@@ -26,7 +26,7 @@ public class ChecklistServiceImpl implements ChecklistService {
     private final ChecklistRepository checklistRepository;
     private final ModelMapper modelMapper;
     private final APIUserRepository apiUserRepository;
-    private final ItemRepository itemRepository;
+    private final ChecklistItemRepository checklistItemRepository;
 
     @Override
     public void registerChecklist(Long memberId, ChecklistDTO checklistDTO) {
@@ -103,8 +103,8 @@ public class ChecklistServiceImpl implements ChecklistService {
     @Override
     public void resetPacking(Long checklistId) {
         // 체크리스트에 속한 모든 아이템의 체크 상태를 false로 변경
-        List<Item> items = itemRepository.findByChecklistId(checklistId);
-        items.forEach(item -> item.setChecked(false));
-        itemRepository.saveAll(items);
+        List<ChecklistItem> checklistItems = checklistItemRepository.findByChecklistId(checklistId);
+        checklistItems.forEach(item -> item.setChecked(false));
+        checklistItemRepository.saveAll(checklistItems);
     }
 }

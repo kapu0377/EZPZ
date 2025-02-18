@@ -1,10 +1,10 @@
 package com.example.apiezpz.checklist.service;
 
 import com.example.apiezpz.checklist.domain.Category;
-import com.example.apiezpz.checklist.domain.Item;
+import com.example.apiezpz.checklist.domain.ChecklistItem;
 import com.example.apiezpz.checklist.dto.ItemDTO;
 import com.example.apiezpz.checklist.repository.CategoryRepository;
-import com.example.apiezpz.checklist.repository.ItemRepository;
+import com.example.apiezpz.checklist.repository.ChecklistItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @Transactional
 public class ItemServiceImpl implements ItemService {
-    private final ItemRepository itemRepository;
+    private final ChecklistItemRepository checklistItemRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
@@ -29,51 +29,51 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
 
         // 중복 검사 (선택적으로 사용 가능)
-        boolean exists = itemRepository.existsByCategoryIdAndName(categoryId, itemDTO.getName());
+        boolean exists = checklistItemRepository.existsByCategoryIdAndName(categoryId, itemDTO.getName());
         if (exists) {
             throw new RuntimeException("이미 존재하는 아이템입니다.");
         }
 
-        Item item = modelMapper.map(itemDTO, Item.class);
-        item.setCategory(category);
-        itemRepository.save(item);
+        ChecklistItem checklistItem = modelMapper.map(itemDTO, ChecklistItem.class);
+        checklistItem.setCategory(category);
+        checklistItemRepository.save(checklistItem);
     }
 
     @Override
     public List<ItemDTO> getAllItems(Long categoryId) {
-        List<Item> items = itemRepository.findByCategoryIdOrderByNameAsc(categoryId);
-        return items.stream()
+        List<ChecklistItem> checklistItems = checklistItemRepository.findByCategoryIdOrderByNameAsc(categoryId);
+        return checklistItems.stream()
                 .map(item -> modelMapper.map(item, ItemDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteItem(Long itemId) {
-        Item item = itemRepository.findById(itemId)
+        ChecklistItem checklistItem = checklistItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("해당 아이템이 존재하지 않습니다."));
-        itemRepository.delete(item);
+        checklistItemRepository.delete(checklistItem);
     }
 
     @Override
     public void updateItem(Long itemId, ItemDTO itemDTO) {
-        Item item = itemRepository.findById(itemId)
+        ChecklistItem checklistItem = checklistItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("해당 아이템이 존재하지 않습니다."));
 
-        item.setName(itemDTO.getName());
-        item.setChecked(itemDTO.isChecked()); // 체크 상태 변경
+        checklistItem.setName(itemDTO.getName());
+        checklistItem.setChecked(itemDTO.isChecked()); // 체크 상태 변경
     }
 
     @Override
     public void updateItemCheckedStatus(Long itemId) {  //체크 여부 변경시 true-false 전환
-        Item item = itemRepository.findById(itemId)
+        ChecklistItem checklistItem = checklistItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("아이템이 존재하지 않습니다."));
-        item.setChecked(!item.isChecked()); // 체크 상태 반전
-        itemRepository.save(item);
+        checklistItem.setChecked(!checklistItem.isChecked()); // 체크 상태 반전
+        checklistItemRepository.save(checklistItem);
     }
 
 //    @Override
 //    public void updateItemCheckedStatus(Long itemId, boolean checked) {
-//        Item item = itemRepository.findById(itemId)
+//        ChecklistItem item = checklistItemRepository.findById(itemId)
 //                .orElseThrow(() -> new RuntimeException("해당 아이템이 존재하지 않습니다."));
 //        item.setChecked(checked);
 //    }

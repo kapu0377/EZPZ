@@ -2,10 +2,10 @@ package com.example.apiezpz.repositoryTest;
 
 import com.example.apiezpz.checklist.domain.Category;
 import com.example.apiezpz.checklist.domain.Checklist;
-import com.example.apiezpz.checklist.domain.Item;
+import com.example.apiezpz.checklist.domain.ChecklistItem;
 import com.example.apiezpz.checklist.repository.CategoryRepository;
 import com.example.apiezpz.checklist.repository.ChecklistRepository;
-import com.example.apiezpz.checklist.repository.ItemRepository;
+import com.example.apiezpz.checklist.repository.ChecklistItemRepository;
 import com.example.apiezpz.domain.APIUser;
 import com.example.apiezpz.repository.APIUserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +29,7 @@ public class ChecklistRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private ItemRepository itemRepository;
+    private ChecklistItemRepository checklistItemRepository;
 
     @Test
     public void insertChecklist() {
@@ -65,22 +65,22 @@ public class ChecklistRepositoryTest {
         Category category = categoryRepository.findById(21L).orElseThrow(() -> new RuntimeException("아이템 없음"));
 
         IntStream.rangeClosed(1,10).forEach(i -> {
-            Item item = Item.builder()
-                    .name("item"+i)
+            ChecklistItem checklistItem = ChecklistItem.builder()
+                    .name("checklistItem"+i)
                     .checked(false)
                     .category(category)
                     .build();
-            itemRepository.save(item);
+            checklistItemRepository.save(checklistItem);
         });
     }
     @Test
     public void deleteItem() {
         // 특정 아이템 가져오기(제일 첫 행)
-        Item item = itemRepository.findAll().stream().findFirst()
+        ChecklistItem checklistItem = checklistItemRepository.findAll().stream().findFirst()
                 .orElseThrow(() -> new RuntimeException("삭제할 아이템이 없습니다. 먼저 insertItem() 실행하세요."));
-        log.info("삭제할 아이템 ID: " + item.getId());
+        log.info("삭제할 아이템 ID: " + checklistItem.getId());
         // 아이템 삭제
-        itemRepository.delete(item);
+        checklistItemRepository.delete(checklistItem);
         log.info("아이템 삭제 완료.");
     }
     @Test
@@ -114,29 +114,29 @@ public class ChecklistRepositoryTest {
         category = categoryRepository.save(category); // DB에 저장 후 다시 가져오기
 
         // 해당 카테고리에 아이템 추가 (랜덤 순서)
-        Item item1 = Item.builder().name("여권").category(category).checked(false).build();
-        Item item2 = Item.builder().name("충전기").category(category).checked(false).build();
-        Item item3 = Item.builder().name("선글라스").category(category).checked(false).build();
-        Item item4 = Item.builder().name("의류").category(category).checked(false).build();
+        ChecklistItem checklistItem1 = ChecklistItem.builder().name("여권").category(category).checked(false).build();
+        ChecklistItem checklistItem2 = ChecklistItem.builder().name("충전기").category(category).checked(false).build();
+        ChecklistItem checklistItem3 = ChecklistItem.builder().name("선글라스").category(category).checked(false).build();
+        ChecklistItem checklistItem4 = ChecklistItem.builder().name("의류").category(category).checked(false).build();
 
-        itemRepository.save(item1);
-        itemRepository.save(item2);
-        itemRepository.save(item3);
-        itemRepository.save(item4);
+        checklistItemRepository.save(checklistItem1);
+        checklistItemRepository.save(checklistItem2);
+        checklistItemRepository.save(checklistItem3);
+        checklistItemRepository.save(checklistItem4);
 
         // 실제 DB에서 아이템을 이름순으로 정렬하여 조회
-        List<Item> sortedItems = itemRepository.findByCategoryIdOrderByNameAsc(category.getId());
+        List<ChecklistItem> sortedChecklistItems = checklistItemRepository.findByCategoryIdOrderByNameAsc(category.getId());
 
         // 4️⃣ 정렬 결과 검증
-        assertThat(sortedItems).isNotNull();
-        assertThat(sortedItems.size()).isEqualTo(4);
-        assertThat(sortedItems.get(0).getName()).isEqualTo("선글라스");
-        assertThat(sortedItems.get(1).getName()).isEqualTo("여권");
-        assertThat(sortedItems.get(2).getName()).isEqualTo("의류");
-        assertThat(sortedItems.get(3).getName()).isEqualTo("충전기");
+        assertThat(sortedChecklistItems).isNotNull();
+        assertThat(sortedChecklistItems.size()).isEqualTo(4);
+        assertThat(sortedChecklistItems.get(0).getName()).isEqualTo("선글라스");
+        assertThat(sortedChecklistItems.get(1).getName()).isEqualTo("여권");
+        assertThat(sortedChecklistItems.get(2).getName()).isEqualTo("의류");
+        assertThat(sortedChecklistItems.get(3).getName()).isEqualTo("충전기");
 
         // 5️⃣ 로그 출력 (테스트 실행 후 실제 DB에서 확인 가능)
         log.info("✔ 실제 DB에서 정렬된 아이템 목록:");
-        sortedItems.forEach(item -> log.info(item.getName()));
+        sortedChecklistItems.forEach(item -> log.info(item.getName()));
     }
 }
