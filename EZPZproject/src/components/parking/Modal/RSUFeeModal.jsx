@@ -52,31 +52,6 @@ const RSUFeeModal = ({ isOpen, onClose }) => {
           <div className="parking-notice">
             <p className="special-notice">• 최초 10분 무료 주차 가능</p>
           </div>
-
-          <div className="sub-section">
-            <h3>차량구분</h3>
-            <table className="fee-table">
-              <thead>
-                <tr>
-                  <th className="center">구분</th>
-                  <th className="center">소형</th>
-                  <th className="center">대형</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="center">승합차</td>
-                  <td className="center">15인승 이하</td>
-                  <td className="center">16인승 이상</td>
-                </tr>
-                <tr>
-                  <td className="center">화물차</td>
-                  <td className="center">1톤 이하</td>
-                  <td className="center">1톤 초과</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
       </div>
     </div>

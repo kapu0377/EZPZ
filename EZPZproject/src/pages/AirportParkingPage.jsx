@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AirportCard from '../components/parking/AirportCard';
 import '../components/parking/AirportParking.css';
+import axios from 'axios';
 import { fetchAirportParkingData, AIRPORT_CODES } from '../api/parking/ParkingApi';
 import { fetchIncheonParkingData } from '../api/parking/ICNParkingApi';
 import ICNFeeModal from '../components/parking/Modal/ICNFeeModal';
@@ -15,6 +16,7 @@ import USNFeeModal from '../components/parking/Modal/USNFeeModal';
 import KUVFeeModal from '../components/parking/Modal/KUVFeeModal';
 import WJUFeeModal from '../components/parking/Modal/WJUFeeModal';
 import CJJFeeModal from '../components/parking/Modal/CJJFeeModal';
+import RatingSection from '../components/rating/RatingSection';
 
 
 const AirportParkingPage = () => {
@@ -35,6 +37,15 @@ const AirportParkingPage = () => {
   const [isUSNModalOpen, setIsUSNModalOpen] = useState(false);
   const [isKUVModalOpen, setIsKUVModalOpen] = useState(false);
   const [isWJUModalOpen, setIsWJUModalOpen] = useState(false);
+
+  const [ratings, setRatings] = useState({
+    satisfaction: 5,
+    cleanliness: 5,
+    convenience: 5,
+    comment: ''
+  });
+  const [averageRatings, setAverageRatings] = useState(null);
+
   
 
   const loadAirportData = async (airportCode) => {
@@ -81,6 +92,31 @@ const AirportParkingPage = () => {
     if (occupancy >= 80) return '#ff4d4d';
     if (occupancy >= 50) return '#ffd700';
     return '#4CAF50';
+  };
+
+  const fetchAverageRatings = async (airportId) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/airports/${airportId}/ratings/average`);
+      setAverageRatings(response.data);
+    } catch (error) {
+      console.error('평균 평점 조회 실패:', error);
+    }
+  };
+
+  const handleRatingSubmit = async (airportId) => {
+    try {
+      await axios.post(`http://localhost:8080/api/airports/${airportId}/ratings`, ratings);
+      alert('평가가 성공적으로 제출되었습니다!');
+      fetchAverageRatings(airportId);
+      setRatings({
+        satisfaction: 5,
+        cleanliness: 5,
+        convenience: 5,
+        comment: ''
+      });
+    } catch (error) {
+      alert('평가 제출에 실패했습니다.');
+    }
   };
 
   return (
@@ -166,7 +202,7 @@ const AirportParkingPage = () => {
             </a>
           </div>
           <div className="contact-text-container">
-            <p className="contact-info">주차 대표번호 : 1661-2626, 051-974-3718</p>
+            <p className="contact-info">주차고객 지원실(주차안내) Tel. 02-2660-2515</p>
             <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
           </div>
         </div>
@@ -187,7 +223,7 @@ const AirportParkingPage = () => {
             </a>
           </div>
           <div className="contact-text-container">
-            <p className="contact-info">주차고객 지원실(주차안내) Tel. 02-2660-2515</p>
+            <p className="contact-info">주차 대표번호 1661-2626, 051-974-3718</p>
             <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
           </div>
         </div>
@@ -360,6 +396,11 @@ const AirportParkingPage = () => {
         onClose={() => setIsWJUModalOpen(false)} 
       />
 
+      {(selectedAirport || incheonData) && (
+        <RatingSection 
+          airport={selectedAirport || { id: 'ICN', name: '인천국제공항' }}
+        />
+      )}
     </div>
   );
 };
