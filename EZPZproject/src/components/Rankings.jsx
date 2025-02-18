@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { getSearchRankings } from '../api/searchApi';
+import {
+  getSearchRankings,
+  getDailyRankings,
+  getWeeklyRankings,
+  getMonthlyRankings,} from '../api/searchApi';
 import './Rankings.css';
 
 const Rankings = () => {
   const [searchRankings, setSearchRankings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const MAX_DISPLAY_ITEMS = 6; // 최대 표시 항목 수 설정
+  const [extendedRankings, setExtendedRankings] = useState([]);
+  const [rankingType, setRankingType] = useState('daily'); // 'daily', 'weekly', 'monthly'
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const MAX_DISPLAY_ITEMS = 6;
 
   useEffect(() => {
     const fetchRankings = async () => {
@@ -16,7 +23,7 @@ const Rankings = () => {
           console.log('순위 데이터가 없습니다.');
           setSearchRankings([]);
         } else {
-                    setSearchRankings(data.slice(0, MAX_DISPLAY_ITEMS));
+          setSearchRankings(data.slice(0, MAX_DISPLAY_ITEMS));
         }
       } catch (error) {
         console.error('Failed to fetch rankings:', error);
@@ -31,24 +38,33 @@ const Rankings = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    return () => {
-      setSearchRankings([]);
-    };
-  }, []);
+  const fetchExtendedRankings = async (type) => {
+    try {
+      let data = [];
+      if (type === 'daily') {
+        data = await getDailyRankings();
+      } else if (type === 'weekly') {
+        data = await getWeeklyRankings();
+      } else if (type === 'monthly') {
+        data = await getMonthlyRankings();
+      }
+      setExtendedRankings(data);
+    } catch (error) {
+      console.error(`Failed to fetch ${type} rankings:`, error);
+      setExtendedRankings([]);
+    }
+  };
 
-  // 검색 직후 즉시 업데이트를 위한 이벤트 리스너
-  useEffect(() => {
-    const handleRankingsUpdate = (event) => {
-      // 업데이트 시에도 6개로 제한
-      setSearchRankings(event.detail.slice(0, MAX_DISPLAY_ITEMS));
-    };
+  const handleMoreClick = () => {
+    setIsModalOpen(true);
+    setRankingType('daily');
+    fetchExtendedRankings('daily');
+  };
 
-    window.addEventListener('rankingsUpdated', handleRankingsUpdate);
-    return () => {
-      window.removeEventListener('rankingsUpdated', handleRankingsUpdate);
-    };
-  }, []);
+  const handleTabClick = (type) => {
+    setRankingType(type);
+    fetchExtendedRankings(type);
+  };
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -62,7 +78,9 @@ const Rankings = () => {
           {searchRankings && searchRankings.length > 0 ? (
             searchRankings.map((item, index) => (
               <div key={index} className="ranking-item">
-                <span>{index + 1}. {item.name}</span>
+                <span>
+                  {index + 1}. {item.name}
+                </span>
                 <span>{item.count}회</span>
               </div>
             ))
@@ -70,7 +88,53 @@ const Rankings = () => {
             <div>검색 기록이 없습니다.</div>
           )}
         </div>
-      </div>
+        <button className="rankingmore-button" onClick={handleMoreClick}>더보기</button>
+        </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <span
+              className="close-button"
+              onClick={() => setIsModalOpen(false)}
+            >
+              &times;
+            </span>
+            <div className="tabs">
+              <button
+                className={rankingType === 'daily' ? 'active' : ''}
+                onClick={() => handleTabClick('daily')}
+              >
+                일간
+              </button>
+              <button
+                className={rankingType === 'weekly' ? 'active' : ''}
+                onClick={() => handleTabClick('weekly')}
+              >
+                주간
+              </button>
+              <button
+                className={rankingType === 'monthly' ? 'active' : ''}
+                onClick={() => handleTabClick('monthly')}
+              >
+                월간
+              </button>
+            </div>
+            <div className="extended-ranking-list">
+              {extendedRankings && extendedRankings.length > 0 ? (
+                extendedRankings.map((item, index) => (
+                  <div key={index} className="ranking-item">
+                    <span>{index + 1}. {item.category}</span>
+                    <span>{item.searchCount}회</span>
+                  </div>
+                ))
+              ) : (
+                <div>데이터가 없습니다.</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

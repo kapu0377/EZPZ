@@ -10,7 +10,6 @@ const SearchInput = ({ onSearchResult, onReset }) => {
   const [batteryCapacity, setBatteryCapacity] = useState("")
 
   const calculateWattHours = (voltage, mah) => {
-    // mAh를 Ah로 변환 (1000mAh = 1Ah)
     const ah = mah / 1000;
     return voltage * ah;
   };
@@ -61,14 +60,12 @@ const SearchInput = ({ onSearchResult, onReset }) => {
         const result = await itemApi.searchItems(inputValue.trim());
         let newResult;
         
-        // 배터리 검색어 확인
         if (inputValue.trim().includes('배터리')) {
           setShowBatteryModal(true);
           setIsLoading(false);
           return;
         }
         
-        // DB에 데이터가 있는 경우
         if (result && !result.error && result.restrictions) {
           let status;
           let details = result.restrictions;
@@ -88,7 +85,6 @@ const SearchInput = ({ onSearchResult, onReset }) => {
             isConditional: actualConditional
           };
         } else {
-          // DB에 데이터가 없는 경우
           newResult = {
             item: inputValue.trim(),
             status: "반입가능",
