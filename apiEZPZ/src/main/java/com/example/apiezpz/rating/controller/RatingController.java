@@ -22,15 +22,12 @@ public class RatingController {
     public ResponseEntity<?> createRating(
             @PathVariable(value = "airportCode", required = true) String airportCode,
             @RequestBody RatingDTO ratingDTO) {
-        log.info("Received rating request for airport: {}", airportCode);
         try {
             Rating savedRating = ratingService.createRating(airportCode, ratingDTO);
             return ResponseEntity.ok(savedRating);
         } catch (IllegalArgumentException e) {
-            log.error("Airport not found: {}", airportCode, e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            log.error("Error creating rating", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("평가 저장 중 오류가 발생했습니다: " + e.getMessage());
         }
@@ -39,15 +36,12 @@ public class RatingController {
     @GetMapping("/{airportCode}/ratings/average")
     public ResponseEntity<?> getAverageRatings(
             @PathVariable(value = "airportCode", required = true) String airportCode) {
-        log.info("Fetching average ratings for airport: {}", airportCode);
         try {
             Map<String, Double> averages = ratingService.getAverageRatings(airportCode);
             return ResponseEntity.ok(averages);
         } catch (IllegalArgumentException e) {
-            log.error("Airport not found: {}", airportCode, e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            log.error("Error fetching average ratings", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("평균 평점 조회 중 오류가 발생했습니다: " + e.getMessage());
         }

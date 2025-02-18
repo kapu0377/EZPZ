@@ -62,7 +62,6 @@ public class RatingServiceImpl implements RatingService {
                 log.info("No ratings found for airport: {}", airportCode);
                 return initializeEmptyAverages();
             }
-
             Map<String, Double> averages = calculateAverages(ratings);
             log.info("Calculated averages: {}", averages);
             return averages;
