@@ -92,12 +92,6 @@ const AirportRating = ({ airport }) => {
           <span>{ratings.convenience}</span>
         </div>
 
-        <textarea
-          placeholder="의견을 입력해주세요"
-          value={ratings.comment}
-          onChange={(e) => setRatings({...ratings, comment: e.target.value})}
-        />
-
         <button type="submit">평가 제출</button>
       </form>
     </div>
