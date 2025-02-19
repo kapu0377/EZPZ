@@ -1,6 +1,6 @@
-package com.example.apiezpz.repository;
+package com.example.apiezpz.prohibited.repository;
 
-import com.example.apiezpz.domain.Prohibit;
+import com.example.apiezpz.prohibited.domain.Prohibit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
