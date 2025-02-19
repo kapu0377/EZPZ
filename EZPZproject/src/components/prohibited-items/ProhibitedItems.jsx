@@ -312,13 +312,51 @@ function ProhibitedItems() {
       </div>
       {/* ✅ 막대 그래프 출력 */}
       <div className="chart-container">
-        {chartData ? (
+      {chartData ? (
           <Bar
             data={chartData}
             options={{
               responsive: true,
-              plugins: { legend: { display: false } },
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { 
+                  display: false 
+                },
+                title: {
+                  display: true,
+                  text: '공항 별 적발 현황',
+                  font: {
+                    size: 20
+                  },
+                  padding: 20
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    display: true,
+                    color: 'rgba(0, 0, 0, 0.1)'
+                  },
+                  ticks: {
+                    font: {
+                      size: 14
+                    }
+                  }
+                },
+                x: {
+                  grid: {
+                    display: false
+                  },
+                  ticks: {
+                    font: {
+                      size: 14
+                    }
+                  }
+                }
+              }
             }}
+            style={{ height: '500px' }}
           />
         ) : (
           <p>데이터를 불러오는 중...</p>
