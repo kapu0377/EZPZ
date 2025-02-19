@@ -365,8 +365,14 @@ const App = () => {
                           {post.title.length > 15 ? post.title.slice(0, 15) + '...' : post.title}
                         </span>
                       </td>
-                      <td className="px-4 py-2">작성자</td>
-                      <td className="px-4 py-2">{new Date().toLocaleDateString()}</td>
+                      <td className="px-4 py-2">{post.writer || '작성자'}</td>
+                      <td className="px-4 py-2">
+                        {post.createdAt ? new Date(post.createdAt).toLocaleDateString('ko-KR', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        }) : '날짜 없음'}
+                      </td>
             </tr>
           ))}
         </tbody>
