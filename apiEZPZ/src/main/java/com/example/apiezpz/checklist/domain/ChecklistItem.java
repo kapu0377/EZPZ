@@ -18,7 +18,7 @@ public class ChecklistItem {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private boolean checked = false;   //체크여부
+    private boolean checked = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

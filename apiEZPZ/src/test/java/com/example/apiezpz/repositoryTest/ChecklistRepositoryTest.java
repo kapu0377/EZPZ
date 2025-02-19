@@ -49,7 +49,7 @@ public class ChecklistRepositoryTest {
     @Test
     public void insertCategory() {
         // 특정 checklist 가져오기
-        Checklist checklist = checklistRepository.findById(1L).orElseThrow(() -> new RuntimeException("체크리스트 없음"));
+        Checklist checklist = checklistRepository.findById(88L).orElseThrow(() -> new RuntimeException("체크리스트 없음"));
 
         IntStream.rangeClosed(1,10).forEach(i -> {
             Category category = Category.builder()
@@ -62,7 +62,7 @@ public class ChecklistRepositoryTest {
     @Test
     public void insertItem() {
         //특정 카테고리 가져오기
-        Category category = categoryRepository.findById(2L).orElseThrow(() -> new RuntimeException("아이템 없음"));
+        Category category = categoryRepository.findById(21L).orElseThrow(() -> new RuntimeException("아이템 없음"));
 
         IntStream.rangeClosed(1,10).forEach(i -> {
             ChecklistItem checklistItem = ChecklistItem.builder()
