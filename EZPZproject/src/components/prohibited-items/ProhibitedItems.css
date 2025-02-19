@@ -625,10 +625,10 @@ tr:hover {
 
 /* ✅ 그래프 컨테이너 */
 .chart-container {
-  width: 80%;
-  max-width: 600px;
+  width: 90%;  /* 80%에서 90%로 증가 */
+  max-width: 1000px; /* 600px에서 1000px로 증가 */
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px; /* 20px에서 30px로 증가 */
   background: white;
   border-radius: 10px;
   box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
