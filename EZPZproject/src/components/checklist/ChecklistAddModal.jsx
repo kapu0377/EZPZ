@@ -9,7 +9,11 @@ export default function ChecklistAddModal({ isOpen, onClose, onAdd }) {
     if (!isOpen) return null; // ✅ 모달이 열려 있을 때만 표시
 
     const handleSubmit = () => {
-        if (!title.trim() || !departureDate.trim() || !returnDate.trim()) {
+        console.log("모달 입력값 확인");
+        console.log("제목:", title);
+        console.log("출발일:", departureDate);
+        console.log("도착일:", returnDate);
+        if (!title.trim() || !departureDate || !returnDate) {
             alert("제목, 출발일, 도착일을 모두 입력하세요.");
             return;
         }
