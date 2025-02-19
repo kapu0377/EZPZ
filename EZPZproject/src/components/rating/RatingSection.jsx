@@ -35,59 +35,73 @@ const StarRating = ({ rating, setRating, label }) => {
   );
 };
 
+const BASE_URL = 'http://localhost:8088';
+
 const RatingSection = ({ airport }) => {
-  const [ratings, setRatings] = useState({
-    satisfaction: 0,
-    cleanliness: 0,
-    convenience: 0,
-    comment: ''
-  });
-  const [averageRatings, setAverageRatings] = useState(null);
-
-  useEffect(() => {
-    if (airport) {
-      fetchAverageRatings(airport.id || 'ICN');
-    }
-  }, [airport]);
-
-  const fetchAverageRatings = async (airportId) => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/airports/${airportId}/ratings/average`);
-      setAverageRatings(response.data);
-    } catch (error) {
-      console.error('평균 평점 조회 실패:', error);
-    }
-  };
-
-  const handleRatingSubmit = async () => {
-    if (!ratings.satisfaction || !ratings.cleanliness || !ratings.convenience) {
-      alert('모든 항목을 평가해주세요.');
-      return;
-    }
-
-    try {
-      const airportId = airport.id || 'ICN';
-      // 5점 만점을 10점 만점으로 변환
-      const convertedRatings = {
-        ...ratings,
-        satisfaction: ratings.satisfaction * 2,
-        cleanliness: ratings.cleanliness * 2,
-        convenience: ratings.convenience * 2
-      };
-      
-      await axios.post(`http://localhost:8080/api/airports/${airportId}/ratings`, convertedRatings);
-      alert('평가가 성공적으로 제출되었습니다!');
-      fetchAverageRatings(airportId);
-      setRatings({
-        satisfaction: 0,
-        cleanliness: 0,
-        convenience: 0,
-        comment: ''
-      });
-    } catch (error) {
-      alert('평가 제출에 실패했습니다.');
-    }
-  };
+    const [ratings, setRatings] = useState({
+      satisfaction: 0,
+      cleanliness: 0,
+      convenience: 0
+    });
+    const [averageRatings, setAverageRatings] = useState(null);
+  
+    useEffect(() => {
+      console.log('Current airport:', airport);
+      if (airport && airport.id) {
+        fetchAverageRatings(airport.id);
+      }
+    }, [airport]);
+  
+    const fetchAverageRatings = async (airportId) => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/airports/${airportId}/ratings/average`);
+        setAverageRatings(response.data);
+      } catch (error) {
+        console.error('평균 평점 조회 실패:', error);
+      }
+    };
+  
+    const handleRatingSubmit = async () => {
+      if (!ratings.satisfaction || !ratings.cleanliness || !ratings.convenience) {
+        alert('모든 항목을 평가해주세요.');
+        return;
+      }
+  
+      try {
+        if (!airport || !airport.id) {
+          throw new Error('공항 정보가 없습니다.');
+        }
+  
+        const ratingData = {
+          satisfaction: ratings.satisfaction,
+          cleanliness: ratings.cleanliness,
+          convenience: ratings.convenience
+        };
+        
+        const response = await axios.post(
+            `${BASE_URL}/api/airports/${airport.id}/ratings`,
+            ratingData,
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+  
+        if (response.status === 200) {
+          alert('평가가 성공적으로 제출되었습니다!');
+          fetchAverageRatings(airport.id);
+          setRatings({
+            satisfaction: 0,
+            cleanliness: 0,
+            convenience: 0
+          });
+        }
+      } catch (error) {
+        console.error('Error details:', error.response?.data || error.message);
+        alert('평가 제출에 실패했습니다');
+      }
+    };
 
   return (
     <div className="airport-rating-section">
@@ -99,15 +113,15 @@ const RatingSection = ({ airport }) => {
           <div className="ratings-grid">
             <div className="rating-item">
               <span>전반적 만족도:</span>
-              <span>{(averageRatings.avgSatisfaction / 2).toFixed(1)} / 5.0</span>
+              <span>{(averageRatings.avgSatisfaction).toFixed(1)} / 5.0</span>
             </div>
             <div className="rating-item">
               <span>청결도:</span>
-              <span>{(averageRatings.avgCleanliness / 2).toFixed(1)} / 5.0</span>
+              <span>{(averageRatings.avgCleanliness).toFixed(1)} / 5.0</span>
             </div>
             <div className="rating-item">
               <span>이용 편의성:</span>
-              <span>{(averageRatings.avgConvenience / 2).toFixed(1)} / 5.0</span>
+              <span>{(averageRatings.avgConvenience).toFixed(1)} / 5.0</span>
             </div>
           </div>
         </div>

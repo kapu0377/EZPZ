@@ -1,33 +1,38 @@
 package com.example.apiezpz.rating.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "ratings")
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "airport_id", nullable = false)
     private Airport airport;
+    @Column(name = "airport_code", nullable = false)
+    private String airportCode;
 
+    @Column(nullable = false)
     private Integer satisfaction;
+    @Column(nullable = false)
     private Integer cleanliness;
+    @Column(nullable = false)
     private Integer convenience;
-    private String comment;
-
-    private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        if (this.airport != null) {
+            this.airportCode = this.airport.getCode();
+        }
     }
 }
