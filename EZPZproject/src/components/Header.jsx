@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import Logo from "../logo/Logo";
+import Login from "./Login";
 
 const Header = () => {
   const { user, logout } = useAuth();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   
   console.log("Header에서의 user 객체:", user); // user 객체 확인
 
   return (
     <header className="header">
-      <Link to="/" className="logo">EZPacking</Link>
+      <Logo />
       <div className="nav-container">
         {user && (
           <div className="user-menu">
@@ -19,12 +22,20 @@ const Header = () => {
         )}
         <nav className="main-nav">
           <Link to="/prohibited">금지물품</Link>
-          <Link to="/detection">적발현황</Link>
-          {user && <Link to="/mypage">마이페이지</Link>}
-          {!user && <Link to="/login">로그인</Link>}
           <Link to="/board">게시판</Link>
+          {user && <Link to="/mypage">마이페이지</Link>}
+          {!user && (
+            <button 
+              onClick={() => setIsLoginOpen(true)}
+              className="nav-login-button"
+            >
+              로그인
+            </button>
+          )}
+          <Link to="/parking">주차현황</Link>
         </nav>
       </div>
+      <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </header>
   );
 };

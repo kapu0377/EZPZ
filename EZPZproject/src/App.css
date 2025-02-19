@@ -1,3 +1,7 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 /* 전역 스타일 */
 :root {
   --primary-black: #1a1a1a;
@@ -236,17 +240,26 @@ body {
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
-  min-height: 400px;
+  transition: none;
+  min-height: 450px;
+  height: auto;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
-.content-box h2 {
+/* .content-box h2 {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--accent-gray);
+} */
+
+.content-box h2 {
+  font-size: 1.5rem;
+  margin: 0;  /* margin-bottom 제거 */
+  padding: 0; /* padding-bottom 제거 */
+  border-bottom: none; /* border 제거 */
 }
 
 .content-box .content-area {
@@ -255,9 +268,9 @@ body {
   padding: 1rem;
 }
 
-.content-box:hover {
+/* .content-box:hover {
   transform: translateY(-4px);
-}
+} */
 
 /* 푸터 스타일 */
 .footer {
@@ -309,144 +322,6 @@ body {
   }
 }
 
-/* 로그인 페이지 스타일 */
-.login-container {
-  max-width: 400px;
-  margin: 4rem auto;
-  padding: 2rem;
-  background-color: var(--primary-white);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.login-form h2 {
-  text-align: center;
-  color: var(--primary-black);
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.login-form input {
-  padding: 1rem;
-  border: 2px solid var(--accent-gray);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-}
-
-.login-form input:focus {
-  outline: none;
-  border-color: var(--primary-black);
-}
-
-.login-form button {
-  padding: 1rem;
-  background-color: var(--primary-black);
-  color: var(--primary-white);
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.login-form button:hover {
-  background-color: var(--secondary-black);
-}
-
-.login-links {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
-.login-links a {
-  color: var(--text-gray);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.login-links a:hover {
-  color: var(--primary-black);
-}
-
-.register-container {
-  max-width: 400px;
-  margin: 4rem auto;
-  padding: 2rem;
-  background-color: var(--primary-white);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.register-form h2 {
-  text-align: center;
-  color: var(--primary-black);
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.register-form input {
-  padding: 1rem;
-  border: 2px solid var(--accent-gray);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-}
-
-.register-form input:focus {
-  outline: none;
-  border-color: var(--primary-black);
-}
-
-.register-form button {
-  padding: 1rem;
-  background-color: var(--primary-black);
-  color: var(--primary-white);
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.register-form button:hover {
-  background-color: var(--secondary-black);
-}
-
-.register-links {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
-.register-links a {
-  color: var(--text-gray);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.register-links a:hover {
-  color: var(--primary-black);
-}
 
 .search-results {
   margin-top: 2rem;
@@ -493,6 +368,10 @@ body {
   color: white;
 }
 
+.item-status.conditional {
+  color: orange;
+}
+
 .item-details {
   color: var(--text-gray);
   line-height: 1.5;
@@ -510,4 +389,8 @@ body {
   color: var(--text-gray);
   padding: 2rem;
 }
+
+
+
+
 

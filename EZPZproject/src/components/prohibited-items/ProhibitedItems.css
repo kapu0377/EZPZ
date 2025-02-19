@@ -12,61 +12,208 @@
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 한 줄에 3개씩 배치 */
-  gap: 60px; /* 카드 간격을 15px로 줄임 */
-  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-}
-
-.card {
-  width: 90%;
-  max-width: 500px; /* 카드 최대 너비 유지 */
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
-}
-
-.card:hover {
-  transform: translateY(-8px); /* 약간 더 부드러운 호버 효과 */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-.card-header {
-  background: linear-gradient(135deg, #616161, #3b3b3b);
-  padding: 20px;
-  color: white;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
   display: flex;
   flex-direction: column;
+  gap: 40px;
+}
+
+.center-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.category-group {
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.category-group-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.category-group-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  justify-items: center;
+}
+
+/* 3개씩 그룹화 */
+.card-group {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 30px;
+}
+
+/* 카테고리 제목 컨테이너 */
+.category-titles {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+/* 카테고리 제목 스타일 */
+.category-title {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* 카드 그리드 수정 */
+.all-categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+/* 카드 컬럼 */
+.category-column {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   align-items: center;
 }
 
+/* 카드 스타일 수정 */
+.card {
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* 카드 호버 효과 수정 */
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* 카드 헤더 수정 */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
 .card-header .icon {
-  font-size: 40px;
-  margin-bottom: 10px;
+  font-size: 32px;
+  margin-right: 10px;
 }
 
+/* 카드 내용 스타일 수정 */
 .card-body {
-  padding: 15px;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.card-body ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.card-body p strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
 }
 
-.card-body li {
-  font-size: 20px; /* 글자 크기 증가 */
-  padding: 6px 0; /* 항목 간격 약간 조정 */
-  border-bottom: 1px solid #eee;
+.card-body p {
+  font-size: 14px;
+  color: #666;
   line-height: 1.4;
+}
+
+/* 카테고리별 색상 */
+.category-section.physical .category-title {
+  background: #4B89DC;
+  color: white;
+}
+
+.category-section.allowed .category-title {
+  background: #2ECC71;
+  color: white;
+}
+
+.category-section.hazardous .category-title {
+  background: #E74C3C;
+  color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .category-group-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .category-group-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    width: 100%;
+  }
+  
+  .category-title {
+    width: 100%;
+  }
+}
+
+.category-group.physical .category-group-title {
+  color: #4B89DC;
+}
+
+.category-group.hazardous .category-group-title {
+  color: #E74C3C;
+}
+
+/* 카드 컨테이너 */
+.category-group-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* 고위험 비행편 카드 스타일 */
+.high-risk-flight {
+  grid-column: 2; /* 가운데 열에 배치 */
+  justify-self: center;
+  max-width: 400px; /* 카드 최대 너비 제한 */
+}
+
+/* 원형 테두리 제거 */
+.category-group-cards::before {
+  content: none;
+}
+
+.category-group.physical .category-group-cards::before {
+  border-color: #4B89DC;
+}
+
+.category-group.hazardous .category-group-cards::before {
+  border-color: #E74C3C;
 }
 
 .category-details {
@@ -84,18 +231,24 @@
 
 .description-section {
   font-size: 16px;
-  color: white; /* 배경 이미지 위에 잘 보이도록 */
+  color: white;
   padding: 20px;
   margin-bottom: 20px;
   background: url('../../assets/img/airport.jpg') no-repeat center center;
-  background-size: cover; /* 배경 이미지를 영역에 맞게 조정 */
+  background-size: cover;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 1;
 }
 
-/* 텍스트 가독성을 높이기 위한 어두운 오버레이 */
+.description-section h1,
+.description-section p {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 텍스트 가독성 향상 */
+}
+
 .description-section::before {
   content: '';
   position: absolute;
@@ -103,8 +256,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4); /* 반투명한 검은색 오버레이 */
-  z-index: -1;
+  background: rgba(0, 0, 0, 0.6); /* 오버레이를 좀 더 진하게 */
   border-radius: 10px;
 }
 
@@ -172,19 +324,374 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
+/* 새로운 슬라이드 패널 스타일 */
+.slide-panel {
+  position: absolute;
+  left: 105%; /* 왼쪽 카드는 오른쪽으로 슬라이드 */
+  top: 0;
+  width: 300px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: none; /* 전환 효과 제거 */
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* 오른쪽 카드의 슬라이드 패널 위치 조정 */
+.card:nth-child(2n) .slide-panel {
+  left: auto; /* 기존 left: 105% 제거 */
+  right: 105%; /* 오른쪽 카드는 왼쪽으로 슬라이드 */
+}
+
+/* 카테고리 섹션 기본 스타일 */
+.category-section {
+  width: 100%;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 각 섹션별 제목 색상 */
+.category-section.physical .category-title {
+  background: #4B89DC;
+  color: white;
+}
+
+.category-section.high-risk .category-title {
+  color: #00AA00;
+}
+
+.category-section.hazardous .category-title {
+  background: #E74C3C;
+  color: white;
+}
+
+/* 카드 그룹 스타일 */
+.category-group-cards {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin: 20px 0;
+}
+
+/* 각 섹션별 카드 위치 */
+.category-section.physical .card:nth-child(1) {
+  position: relative;
+  left: 30px;
+  top: 20px;
+}
+
+.category-section.physical .card:nth-child(2) {
+  position: relative;
+  top: -20px;
+}
+
+.category-section.physical .card:nth-child(3) {
+  position: relative;
+  right: 30px;
+  top: 20px;
+}
+
+.category-section.hazardous .card:nth-child(1) {
+  position: relative;
+  left: 20px;
+  bottom: 10px;
+}
+
+.category-section.high-risk .card {
+  margin: 0 auto;
+}
+
+/* 허가류 섹션 스타일 */
+.category-section.allowed .category-title {
+  background: #2ECC71;
+  color: white;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.category-group-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* 반응형 디자인 수정 */
+@media (max-width: 768px) {
+  .category-group-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-section {
+    padding: 10px;
+  }
+}
+
+/* 카테고리 섹션 컨테이너 */
+.category-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+/* 카테고리 제목 */
+.category-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  width: fit-content;
+  margin: 0 auto 30px;
+}
+
+/* 카드 그리드 컨테이너 */
+.all-categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 카테고리 컬럼 */
+.category-column {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 카드 스타일 */
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 180px;
+  transition: transform 0.3s ease;
+  border: 1px solid #eee;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 카드 헤더 (아이콘) */
+.card-header {
+  font-size: 32px;
+}
+
+/* 카드 내용 */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-body strong {
+  font-size: 20px;
+  color: #333;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.card-body p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 카테고리별 색상 */
+.category-column.physical .category-title {
+  background: #4B89DC;
+  color: white;
+}
+
+.category-column.allowed .category-title {
+  background: #2ECC71;
+  color: white;
+}
+
+.category-column.hazardous .category-title {
+  background: #E74C3C;
+  color: white;
+}
+/* 공항 별 적발 근황 스타일 */
+/* 공항 별 적발 현황 스타일 */
+.airport-section {
+  margin: 40px 0;
+  text-align: center;
+}
+
+.airport-box-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.airport-box {
+  background: #ffffff;
+  color: rgb(3, 3, 3);
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 180px;
+  text-align: center;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.airport-box:hover {
+  transform: translateY(-3px);
+  border: 2px solid #808080; /* 초록색으로 변경 */
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ 공항 선택 메뉴 스타일 */
+.airport-select-box {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.airport-select-box label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.airport-select-box select {
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid #4B89DC;
+  background: white;
+  cursor: pointer;
+}
+
+/* ✅ 그래프 컨테이너 */
+.chart-container {
+  width: 90%;  /* 80%에서 90%로 증가 */
+  max-width: 1000px; /* 600px에서 1000px로 증가 */
+  margin: 0 auto;
+  padding: 30px; /* 20px에서 30px로 증가 */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 전체 컨테이너 스타일 */
+.prohibited-items-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+/* ✅ 사이드바 스타일 */
+.sidebar {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar button {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.sidebar button:hover {
+  background: #ddd;
+}
+
+.sidebar button.active {
+  background: #4B89DC;
+  color: white;
+}
+
+/* ✅ 콘텐츠 영역 */
+.content {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 모달 스타일 유지 */
 
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
-  .cards-container {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 표시 */
-    gap: 10px; /* 태블릿에서는 더 좁은 간격 */
+  .all-categories {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 600px) {
-  .cards-container {
-    grid-template-columns: 1fr; /* 모바일에서는 1개씩 표시 */
-    gap: 8px; /* 모바일에서는 최소 간격 */
+@media (max-width: 768px) {
+  .all-categories {
+    grid-template-columns: 1fr;
   }
+  
+  .category-column {
+    margin-bottom: 20px;
+  }
+}
+
+.prohibited-items-slider {
+  position: relative;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.slider-content {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.slide-panel {
+  z-index: 10;
+  max-height: none; /* 최대 높이 제한 제거 */
 }

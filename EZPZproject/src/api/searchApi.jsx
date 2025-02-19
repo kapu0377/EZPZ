@@ -8,6 +8,10 @@ export const getSearchRankings = async () => {
   return itemApi.getSearchRankings();
 };
 
+export const getUserSearchHistory = async (username) => {
+  return itemApi.getUserSearchHistory(username);
+};
+
 export const getDetectionRankings = async () => {
   return itemApi.getDetectionRankings();
 };

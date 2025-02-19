@@ -6,11 +6,6 @@ const Footer = () => {
         <div>주소: 서울시 예제구</div>
         <div>연락처: 010-1234-5678</div>
       </div>
-      <div className="footer-logos">
-        <div className="logo-placeholder"></div>
-        <div className="logo-placeholder"></div>
-        <div className="logo-placeholder"></div>
-      </div>
     </footer>
   )
 }
