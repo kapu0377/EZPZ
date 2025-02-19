@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "http://localhost:8088/api";
 
 export default function ChecklistApi() {
     const [memberId] = useState(1); //테스트용 회원 ID
@@ -91,7 +91,11 @@ export default function ChecklistApi() {
 
     const handleEditChecklist = (checklist) => {
         setEditChecklist(checklist.id);
-        setEditChecklistData({ title: checklist.title, departureDate: checklist.departureDate, returnDate: checklist.returnDate });
+        setEditChecklistData({
+            title: checklist.title,
+            departureDate: checklist.departureDate,
+            returnDate: checklist.returnDate,
+        });
     };
 
     const handleUpdateChecklist = async (id) => {
@@ -204,7 +208,7 @@ export default function ChecklistApi() {
             setNewItem({ categoryId: null, name: "" });
             loadItems(categoryId);
         } catch (error) {
-            if (error.response && error.response.status === 500) {
+            if (error.response && error.response.status === 401) {
                 alert("이미 존재하는 아이템입니다.");
             } else {
                 console.error("아이템 추가 실패:", error);
@@ -275,7 +279,8 @@ export default function ChecklistApi() {
                             <div className="flex gap-2">
                                 <input type="text" value={editChecklistData.title} onChange={(e) => setEditChecklistData({ ...editChecklistData, title: e.target.value })} className="w-full p-2 border rounded" />
                                 <input type="date" value={editChecklistData.departureDate} onChange={(e) => setEditChecklistData({ ...editChecklistData, departureDate: e.target.value })} className="w-full p-2 border rounded" />
-                                <input type="date" value={editChecklistData.returnDate} onChange={(e) => setEditChecklistData({ ...editChecklistData, returnDate: e.target.value })} className="w-full p-2 border rounded" />
+                                <input type="date" value={editChecklistData.returnDate} min={editChecklistData.departureDate} // 출발일보다 이전 날짜 선택 방지
+                                    onChange={(e) => setEditChecklistData({ ...editChecklistData, returnDate: e.target.value })} className="w-full p-2 border rounded" />
                                 <button onClick={() => handleUpdateChecklist(checklist.id)} className="p-2 bg-blue-500 text-white rounded">저장</button>
                                 <button onClick={() => setEditChecklist(null)} className="p-2 bg-gray-500 text-white rounded">취소</button>
                             </div>

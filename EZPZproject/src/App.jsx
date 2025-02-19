@@ -5,13 +5,12 @@ import Layout from "./components/layout/Layout";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
-import MyPage from "./api/checklistApi"
-// import MyPage from "./components/checklist/ChecklistPage";
+// import MyPage from "./api/checklistAllCode"
+import MyPage from "./components/checklist/Main"
 import "./App.css";
 import "./components/notice/Notice.css";
 import Notice from "./pages/Notice";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
-import CategoryItemPage from "./components/checklist/CategoryItemPage";
 
 import AirportParkingPage from "./pages/AirportParkingPage";
 import 'swiper/css';  // 기본 스타일
@@ -27,7 +26,6 @@ function App() {
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
             <Route path="/mypage" element={<MyPage />} />
-            <Route path="/checklist/:checklistId" element={<CategoryItemPage />} />
             <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>
