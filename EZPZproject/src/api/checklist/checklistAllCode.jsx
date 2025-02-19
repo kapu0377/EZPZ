@@ -98,16 +98,6 @@ export default function ChecklistApi() {
         });
     };
 
-    // 출발일 변경 시, 도착일의 min 값 업데이트
-    const handleEditDepartureDateChange = (e) => {
-        const newDepartureDate = e.target.value;
-        setEditChecklistData((prev) => ({
-            ...prev,
-            departureDate: newDepartureDate,
-            returnDate: prev.returnDate, // 초기화 없이 유지
-        }));
-    };
-
     const handleUpdateChecklist = async (id) => {
         try {
             await axios.put(`${API_BASE_URL}/checklist/${id}`, editChecklistData, { params: { memberId } });
