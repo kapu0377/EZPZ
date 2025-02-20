@@ -3,7 +3,6 @@
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
   transition: transform 2.0s ease;
   height: 100%;
   display: flex;
@@ -17,8 +16,22 @@
 }
 
 .slider-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon:hover {
+  transform: translateX(3px); /* 호버 시 오른쪽으로 이동 */
 }
 
 .slider-header h2 {
@@ -153,4 +166,6 @@
     min-width: 50px;
     height: 50px;
   }
+
+  
 } 
