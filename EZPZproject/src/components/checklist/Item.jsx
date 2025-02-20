@@ -50,13 +50,7 @@ export default function Item({ category }) {
 
     return (
         <div className="item-container">
-            <input
-                type="text"
-                placeholder="새 아이템 이름"
-                value={newItemName}
-                onChange={(e) => setNewItemName(e.target.value)}
-            />
-            <button onClick={handleAddItem}>추가</button>
+            
             <ul>
                 {items.map((item) => (
                     <li key={item.id}>
@@ -85,6 +79,13 @@ export default function Item({ category }) {
                     </li>
                 ))}
             </ul>
+            <input
+                type="text"
+                placeholder="새 아이템 이름"
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+            />
+            <button onClick={handleAddItem}>추가</button>
         </div>
     );
 }

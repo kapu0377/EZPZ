@@ -3,12 +3,13 @@ import { getCategoriesWithItems, addCategory, updateCategory, deleteCategory } f
 import { resetPacking } from "../../api/checklist/checklistApi";
 import Item from "./Item";
 import "./Category.css";
+import CategoryAddModal from "./CategoryAddModal"; // ✅ 모달 추가
 
 export default function Category({ checklist }) {
     const [categories, setCategories] = useState([]);
-    const [newCategoryName, setNewCategoryName] = useState("");
     const [editCategoryId, setEditCategoryId] = useState(null);
     const [editCategoryName, setEditCategoryName] = useState("");
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false); // ✅ 추가 모달 상태
 
     useEffect(() => {
         loadCategories();
@@ -20,16 +21,16 @@ export default function Category({ checklist }) {
         setCategories(data);
     };
 
-    const handleAddCategory = async () => {
-        if (!newCategoryName.trim()) return alert("카테고리 이름을 입력하세요.");
+    const handleAddCategory = async (categoryName) => {
+        if (!categoryName.trim()) return alert("카테고리 이름을 입력하세요.");
         
-        const result = await addCategory(checklist.id, newCategoryName);
+        const result = await addCategory(checklist.id, categoryName);
         if (!result.success) {
-            alert(result.message); // 중복된 카테고리 알림창 표시
-            return;
+            alert(result.message);  // 중복된 카테고리 알림창 표시
+            return false;
         }
-        setNewCategoryName("");
         loadCategories();
+        return true;
     };
 
 
@@ -41,7 +42,7 @@ export default function Category({ checklist }) {
     };
 
     const handleDeleteCategory = async (categoryId) => {
-        if (window.confirm("카테고리를 삭제하시겠습니까?")) {
+        if (window.confirm("카테고리에 포함된 모든 데이터가 삭제됩니다.\n카테고리를 삭제하시겠습니까?")) {
             await deleteCategory(categoryId);
             loadCategories();
         }
@@ -57,15 +58,9 @@ export default function Category({ checklist }) {
 
     return (
         <div className="category-container">
-            <h3>{checklist.title} - 카테고리 목록</h3>
-            <input
-                type="text"
-                placeholder="새 카테고리 이름"
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-            />
-            <button onClick={handleAddCategory}>추가</button>
-            <button onClick={handleResetPacking}>짐 싸기 초기화</button>
+            <h3>{checklist.title}({checklist.departureDate} ~ {checklist.returnDate}) - 카테고리 목록</h3>
+            <button className="category-add-btn" onClick={() => setIsAddModalOpen(true)}>카테고리 추가</button>
+            <button className="category-reset-btn" onClick={handleResetPacking}>짐 싸기 초기화</button>
             <ul>
             {categories.map((category) => (
                     <li key={category.id} className="category-block">
@@ -83,9 +78,9 @@ export default function Category({ checklist }) {
                                 </>
                             ) : (
                                 <>
-                                    <span>{category.name}</span>
-                                    <button onClick={() => { setEditCategoryId(category.id); setEditCategoryName(category.name); }}>수정</button>
-                                    <button onClick={() => handleDeleteCategory(category.id)}>삭제</button>
+                                    <span>📌 {category.name}</span>
+                                    <button className="edit-btn" onClick={() => { setEditCategoryId(category.id); setEditCategoryName(category.name); }}>수정</button>
+                                    <button className="delete-btn" onClick={() => handleDeleteCategory(category.id)}>삭제</button>
                                 </>
                             )}
                         </div>
@@ -97,7 +92,12 @@ export default function Category({ checklist }) {
                     </li>
                 ))}
             </ul>
-            
+             {/* ✅ 카테고리 추가 모달 */}
+             <CategoryAddModal 
+                isOpen={isAddModalOpen} 
+                onClose={() => setIsAddModalOpen(false)}
+                onAdd={handleAddCategory}
+            />
         </div>
     );
 }

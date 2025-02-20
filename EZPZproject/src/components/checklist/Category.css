@@ -9,12 +9,12 @@
     margin-bottom: 20px;
 }
 
+
 /* 카테고리 블록 (제목과 아이템 목록을 세로로 배치) */
 .category-block {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
     padding: 15px;
     border-radius: 10px;
     background-color: #f9f9f9;
@@ -29,7 +29,6 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 10px;
 }
 
 /* 카테고리명과 버튼 정렬 */
@@ -38,8 +37,34 @@
 }
 
 /* 아이템 리스트 */
+ul,
 .item-list {
-    list-style: none;
-    padding: 0;
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0; /* ✅ 들여쓰기 제거 */
+    margin: 0; /* ✅ 기본 마진 제거 */
     width: 100%;
+}
+
+.category-add-btn, .category-default-btn, .category-reset-btn {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+/* ✅ 기본 카테고리 생성 버튼 (녹색) */
+.category-default-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+/* ✅ 카테고리 추가 버튼 (파란색) */
+.category-add-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+/* ✅ 짐 싸기 초기화 버튼 (빨간색) */
+.category-reset-btn {
+    background-color: #dc3545;
+    color: white;
 }
