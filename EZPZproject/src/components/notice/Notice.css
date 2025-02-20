@@ -132,9 +132,9 @@ h3 {
 }
 
 .comments-section {
-  margin-top: 40px;
+  margin-top: -45px;
+  margin-bottom: 30px;
   padding-top: 35px;
-  border-top: 1px solid #eee;
 }
 
 .comment-form {
@@ -329,14 +329,12 @@ h3 {
 
 .post-buttons {
   position: absolute;
-  bottom: 50px;
+  bottom: 30px;
   left: 20px;
   right: 20px;
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
-  border-top: 1px solid #eee;
-  background-color: white;
 }
 
 .right-buttons {
@@ -345,6 +343,7 @@ h3 {
 }
 
 .back-button {
+  position: relative;
   background-color: #4a5568;
   color: white;
 }
@@ -378,6 +377,7 @@ h3 {
 }
 
 .post-buttons {
+  position: relative;
   display: flex;
   gap: 10px;
   margin-top: 30px;
