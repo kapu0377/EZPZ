@@ -254,10 +254,10 @@ const App = () => {
     }
   };
 
-  // 댓글 관련 함수들 추가
+  // 댓글 관련 함수들 수정
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/comments/post/${selectedPost.id}`);
+      const response = await fetch(`http://localhost:8088/api/comments/post/${selectedPost.id}`);
       const data = await response.json();
       setComments(data);
     } catch (error) {
@@ -267,20 +267,23 @@ const App = () => {
 
   const handleAddComment = async () => {
     if (!commentText.trim()) return;
-    if (!username) {
+    
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/comments/post/${selectedPost.id}`, {
+      const response = await fetch(`http://localhost:8088/api/comments/post/${selectedPost.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           content: commentText,
-          writer: username  // refresh_token의 username 사용
+          writer: localStorage.getItem('username') || '작성자'
         }),
       });
 
@@ -293,12 +296,59 @@ const App = () => {
     }
   };
 
+  // 댓글 수정 버튼 클릭 핸들러 수정
+  const handleEditButtonClick = (comment) => {
+    setEditingCommentId(comment.id);
+    setEditCommentText(comment.content);
+  };
+
+  // 댓글 수정 저장 핸들러
+  const handleEditComment = async (commentId) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          content: editCommentText,
+          writer: localStorage.getItem('username') || '작성자'
+        }),
+      });
+
+      if (response.ok) {
+        setEditingCommentId(null);
+        setEditCommentText('');
+        fetchComments();
+      }
+    } catch (error) {
+      console.error('Error updating comment:', error);
+    }
+  };
+
+  // 댓글 삭제 핸들러
   const handleDeleteComment = async (commentId) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (response.ok) {
@@ -566,17 +616,7 @@ const App = () => {
                             />
                             <div className="comment-edit-buttons">
                               <button
-                                onClick={async () => {
-                                  try {
-                                    await updateComment(comment.id, editCommentText, comment.writer);
-                                    setEditingCommentId(null);
-                                    setEditCommentText("");
-                                    fetchComments();
-                                  } catch (error) {
-                                    console.error('Error updating comment:', error);
-                                    alert('댓글 수정에 실패했습니다.');
-                                  }
-                                }}
+                                onClick={handleEditComment}
                                 className="button edit-button"
                               >
                                 저장
@@ -604,16 +644,13 @@ const App = () => {
                             </div>
                             <div className="comment-buttons">
                               <button
-                                onClick={() => {
-                                  setEditingCommentId(comment.id);
-                                  setEditCommentText(comment.content);
-                                }}
+                                onClick={() => handleEditButtonClick(comment)}
                                 className="comment-edit"
                               >
                                 수정
                               </button>
                               <button
-                                onClick={() => handleDeleteComment(comment.id, comment.writer)}
+                                onClick={() => handleDeleteComment(comment.id)}
                                 className="comment-delete"
                               >
                                 삭제
