@@ -25,6 +25,7 @@ const App = () => {
   const [commentText, setCommentText] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState("");
+  const [username, setUsername] = useState(null);
 
   // 검색 실행 함수
   const handleSearch = () => {
@@ -88,6 +89,38 @@ const App = () => {
     fetchPosts();
   }, []);
 
+  // 로그인한 사용자 정보 가져오기
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await fetch('http://localhost:8088/api/member/me', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch user info');
+        }
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          setUsername(data.username);
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      fetchUsername();
+    }
+  }, []);
+
   // 글쓰기 버튼 클릭 핸들러 수정
   const handleAddClick = () => {
     setTitle("");  // 제목 초기화
@@ -105,25 +138,30 @@ const App = () => {
       return;
     }
   
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+  
     try {
       const url = editId 
         ? `http://localhost:8088/api/posts/${editId}`
         : 'http://localhost:8088/api/posts';
       
-      // POST 요청 데이터 구조 수정
       const postData = {
         title: title,
         content: content,
-        writer: "작성자",
-        createdAt: new Date().toISOString(), // 날짜 추가
-        viewCount: 0,  // 조회수 초기값
-        // 필요한 경우 추가 필드
+        writer: localStorage.getItem('username') || '작성자',  // 로컬 스토리지에서 username 가져오기
+        createdAt: new Date().toISOString(),
+        viewCount: 0
       };
   
       const response = await fetch(url, {
         method: editId ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(postData),
       });
@@ -229,6 +267,10 @@ const App = () => {
 
   const handleAddComment = async () => {
     if (!commentText.trim()) return;
+    if (!username) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
 
     try {
       const response = await fetch(`http://localhost:8080/api/comments/post/${selectedPost.id}`, {
@@ -238,7 +280,7 @@ const App = () => {
         },
         body: JSON.stringify({
           content: commentText,
-          writer: '작성자' // 실제로는 로그인한 사용자 정보를 사용
+          writer: username  // refresh_token의 username 사용
         }),
       });
 
