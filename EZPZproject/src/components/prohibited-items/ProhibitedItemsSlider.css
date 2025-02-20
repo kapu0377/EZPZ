@@ -68,11 +68,12 @@
   background: white;
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(102, 102, 102, 0.1);
+  box-shadow: 0 8px 8px rgba(102, 102, 102, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  border: 2px solid rgb(231, 231, 231);
 }
 
 .slide-item:hover {
