@@ -140,7 +140,6 @@ const getParkingLotName = (airportCode, defaultName) => {
   const airport = AIRPORT_CODES[airportCode];
   if (!airport) return defaultName;
   
-  // 주차장 코드에서 이름 매핑
   for (const [code, name] of Object.entries(airport.parkingLots)) {
     if (defaultName.includes(code)) return name;
   }
