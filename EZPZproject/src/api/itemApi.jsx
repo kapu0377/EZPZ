@@ -51,19 +51,6 @@ const itemApi = {
     }
   },
 
-  getDailyRankings: async () => {
-    try {
-      const response = await axiosInstance.get('/api/search/daily-ranking');
-      return response.data.map(item => ({
-        name: item.category,
-        count: item.searchCount
-      }));
-    } catch (error) {
-      console.error('일간 랭킹 조회 실패:', error);
-      return [];
-    }
-  },
-
   getWeeklyRankings: async () => {
     try {
       const response = await axiosInstance.get('/api/search/weekly-ranking');
@@ -89,36 +76,6 @@ const itemApi = {
       return [];
     }
   },
-
-  getDetectionRankings: async () => {
-    try {
-      const response = await axiosInstance.get('/api/rankings/detection');
-      return response.data;
-    } catch (error) {
-      console.error('적발 랭킹 조회 실패:', error);
-      throw error;
-    }
-  },
-
-  addDetection: async (detectionData) => {
-    try {
-      const response = await axiosInstance.post('/api/detection', detectionData);
-      return response.data;
-    } catch (error) {
-      console.error('적발 정보 추가 실패:', error);
-      throw error;
-    }
-  },
-
-  getDetections: async () => {
-    try {
-      const response = await axiosInstance.get('/api/detection');
-      return response.data;
-    } catch (error) {
-      console.error('적발 정보 조회 실패:', error);
-      throw error;
-    }
-  }
 };
 
 export default itemApi;

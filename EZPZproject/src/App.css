@@ -303,7 +303,6 @@ body {
   opacity: 0.8;
 }
 
-/* 반응형 디자인 */
 @media (max-width: 768px) {
   .search-section {
     grid-template-columns: 1fr;
@@ -369,7 +368,8 @@ body {
 }
 
 .item-status.conditional {
-  color: orange;
+  background-color: orange;
+  color: white;
 }
 
 .item-details {

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const SearchResults = ({ results, onRemoveItem }) => {
   if (!results || results.length === 0) {
     return (
@@ -7,6 +9,19 @@ const SearchResults = ({ results, onRemoveItem }) => {
       </div>
     );
   }
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "반입금지":
+        return "prohibited";
+      case "부분허용":
+        return "conditional";
+      case "반입가능":
+        return "allowed";
+      default:
+        return "allowed";
+    }
+  };
 
   const handleDoubleClick = (index) => {
     if (window.confirm('이 항목을 삭제하시겠습니까?')) {
@@ -28,11 +43,7 @@ const SearchResults = ({ results, onRemoveItem }) => {
           >
             <div className="item-header">
               <span className="item-name">{result.item}</span>
-              <span className={`item-status ${
-                result.status === "반입가능" ? "allowed" : 
-                result.status === "부분허용" ? "conditional" :
-                "prohibited"
-              }`}>
+              <span className={`item-status ${getStatusClass(result.status)}`}>
                 {result.status}
               </span>
             </div>
@@ -48,7 +59,7 @@ const SearchResults = ({ results, onRemoveItem }) => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SearchResults
+export default SearchResults;
