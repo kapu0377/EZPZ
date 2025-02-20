@@ -112,13 +112,18 @@
 /* 카드 헤더 수정 */
 .card-header {
   display: flex;
-  align-items: flex-start;
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center;
   margin-bottom: 15px;
 }
 
 .card-header .icon {
-  font-size: 32px;
-  margin-right: 10px;
+  font-size: 48px; /* 아이콘 크기 키우기 */
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 카드 내용 스타일 수정 */

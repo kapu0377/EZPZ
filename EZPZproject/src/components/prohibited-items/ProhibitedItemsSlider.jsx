@@ -15,18 +15,15 @@ const ProhibitedItemsSlider = () => {
       items: [
         { 
           icon: "🔪", 
-          title: "날붙이", 
-          examples: "칼, 송곳, 도끼, 드릴날, 가위, 면도칼, 작살" 
+          title: "날붙이"
         },
         { 
           icon: "🔨", 
-          title: "둔기", 
-          examples: "망치, 곡괭이, 야구방망이, 골프채, 쇠파이프" 
+          title: "둔기"
         },
         { 
           icon: "🔫", 
-          title: "화기류", 
-          examples: "총기, 전자충격기, 총알, 스프레이, 라이터" 
+          title: "화기류"
         }
       ]
     },
@@ -36,18 +33,15 @@ const ProhibitedItemsSlider = () => {
       items: [
         { 
           icon: "🧪", 
-          title: "화학물질", 
-          examples: "산성물질, 염기성물질, 수은, 표백제, 농약" 
+          title: "화학물질"
         },
         { 
           icon: "💥", 
-          title: "폭발/인화성", 
-          examples: "폭죽, 화약, 부탄가스, 산소통, 성냥" 
+          title: "폭발/인화성"
         },
         { 
           icon: "💧", 
-          title: "액체/겔", 
-          examples: "음료수, 화장품, 샴푸, 젤, 로션(100ml 초과)" 
+          title: "액체/겔"
         }
       ]
     }
