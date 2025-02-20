@@ -302,7 +302,7 @@ const App = () => {
     setEditCommentText(comment.content);
   };
 
-  // 댓글 수정 저장 핸들러
+  // 댓글 수정 저장 핸들러 수정
   const handleEditComment = async (commentId) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -318,22 +318,26 @@ const App = () => {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
+          id: commentId,  // 댓글 ID 추가
           content: editCommentText,
           writer: localStorage.getItem('username') || '작성자'
         }),
       });
 
-      if (response.ok) {
-        setEditingCommentId(null);
-        setEditCommentText('');
-        fetchComments();
+      if (!response.ok) {
+        throw new Error('Failed to update comment');
       }
+
+      setEditingCommentId(null);
+      setEditCommentText('');
+      fetchComments();
     } catch (error) {
       console.error('Error updating comment:', error);
+      alert('댓글 수정에 실패했습니다.');
     }
   };
 
-  // 댓글 삭제 핸들러
+  // 댓글 삭제 핸들러 수정
   const handleDeleteComment = async (commentId) => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -344,18 +348,21 @@ const App = () => {
     if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8088/api/comments/${commentId}?writer=${localStorage.getItem('username')}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
-      if (response.ok) {
-        fetchComments();
+      if (!response.ok) {
+        throw new Error('Failed to delete comment');
       }
+
+      fetchComments();
     } catch (error) {
       console.error('Error deleting comment:', error);
+      alert('댓글 삭제에 실패했습니다.');
     }
   };
 
@@ -560,31 +567,33 @@ const App = () => {
                       목록으로
                     </button>
                   </div>
-                  <div className="right-buttons">
-                    <button 
-                      onClick={() => {
-                        if(window.confirm('게시글을 수정하시겠습니까?')) {
-                          setTitle(selectedPost.title);
-                          setContent(selectedPost.content);
-                          setEditId(selectedPost.id);
-                          setIsWriting(true);
-                        }
-                      }} 
-                      className="button edit-button"
-                    >
-                      수정하기
-                    </button>
-                    <button 
-                      onClick={() => {
-                        if(window.confirm('정말 삭제하시겠습니까?')) {
-                          handleDelete(selectedPost.id);
-                        }
-                      }}
-                      className="button delete-button"
-                    >
-                      삭제하기
-                    </button>
-                  </div>
+                  {selectedPost.writer === localStorage.getItem('username') && (  // 작성자만 수정/삭제 버튼 표시
+                    <div className="right-buttons">
+                      <button 
+                        onClick={() => {
+                          if(window.confirm('게시글을 수정하시겠습니까?')) {
+                            setTitle(selectedPost.title);
+                            setContent(selectedPost.content);
+                            setEditId(selectedPost.id);
+                            setIsWriting(true);
+                          }
+                        }} 
+                        className="button edit-button"
+                      >
+                        수정하기
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if(window.confirm('정말 삭제하시겠습니까?')) {
+                            handleDelete(selectedPost.id);
+                          }
+                        }}
+                        className="button delete-button"
+                      >
+                        삭제하기
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
@@ -616,7 +625,7 @@ const App = () => {
                             />
                             <div className="comment-edit-buttons">
                               <button
-                                onClick={handleEditComment}
+                                onClick={() => handleEditComment(comment.id)}
                                 className="button edit-button"
                               >
                                 저장
@@ -643,18 +652,22 @@ const App = () => {
                               </span>
                             </div>
                             <div className="comment-buttons">
-                              <button
-                                onClick={() => handleEditButtonClick(comment)}
-                                className="comment-edit"
-                              >
-                                수정
-                              </button>
-                              <button
-                                onClick={() => handleDeleteComment(comment.id)}
-                                className="comment-delete"
-                              >
-                                삭제
-                              </button>
+                              {comment.writer === localStorage.getItem('username') && (  // 작성자만 수정/삭제 가능
+                                <>
+                                  <button
+                                    onClick={() => handleEditButtonClick(comment)}
+                                    className="comment-edit"
+                                  >
+                                    수정
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteComment(comment.id)}
+                                    className="comment-delete"
+                                  >
+                                    삭제
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </>
                         )}
