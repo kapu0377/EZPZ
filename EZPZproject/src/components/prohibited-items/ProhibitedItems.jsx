@@ -150,7 +150,6 @@ function ProhibitedItems() {
 
   useEffect(() => {
     if (selectedAirport) {
-      // ✅ 선택된 공항의 적발 데이터 가져오기
       axios
         .get(
           `http://localhost:8088/api/airport-detections/name/${selectedAirport}`
@@ -158,9 +157,61 @@ function ProhibitedItems() {
         .then((response) => {
           setDetectionData(response.data);
 
-          // ✅ 그래프 데이터 형식 변환
-          const labels = response.data.map((item) => item.category);
-          const values = response.data.map((item) => item.detectionCount);
+          // ✅ 줄임말 변환 함수
+          const shortenCategory = (category) => {
+            const replacements = {
+              "날카로운물체(칼 가위 등)": "날붙이",
+              "인화성류(라이터 스프레이 폭죽 등)": "인화성",
+            };
+            return replacements[category] || category;
+          };
+
+          // ✅ '화기류'로 묶을 항목들
+          const fireArmsCategories = [
+            "권총 등",
+            "총기구성품",
+            "기타발사장치",
+            "탄약류",
+          ];
+
+          // ✅ 데이터 그룹화 및 합산 함수
+          const groupCategoryData = (data) => {
+            const groupedData = {};
+            let totalSum = 0; // 전체 합계를 저장할 변수
+
+            data.forEach((item) => {
+              let category = shortenCategory(item.category);
+
+              // '화기류'에 해당하는 경우 "화기류"로 그룹화
+              if (fireArmsCategories.includes(item.category)) {
+                category = "화기류";
+              }
+
+              // 같은 카테고리인 경우 적발 건수를 합산
+              if (groupedData[category]) {
+                groupedData[category] += item.detectionCount;
+              } else {
+                groupedData[category] = item.detectionCount;
+              }
+
+              // ✅ 김해공항, 김포공항이 아닌 경우 합계에 추가
+              if (!["김해공항", "김포공항"].includes(selectedAirport)) {
+                totalSum += item.detectionCount;
+              }
+            });
+
+            // ✅ 김해공항, 김포공항이 아닌 경우만 '합계' 추가
+            if (!["김해공항", "김포공항"].includes(selectedAirport)) {
+              groupedData["합계"] = totalSum;
+            }
+
+            return groupedData;
+          };
+
+          // ✅ 가공된 데이터 생성
+          const groupedData = groupCategoryData(response.data);
+          const labels = Object.keys(groupedData);
+          const values = Object.values(groupedData);
 
           setChartData({
             labels,
@@ -314,51 +365,51 @@ function ProhibitedItems() {
       </div>
       {/* ✅ 막대 그래프 출력 */}
       <div className="chart-container">
-      {chartData ? (
+        {chartData ? (
           <Bar
             data={chartData}
             options={{
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: { 
-                  display: false 
+                legend: {
+                  display: false,
                 },
                 title: {
                   display: true,
-                  text: '공항 별 적발 현황',
+                  text: "공항 별 적발 현황",
                   font: {
-                    size: 20
+                    size: 20,
                   },
-                  padding: 20
-                }
+                  padding: 20,
+                },
               },
               scales: {
                 y: {
                   beginAtZero: true,
                   grid: {
                     display: true,
-                    color: 'rgba(0, 0, 0, 0.1)'
+                    color: "rgba(0, 0, 0, 0.1)",
                   },
                   ticks: {
                     font: {
-                      size: 14
-                    }
-                  }
+                      size: 14,
+                    },
+                  },
                 },
                 x: {
                   grid: {
-                    display: false
+                    display: false,
                   },
                   ticks: {
                     font: {
-                      size: 14
-                    }
-                  }
-                }
-              }
+                      size: 14,
+                    },
+                  },
+                },
+              },
             }}
-            style={{ height: '500px' }}
+            style={{ height: "500px" }}
           />
         ) : (
           <p>데이터를 불러오는 중...</p>
