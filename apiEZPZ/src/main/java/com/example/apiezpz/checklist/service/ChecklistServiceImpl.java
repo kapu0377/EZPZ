@@ -25,19 +25,15 @@ import java.util.stream.Collectors;
 public class ChecklistServiceImpl implements ChecklistService {
     private final ChecklistRepository checklistRepository;
     private final ModelMapper modelMapper;
-    private final APIUserRepository apiUserRepository;
     private final ChecklistItemRepository checklistItemRepository;
 
     @Override
-    public void registerChecklist(Long memberId, ChecklistDTO checklistDTO) {
+    public void registerChecklist(String username, ChecklistDTO checklistDTO) {
         Checklist checklist = modelMapper.map(checklistDTO, Checklist.class);
-        APIUser member = apiUserRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
-        checklist.setMember(member);
-
-        checklist.setMember(member);
+        checklist.setUsername(username); // Token에서 가져온 username 저장
         checklistRepository.save(checklist);
     }
+
 
     @Override
     public ChecklistDTO readChecklist(Long id) {
@@ -55,50 +51,41 @@ public class ChecklistServiceImpl implements ChecklistService {
     }
 
     @Override
-    public List<ChecklistDTO> list(Long memberId) {
-//        List<Checklist> result = checklistRepository.findByMemberId(memberId);
-//
-//        return result.stream()
-//                .map(i -> modelMapper.map(i,ChecklistDTO.class))
-//                .collect(Collectors.toList());
-
-        List<Checklist> result = checklistRepository.findByMemberIdWithCategories(memberId);
-
-        return result.stream()
-                .map(checklist -> {
-                    ChecklistDTO checklistDTO = modelMapper.map(checklist, ChecklistDTO.class);
-                    List<CategoryDTO> categories = checklist.getCategories().stream()
-                            .map(category -> modelMapper.map(category, CategoryDTO.class))
-                            .collect(Collectors.toList());
-                    checklistDTO.setCategories(categories);
-                    return checklistDTO;
-                })
+    public List<ChecklistDTO> list(String username) {
+        List<Checklist> checklists = checklistRepository.findByUsername(username);
+        return checklists.stream()
+                .map(checklist -> modelMapper.map(checklist, ChecklistDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void removeChecklist(Long memberId, Long id) {
+    public void removeChecklist(String username, Long id) {
         Checklist checklist = checklistRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 체크리스트가 존재하지 않습니다."));
-        if (!checklist.getMember().getId().equals(memberId)) {
+        if (!checklist.getUsername().equals(username)) {
             throw new RuntimeException("이 체크리스트를 삭제할 권한이 없습니다.");
         }
         checklistRepository.delete(checklist);
     }
 
+
     @Override
-    public void modifyChecklist(Long memberId, ChecklistDTO checklistDTO) {
+    public void modifyChecklist(String username, ChecklistDTO checklistDTO) {
         Checklist checklist = checklistRepository.findById(checklistDTO.getId())
                 .orElseThrow(() -> new RuntimeException("해당 체크리스트가 존재하지 않습니다."));
 
-        if (!checklist.getMember().getId().equals(memberId)) {
+        if (!checklist.getUsername().equals(username)) {
             throw new RuntimeException("이 체크리스트를 수정할 권한이 없습니다.");
         }
+
         checklist.setTitle(checklistDTO.getTitle());
         checklist.setDepartureDate(checklistDTO.getDepartureDate());
         checklist.setReturnDate(checklistDTO.getReturnDate());
-//        checklistRepository.save(checklist);
+
+        checklistRepository.save(checklist); // ✅ 수정된 내용 저장
     }
+
+
 
     @Override
     public void resetPacking(Long checklistId) {

@@ -68,11 +68,11 @@ export default function Checklist({ onSelectChecklist }) {
         <div className="checklist-container">
             <h2>체크리스트</h2>
             
-            {/* <input type="text" placeholder="제목" value={newChecklist.title} onChange={(e) => setNewChecklist({ ...newChecklist, title: e.target.value })} />
+            <input type="text" placeholder="제목" value={newChecklist.title} onChange={(e) => setNewChecklist({ ...newChecklist, title: e.target.value })} />
             <input type="date" value={newChecklist.departureDate} onChange={(e) => setNewChecklist({ ...newChecklist, departureDate: e.target.value })} />
-            <input type="date" value={newChecklist.returnDate} min={newChecklist.departureDate} onChange={(e) => setNewChecklist({ ...newChecklist, returnDate: e.target.value })} /> */}
-            {/* <button onClick={handleAddChecklist}>추가</button> */}
-            <button onClick={() => setIsAddModalOpen(true)}>체크리스트 추가</button>
+            <input type="date" value={newChecklist.returnDate} min={newChecklist.departureDate} onChange={(e) => setNewChecklist({ ...newChecklist, returnDate: e.target.value })} />
+            <button onClick={handleAddChecklist}>추가</button>
+            {/* <button onClick={() => setIsAddModalOpen(true)}>체크리스트 추가</button> */}
             <ul>
                 {checklists.map((list) => (
                     <li key={list.id}>
@@ -90,8 +90,8 @@ export default function Checklist({ onSelectChecklist }) {
                                     {list.title} ({list.departureDate} ~ {list.returnDate})
                                 </span>
                                 <div className="checklist-buttons">
-                                    {/* <button className="edit-btn" onClick={() => handleEditChecklist(list)}>수정</button> */}
-                                    <button className="edit-btn" onClick={() => setEditChecklist(list)}>수정</button>
+                                    <button className="edit-btn" onClick={() => handleEditChecklist(list)}>수정</button>
+                                    {/* <button className="edit-btn" onClick={() => setEditChecklist(list)}>수정</button> */}
                                     <button className="delete-btn" onClick={() => handleDeleteChecklist(list.id)}>삭제</button>
                                 </div>
                             </>
@@ -99,19 +99,7 @@ export default function Checklist({ onSelectChecklist }) {
                     </li>
                 ))}
             </ul>
-            {/* ✅ 체크리스트 추가 모달 */}
-            <ChecklistAddModal 
-                isOpen={isAddModalOpen} 
-                onClose={() => setIsAddModalOpen(false)}
-                onAdd={handleAddChecklist}
-            />
-             {/* ✅ 체크리스트 수정 모달 */}
-             <ChecklistEditModal 
-                isOpen={!!editChecklist} 
-                onClose={() => setEditChecklist(null)}
-                checklist={editChecklist} 
-                onUpdate={handleUpdateChecklist}
-            />
+            
         </div>
     );
 }
