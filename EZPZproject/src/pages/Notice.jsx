@@ -131,7 +131,7 @@ const App = () => {
     setSelectedPost(null);  // 선택된 게시글 초기화
   };
 
-  // 게시글 등록/수정 함수
+  // 게시글 등록/수정 함수 수정
   const addOrUpdatePost = async () => {
     if (!title.trim() || !content.trim()) {
       alert("제목과 내용을 모두 입력해주세요.");
@@ -139,6 +139,8 @@ const App = () => {
     }
   
     const token = localStorage.getItem('accessToken');
+    const writer = localStorage.getItem('username');
+    
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
@@ -146,15 +148,14 @@ const App = () => {
   
     try {
       const url = editId 
-        ? `http://localhost:8088/api/posts/${editId}`
+        ? `http://localhost:8088/api/posts/${editId}`  // 수정 시 writer를 body에 포함
         : 'http://localhost:8088/api/posts';
       
       const postData = {
         title: title,
         content: content,
-        writer: localStorage.getItem('username') || '작성자',  // 로컬 스토리지에서 username 가져오기
-        createdAt: new Date().toISOString(),
-        viewCount: 0
+        writer: writer,  // writer 정보 추가
+        id: editId      // 수정 시 id 포함
       };
   
       const response = await fetch(url, {
@@ -163,95 +164,111 @@ const App = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(postData),
+        body: JSON.stringify(postData)
       });
   
       if (!response.ok) {
-        // 에러 응답 내용 확인
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save post');
+        throw new Error('게시글 저장에 실패했습니다.');
       }
       const savedPost = await response.json();
     
       // 게시글 목록 업데이트
       if (editId) {
-        // 수정의 경우 해당 게시글만 업데이트
         setPosts(prevPosts => 
           prevPosts.map(post => 
             post.id === editId ? savedPost : post
           )
         );
+        alert('게시글이 수정되었습니다.');
       } else {
-        // 새 게시글 추가의 경우 목록 맨 위에 추가
         setPosts(prevPosts => [savedPost, ...prevPosts]);
+        alert('게시글이 등록되었습니다.');
       }
-      alert(editId ? '게시글이 수정되었습니다.' : '게시글이 등록되었습니다.');
+
       setIsWriting(false);
       setTitle("");
       setContent("");
       setEditId(null);
-      setSelectedPost(null);  // 선택된 게시글 초기화
-      setIsDetailView(false); // 상세 보기 모드 해제
+      setSelectedPost(null);
+      setIsDetailView(false);
+      fetchPosts();  // 목록 새로고침
     } catch (error) {
-      console.error('Error details:', error);
-      alert('게시글 저장에 실패했습니다. ' + error.message);
+      console.error('Error:', error);
+      alert(error.message);
     }
   };
 
-  // 게시글 삭제 후 목록 새로고침
-  const removePost = async (id) => {
-    try {
-      await deletePost(id);
-      // 삭제 후 목록 새로고침
-      fetchPosts();
-    } catch (error) {
-      console.error("게시글 삭제 실패:", error);
-      alert("게시글 삭제에 실패했습니다.");
+  // 수정 버튼 클릭 핸들러 추가
+  const handleEditClick = () => {
+    const currentUser = localStorage.getItem('username');
+    if (selectedPost.writer !== currentUser) {
+      alert('자신의 게시글만 수정할 수 있습니다.');
+      return;
     }
-  };
 
-  const editPost = (id) => {
-    const post = posts.find(post => post.id === id);
-    if (post) {
-      setTitle(post.title);
-      setContent(post.content);
-      setEditId(id);
+    if (window.confirm('게시글을 수정하시겠습니까?')) {
+      setTitle(selectedPost.title);
+      setContent(selectedPost.content);
+      setEditId(selectedPost.id);
       setIsWriting(true);
     }
   };
 
-  // 브라우저 뒤로가기 버튼 처리
-  useEffect(() => {
-    const handleBackButton = (e) => {
-      if (isDetailView) {
-        e.preventDefault();
-        setIsDetailView(false);
-        setSelectedPost(null);
-      }
-    };
+  // 게시글 삭제 함수 수정
+  const handleDelete = async (id) => {
+    const token = localStorage.getItem('accessToken');
+    const writer = localStorage.getItem('username');
+    
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
 
-    window.addEventListener('popstate', handleBackButton);
-    return () => window.removeEventListener('popstate', handleBackButton);
-  }, [isDetailView]);
+    try {
+      // writer를 쿼리 파라미터로 전달
+      const response = await fetch(`http://localhost:8088/api/posts/${id}?writer=${encodeURIComponent(writer)}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('게시글이 삭제되었습니다.');
+        setIsDetailView(false);
+        fetchPosts();
+      } else {
+        throw new Error('게시글 삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('게시글 삭제에 실패했습니다.');
+    }
+  };
+
+  // 삭제 버튼 클릭 핸들러
+  const handleDeleteClick = () => {
+    if (!selectedPost) {
+      alert('삭제할 게시글을 찾을 수 없습니다.');
+      return;
+    }
+
+    const currentUser = localStorage.getItem('username');
+    if (selectedPost.writer !== currentUser) {
+      alert('자신의 게시글만 삭제할 수 있습니다.');
+      return;
+    }
+
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      handleDelete(selectedPost.id);
+    }
+  };
 
   // 게시글 상세보기로 이동할 때
   const handleViewPost = (post) => {
     setSelectedPost(post);
     setIsDetailView(true);
     window.history.pushState(null, '', window.location.pathname);
-  };
-
-  // 삭제 확인 모달 표시 함수
-  const handleDeleteClick = (id) => {
-    setDeleteConfirm({ show: true, postId: id });
-  };
-
-  // 삭제 확인
-  const confirmDelete = async () => {
-    if (deleteConfirm.postId) {
-      await removePost(deleteConfirm.postId);
-      setDeleteConfirm({ show: false, postId: null });
-    }
   };
 
   // 댓글 관련 함수들 수정
@@ -372,26 +389,6 @@ const App = () => {
       fetchComments();
     }
   }, [selectedPost]);
-
-  // 게시글 삭제 함수 추가
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/posts/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        alert('게시글이 삭제되었습니다.');
-        setIsDetailView(false);
-        fetchPosts(); // 게시글 목록 새로고침
-      } else {
-        throw new Error('Failed to delete post');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('게시글 삭제에 실패했습니다.');
-    }
-  };
 
   return (
     <div className="container">
@@ -567,33 +564,24 @@ const App = () => {
                       목록으로
                     </button>
                   </div>
-                  {selectedPost.writer === localStorage.getItem('username') && (  // 작성자만 수정/삭제 버튼 표시
-                    <div className="right-buttons">
-                      <button 
-                        onClick={() => {
-                          if(window.confirm('게시글을 수정하시겠습니까?')) {
-                            setTitle(selectedPost.title);
-                            setContent(selectedPost.content);
-                            setEditId(selectedPost.id);
-                            setIsWriting(true);
-                          }
-                        }} 
-                        className="button edit-button"
-                      >
-                        수정하기
-                      </button>
-                      <button 
-                        onClick={() => {
-                          if(window.confirm('정말 삭제하시겠습니까?')) {
-                            handleDelete(selectedPost.id);
-                          }
-                        }}
-                        className="button delete-button"
-                      >
-                        삭제하기
-                      </button>
-                    </div>
-                  )}
+                  <div className="right-buttons">
+                    {selectedPost.writer === localStorage.getItem('username') && (
+                      <>
+                        <button 
+                          onClick={handleEditClick}
+                          className="button edit-button"
+                        >
+                          수정하기
+                        </button>
+                        <button 
+                          onClick={handleDeleteClick}
+                          className="button delete-button"
+                        >
+                          삭제하기
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
@@ -651,24 +639,22 @@ const App = () => {
                                 {new Date(comment.createdAt).toLocaleDateString()}
                               </span>
                             </div>
-                            <div className="comment-buttons">
-                              {comment.writer === localStorage.getItem('username') && (  // 작성자만 수정/삭제 가능
-                                <>
-                                  <button
-                                    onClick={() => handleEditButtonClick(comment)}
-                                    className="comment-edit"
-                                  >
-                                    수정
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteComment(comment.id)}
-                                    className="comment-delete"
-                                  >
-                                    삭제
-                                  </button>
-                                </>
-                              )}
-                            </div>
+                            {comment.writer === localStorage.getItem('username') && (
+                              <div className="comment-buttons">
+                                <button
+                                  onClick={() => handleEditButtonClick(comment)}
+                                  className="comment-edit"
+                                >
+                                  수정
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteComment(comment.id)}
+                                  className="comment-delete"
+                                >
+                                  삭제
+                                </button>
+                              </div>
+                            )}
                           </>
                         )}
                       </div>
@@ -689,12 +675,6 @@ const App = () => {
               <h2 className="modal-title text-center">삭제 확인</h2>
               <p className="text-center mb-6">정말 이 게시글을 삭제하시겠습니까?</p>
               <div className="modal-buttons">
-                <button 
-                  onClick={confirmDelete}
-                  className="modal-submit bg-red-500 hover:bg-red-600"
-                >
-                  삭제
-                </button>
                 <button 
                   onClick={() => setDeleteConfirm({ show: false, postId: null })}
                   className="modal-cancel"
