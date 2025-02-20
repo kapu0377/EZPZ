@@ -50,19 +50,16 @@
   width: 82px;
 }
 
-/* 텍스트 변경 애니메이션 */
 .small {
   transition: all 0.3s ease;
 }
 
-/* 텍스트 변경 시 슬라이드 효과 */
 .small.changing {
   width: 0 !important;
   opacity: 0;
   transform: translateX(-20px) translateY(8px);
 }
 
-/* 아이콘 스타일 */
 .icon-container {
   position: absolute;
   left: 100%;
@@ -83,7 +80,6 @@
   transform: translateY(-50%) translateX(10px);
 }
 
-/* 아이콘 애니메이션 */
 .icon-container.changing {
   opacity: 0;
   transform: translateY(-50%) translateX(-20px);

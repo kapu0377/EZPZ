@@ -3,6 +3,8 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .ranking-section {
@@ -18,7 +20,9 @@
 
 .ranking-list {
   display: flex;
+  height: 200px; 
   flex-direction: column;
+  overflow-y: auto;
   gap: 10px;
 }
 
@@ -29,6 +33,9 @@
   background-color: #f8f9fa;
   border-radius: 4px;
   transition: background-color 0.2s ease;
+}
+.ranking-item span {
+  padding: 1px 10px;
 }
 
 .ranking-item:hover {
@@ -92,6 +99,7 @@
   justify-content: center;
   gap: 10px;
   margin: 20px 0;
+  white-space: nowrap;
 }
 
 .tab-button {
@@ -102,11 +110,15 @@
   font-size: 16px;
   border-radius: 20px;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: center;
 }
 
 .tab-button.active {
   background-color: #4a90e2;
   color: white;
+  font-weight: 500;
 }
 
 .rankings.loading {

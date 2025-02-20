@@ -15,7 +15,7 @@ const Rankings = () => {
   });
   const [loading, setLoading] = useState(true);
   const [currentType, setCurrentType] = useState('daily');
-  const MAX_DISPLAY_ITEMS = 6;
+  const MAX_DISPLAY_ITEMS = 5;
   
   const fetchAllRankings = async () => {
     try {
