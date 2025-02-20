@@ -29,14 +29,22 @@ export default function Checklist({ onSelectChecklist }) {
     };
 
     // 체크리스트 추가
-    const handleAddChecklist = async () => {
-        if (!newChecklist.title.trim() || !newChecklist.departureDate.trim() || !newChecklist.returnDate.trim()) {
+    const handleAddChecklist = async (title, departureDate, returnDate) => {
+        console.log("Checklist.jsx에서 받은 제목:", title);
+        console.log("Checklist.jsx에서 받은 출발일:", departureDate);
+        console.log("Checklist.jsx에서 받은 도착일:", returnDate);
+    
+        const newChecklist = { title, departureDate, returnDate };
+    
+        if (!newChecklist.title?.trim() || !newChecklist.departureDate || !newChecklist.returnDate) {
             return alert("제목, 출발일, 도착일을 모두 입력하세요.");
         }
+    
         await addChecklist(newChecklist);
-        setNewChecklist({ title: "", departureDate: "", returnDate: "" });
         loadChecklists();
+        setIsAddModalOpen(false); // 모달 닫기
     };
+    
 
     // 체크리스트 수정 모드 활성화
     const handleEditChecklist = (checklist) => {
