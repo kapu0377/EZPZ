@@ -149,17 +149,17 @@
 
 /* 카테고리별 색상 */
 .category-section.physical .category-title {
-  background: #4B89DC;
+  background: #4b89dc;
   color: white;
 }
 
 .category-section.allowed .category-title {
-  background: #2ECC71;
+  background: #2ecc71;
   color: white;
 }
 
 .category-section.hazardous .category-title {
-  background: #E74C3C;
+  background: #e74c3c;
   color: white;
 }
 
@@ -174,22 +174,22 @@
   .category-group-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .card {
     width: 100%;
   }
-  
+
   .category-title {
     width: 100%;
   }
 }
 
 .category-group.physical .category-group-title {
-  color: #4B89DC;
+  color: #4b89dc;
 }
 
 .category-group.hazardous .category-group-title {
-  color: #E74C3C;
+  color: #e74c3c;
 }
 
 /* 카드 컨테이너 */
@@ -214,11 +214,11 @@
 }
 
 .category-group.physical .category-group-cards::before {
-  border-color: #4B89DC;
+  border-color: #4b89dc;
 }
 
 .category-group.hazardous .category-group-cards::before {
-  border-color: #E74C3C;
+  border-color: #e74c3c;
 }
 
 .category-details {
@@ -239,11 +239,12 @@
   color: white;
   padding: 20px;
   margin-bottom: 20px;
-  background: url('../../assets/img/airport.jpg') no-repeat center center;
+  background: url("../../assets/img/airport.jpg") no-repeat center center;
   background-size: cover;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
+  z-index: 100;
 }
 
 .description-section h1,
@@ -255,7 +256,7 @@
 }
 
 .description-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -310,7 +311,8 @@ table {
   margin-top: 15px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
@@ -363,16 +365,16 @@ tr:hover {
 
 /* 각 섹션별 제목 색상 */
 .category-section.physical .category-title {
-  background: #4B89DC;
+  background: #4b89dc;
   color: white;
 }
 
 .category-section.high-risk .category-title {
-  color: #00AA00;
+  color: #00aa00;
 }
 
 .category-section.hazardous .category-title {
-  background: #E74C3C;
+  background: #e74c3c;
   color: white;
 }
 
@@ -414,7 +416,7 @@ tr:hover {
 
 /* 허가류 섹션 스타일 */
 .category-section.allowed .category-title {
-  background: #2ECC71;
+  background: #2ecc71;
   color: white;
 }
 
@@ -438,7 +440,7 @@ tr:hover {
   .category-group-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .category-section {
     padding: 10px;
   }
@@ -532,17 +534,17 @@ tr:hover {
 
 /* 카테고리별 색상 */
 .category-column.physical .category-title {
-  background: #4B89DC;
+  background: #4b89dc;
   color: white;
 }
 
 .category-column.allowed .category-title {
-  background: #2ECC71;
+  background: #2ecc71;
   color: white;
 }
 
 .category-column.hazardous .category-title {
-  background: #E74C3C;
+  background: #e74c3c;
   color: white;
 }
 /* 공항 별 적발 근황 스타일 */
@@ -594,14 +596,14 @@ tr:hover {
   font-size: 16px;
   padding: 8px;
   border-radius: 5px;
-  border: 2px solid #4B89DC;
+  border: 2px solid #4b89dc;
   background: white;
   cursor: pointer;
 }
 
 /* ✅ 그래프 컨테이너 */
 .chart-container {
-  width: 90%;  /* 80%에서 90%로 증가 */
+  width: 90%; /* 80%에서 90%로 증가 */
   max-width: 1000px; /* 600px에서 1000px로 증가 */
   margin: 0 auto;
   padding: 30px; /* 20px에서 30px로 증가 */
@@ -648,7 +650,7 @@ tr:hover {
 }
 
 .sidebar button.active {
-  background: #4B89DC;
+  background: #4b89dc;
   color: white;
 }
 
@@ -663,7 +665,6 @@ tr:hover {
 
 /* 모달 스타일 유지 */
 
-
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
   .all-categories {
@@ -675,7 +676,7 @@ tr:hover {
   .all-categories {
     grid-template-columns: 1fr;
   }
-  
+
   .category-column {
     margin-bottom: 20px;
   }
