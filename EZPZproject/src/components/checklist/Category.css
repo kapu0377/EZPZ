@@ -8,8 +8,15 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
-
-
+/* 카테고리 제목 입력창 */
+.category-container input[type="text"] {
+    width: calc(100% - 80px); /* 버튼과 균형 맞추기 */
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
 /* 카테고리 블록 (제목과 아이템 목록을 세로로 배치) */
 .category-block {
     display: flex;
