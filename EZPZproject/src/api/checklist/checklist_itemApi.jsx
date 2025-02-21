@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8088/api";
 
+//아이템 목록 가져오기
 export const getItems = async (categoryId) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/items/list/${categoryId}`);
@@ -12,6 +13,7 @@ export const getItems = async (categoryId) => {
     }
 };
 
+//아이템 추가
 export const addItem = async (categoryId, itemName) => {
     try {
         await axios.post(`${API_BASE_URL}/items/${categoryId}`, { name: itemName });
@@ -25,6 +27,7 @@ export const addItem = async (categoryId, itemName) => {
     }
 };
 
+//아이템 수정
 export const updateItem = async (itemId, newName) => {
     try {
         await axios.put(`${API_BASE_URL}/items/${itemId}`, { name: newName });
@@ -35,6 +38,7 @@ export const updateItem = async (itemId, newName) => {
     }
 };
 
+//아이템 삭제
 export const deleteItem = async (itemId) => {
     try {
         await axios.delete(`${API_BASE_URL}/items/${itemId}`);
@@ -45,6 +49,7 @@ export const deleteItem = async (itemId) => {
     }
 };
 
+//아이템 체크 상태 변경
 export const toggleItemCheck = async (itemId, checked) => {
     try {
         await axios.put(`${API_BASE_URL}/items/${itemId}/checked`, { checked: !checked });
