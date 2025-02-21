@@ -19,7 +19,6 @@ const Header = () => {
           </nav>
         </div>
       </div>
-      <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </header>
   );
 };
