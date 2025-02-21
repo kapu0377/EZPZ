@@ -1,6 +1,6 @@
-/* 카테고리 전체 컨테이너 */
+/* ✅ 카테고리 전체 컨테이너 */
 .category-container {
-    width: 50%;
+    width: 120%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -8,16 +8,22 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
-/* 카테고리 제목 입력창 */
-.category-container input[type="text"] {
-    width: calc(100% - 80px); /* 버튼과 균형 맞추기 */
-    padding: 8px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
+
+/* ✅ 버튼 정렬 */
+.category-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
-/* 카테고리 블록 (제목과 아이템 목록을 세로로 배치) */
+
+/* ✅ 카테고리 목록을 2줄로 나누기 */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 레이아웃 */
+    gap: 15px;
+}
+
+/* ✅ 카테고리 블록 */
 .category-block {
     display: flex;
     flex-direction: column;
@@ -25,53 +31,54 @@
     padding: 15px;
     border-radius: 10px;
     background-color: #f9f9f9;
-    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 카테고리 제목 (아이템 목록 위로 배치) */
+/* ✅ 카테고리 제목 */
 .category-title {
     font-size: 18px;
     font-weight: bold;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin-bottom: 10px;
 }
 
-/* 카테고리명과 버튼 정렬 */
+/* ✅ 카테고리명 왼쪽 정렬 */
 .category-title span {
-    flex-grow: 1;
+    flex-grow: 1; /* 버튼을 오른쪽으로 밀어줌 */
+    display: flex;
+    align-items: center;
 }
 
-/* 아이템 리스트 */
-ul,
-.item-list {
-    list-style: none; /* 기본 리스트 스타일 제거 */
-    padding: 0; /* ✅ 들여쓰기 제거 */
-    margin: 0; /* ✅ 기본 마진 제거 */
-    width: 100%;
+/* ✅ 수정 및 삭제 버튼을 오른쪽 정렬 */
+.category-title button {
+    margin-left: 8px; /* 버튼 간격 추가 */
 }
 
-.category-add-btn, .category-default-btn, .category-reset-btn {
+/* ✅ 카테고리 버튼 */
+.category-add-btn, .category-reset-btn {
     padding: 8px 12px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
 }
-/* ✅ 기본 카테고리 생성 버튼 (녹색) */
-.category-default-btn {
-    background-color: #28a745;
-    color: white;
-}
 
-/* ✅ 카테고리 추가 버튼 (파란색) */
 .category-add-btn {
     background-color: #007bff;
     color: white;
 }
 
-/* ✅ 짐 싸기 초기화 버튼 (빨간색) */
 .category-reset-btn {
     background-color: #dc3545;
     color: white;
+}
+
+/* ✅ 아이템 리스트 */
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }

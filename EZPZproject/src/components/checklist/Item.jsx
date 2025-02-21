@@ -43,10 +43,21 @@ export default function Item({ category }) {
         }
     };
 
+    // const handleToggleCheck = async (itemId, checked) => {
+    //     await toggleItemCheck(itemId, checked);
+    //     loadItems();
+    // };
     const handleToggleCheck = async (itemId, checked) => {
-        await toggleItemCheck(itemId, checked);
-        loadItems();
+        const success = await toggleItemCheck(itemId, checked);
+        if (success) {
+            setItems((prevItems) => 
+                prevItems.map((item) => 
+                    item.id === itemId ? { ...item, checked: !item.checked } : item
+                )
+            );
+        }
     };
+    
 
     return (
         <div className="item-container">

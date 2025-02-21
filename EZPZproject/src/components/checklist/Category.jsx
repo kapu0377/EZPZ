@@ -3,7 +3,7 @@ import { getCategoriesWithItems, addCategory, updateCategory, deleteCategory } f
 import { resetPacking } from "../../api/checklist/checklistApi";
 import Item from "./Item";
 import "./Category.css";
-import CategoryAddModal from "./CategoryAddModal"; // ✅ 모달 추가
+import CategoryAddModal from "./CategoryAddModal"; // ✅ 추가 모달
 
 export default function Category({ checklist }) {
     const [categories, setCategories] = useState([]);
@@ -12,11 +12,12 @@ export default function Category({ checklist }) {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false); // ✅ 추가 모달 상태
 
     useEffect(() => {
-        loadCategories();
+        if (checklist) {
+            loadCategories();
+        }
     }, [checklist]);
 
     const loadCategories = async () => {
-        if (!checklist) return;
         const data = await getCategoriesWithItems(checklist.id);
         setCategories(data);
     };
@@ -32,7 +33,6 @@ export default function Category({ checklist }) {
         loadCategories();
         return true;
     };
-
 
     const handleUpdateCategory = async (categoryId) => {
         if (!editCategoryName.trim()) return alert("카테고리 이름을 입력하세요.");
@@ -58,13 +58,16 @@ export default function Category({ checklist }) {
 
     return (
         <div className="category-container">
-            <h3>{checklist.title}({checklist.departureDate} ~ {checklist.returnDate}) - 카테고리 목록</h3>
-            <button className="category-add-btn" onClick={() => setIsAddModalOpen(true)}>카테고리 추가</button>
-            <button className="category-reset-btn" onClick={handleResetPacking}>짐 싸기 초기화</button>
-            <ul>
-            {categories.map((category) => (
-                    <li key={category.id} className="category-block">
-                        {/* ✅ 카테고리명 (위쪽 배치) */}
+            <h3>{checklist.title} ({checklist.departureDate} ~ {checklist.returnDate}) - 카테고리 목록</h3>
+            <div className="category-buttons">
+                <button className="category-add-btn" onClick={() => setIsAddModalOpen(true)}>카테고리 추가</button>
+                <button className="category-reset-btn" onClick={handleResetPacking}>짐 싸기 초기화</button>
+            </div>
+
+            {/* ✅ 카테고리 목록을 2줄 그리드로 정렬 */}
+            <div className="category-grid">
+                {categories.map((category) => (
+                    <div key={category.id} className="category-block">
                         <div className="category-title">
                             {editCategoryId === category.id ? (
                                 <>
@@ -89,11 +92,12 @@ export default function Category({ checklist }) {
                         <ul className="item-list">
                             <Item category={category} />
                         </ul>
-                    </li>
+                    </div>
                 ))}
-            </ul>
-             {/* ✅ 카테고리 추가 모달 */}
-             <CategoryAddModal 
+            </div>
+
+            {/* ✅ 카테고리 추가 모달 */}
+            <CategoryAddModal 
                 isOpen={isAddModalOpen} 
                 onClose={() => setIsAddModalOpen(false)}
                 onAdd={handleAddCategory}

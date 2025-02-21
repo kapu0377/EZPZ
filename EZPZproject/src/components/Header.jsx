@@ -23,7 +23,7 @@ const Header = () => {
         <nav className="main-nav">
           <Link to="/prohibited">금지물품</Link>
           <Link to="/board">게시판</Link>
-          {user && <Link to="/mypage">마이페이지</Link>}
+          {user && <Link to="/checklist">체크리스트</Link>}
           {!user && (
             <button 
               onClick={() => setIsLoginOpen(true)}

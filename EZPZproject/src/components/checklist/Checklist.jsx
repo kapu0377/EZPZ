@@ -58,6 +58,7 @@ export default function Checklist({ onSelectChecklist }) {
 
     return (
         <div className="checklist-container">
+            
             <h2>체크리스트</h2>
             <button onClick={() => setIsAddModalOpen(true)}>체크리스트 추가</button>
             <ul>
@@ -67,7 +68,10 @@ export default function Checklist({ onSelectChecklist }) {
                             setSelectedChecklist(list);
                             onSelectChecklist(list); // ✅ 선택된 체크리스트 업데이트
                         }}>
-                            {list.title} ({list.departureDate} ~ {list.returnDate})
+                            <div>
+                            {list.title}
+                            </div>
+                             ({list.departureDate} ~ {list.returnDate})
                         </span>
                         <div className="checklist-buttons">
                             <button className="edit-btn" onClick={() => setEditChecklist(list)}>수정</button>
