@@ -14,7 +14,7 @@ const Header = () => {
           <nav className="main-nav">
             <Link to="/prohibited">금지물품</Link>
             <Link to="/board">게시판</Link>
-            <Link to="/mypage">마이페이지</Link>
+            <Link to="/checklist">체크리스트</Link>
             <Link to="/parking">주차현황</Link>
           </nav>
         </div>
