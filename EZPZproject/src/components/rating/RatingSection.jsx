@@ -146,12 +146,6 @@ const RatingSection = ({ airport }) => {
           />
         </div>
 
-        {/* <textarea
-          placeholder="추가 의견을 입력해주세요"
-          value={ratings.comment}
-          onChange={(e) => setRatings({...ratings, comment: e.target.value})}
-        /> */}
-
         <button 
           className="submit-rating-button"
           onClick={handleRatingSubmit}
