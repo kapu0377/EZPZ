@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PARKING_API_KEY = "FUM7xFhbGE8Ui7ljC9EtXTAFE4zszroC5kr7fJRI/NZeKAHZmMV11gJJCgz25zXFuW9YMgjUnA6aeOabWDOipg==";
+const PARKING_API_KEY = "AnunPIJSnKFvm5o8GVobpL+1JGyEWtlWM51m+4CyHJwNrgW/oJrXHMdDYVHTpfmK2MECdq6l9WD8ulzfY+Y0xA==";
 
 // 공항 코드 상수 정의
 export const AIRPORT_CODES = {
