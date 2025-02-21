@@ -1,8 +1,11 @@
 .prohibited-items {
+  width: 1200px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   text-align: center;
+  margin: 0 auto;
+  margin-top: 5px;
 }
 
 .description {
@@ -12,7 +15,6 @@
 }
 
 .cards-container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -76,10 +78,10 @@
 
 /* 카드 그리드 수정 */
 .all-categories {
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  align-items: start;
 }
 
 /* 카드 컬럼 */
@@ -88,11 +90,12 @@
   flex-direction: column;
   gap: 30px;
   align-items: center;
+  margin-top: 25px;
 }
 
 /* 카드 스타일 수정 */
 .card {
-  width: 300px;
+  width: 75%;
   height: 200px;
   padding: 20px;
   border-radius: 8px;
@@ -244,6 +247,8 @@
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .description-section h1,
@@ -261,8 +266,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6); /* 오버레이를 좀 더 진하게 */
+  background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 /* 모달 오버레이 */
@@ -613,11 +620,10 @@ tr:hover {
 
 /* ✅ 전체 컨테이너 스타일 */
 .prohibited-items-container {
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
   gap: 20px;
 }
 

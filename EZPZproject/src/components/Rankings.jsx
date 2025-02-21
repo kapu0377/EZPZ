@@ -1,146 +1,127 @@
 import React, { useState, useEffect } from 'react';
 import {
-  searchItems,
-  getSearchRankings,
+
   getDailyRankings,
   getWeeklyRankings,
   getMonthlyRankings,
-  refreshRankings 
 } from '../api/searchApi';
 import "./Rankings.css";
-const Rankings = () => {
-  const [searchRankings, setSearchRankings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [extendedRankings, setExtendedRankings] = useState([]);
-  const [rankingType, setRankingType] = useState('daily');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const MAX_DISPLAY_ITEMS = 6;
 
-  const fetchRankings = async () => {
+const Rankings = () => {
+  const [rankings, setRankings] = useState({
+    daily: [],
+    weekly: [],
+    monthly: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [currentType, setCurrentType] = useState('daily');
+  const MAX_DISPLAY_ITEMS = 5;
+  
+  const fetchAllRankings = async () => {
     try {
-      const data = await getSearchRankings();
-      const sortedData = data.sort((a, b) => b.count - a.count);
-      setSearchRankings(sortedData);
-      return sortedData; // 정렬된 데이터 반환
+      setLoading(true);
+      const [dailyData, weeklyData, monthlyData] = await Promise.all([
+        getDailyRankings(),
+        getWeeklyRankings(),
+        getMonthlyRankings()
+      ]);
+
+      setRankings({
+        daily: dailyData.sort((a, b) => b.count - a.count),
+        weekly: weeklyData.sort((a, b) => b.count - a.count),
+        monthly: monthlyData.sort((a, b) => b.count - a.count)
+      });
     } catch (error) {
-      console.error('Failed to fetch rankings:', error);
-      setSearchRankings([]);
-      return [];
+      console.error('랭킹 데이터 로딩 실패:', error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRankings();
-  }, []); 
-
-  const handleSearch = async (query) => {
-    try {
-      await searchItems(query);
-      await refreshRankings();
-    } catch (error) {
-      console.error('검색 중 오류 발생:', error);
-    }
-  };
-
-  const fetchExtendedRankings = async (type) => {
-    try {
-      let data = [];
-      if (type === 'daily') {
-        // 일별 순위는 전체 검색 순위 데이터를 그대로 사용
-        data = searchRankings;
-      } else if (type === 'weekly') {
-        data = await getWeeklyRankings();
-        data = data.sort((a, b) => b.searchCount - a.searchCount);
-      } else if (type === 'monthly') {
-        data = await getMonthlyRankings();
-        data = data.sort((a, b) => b.searchCount - a.searchCount);
+    fetchAllRankings();
+    
+    // 랭킹 업데이트 이벤트 리스너
+    const handleRankingsUpdate = (event) => {
+      if (event.detail) {
+        setRankings(prevRankings => ({
+          ...prevRankings,
+          daily: event.detail.sort((a, b) => b.count - a.count)
+        }));
       }
-      setExtendedRankings(data);
-    } catch (error) {
-      console.error(`Failed to fetch ${type} rankings:`, error);
-      setExtendedRankings([]);
-    }
-  };
+    };
 
-  const handleMoreClick = async () => {
-    setIsModalOpen(true);
-    setRankingType('daily');
-    // 일별 데이터는 현재 searchRankings를 그대로 사용
-    setExtendedRankings(searchRankings);
-  };
+    window.addEventListener('rankingsUpdated', handleRankingsUpdate);
+    const interval = setInterval(fetchAllRankings, 30000);
+
+    return () => {
+      window.removeEventListener('rankingsUpdated', handleRankingsUpdate);
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setCurrentType(prev => {
+        switch(prev) {
+          case 'daily': return 'weekly';
+          case 'weekly': return 'monthly';
+          case 'monthly': return 'daily';
+          default: return 'daily';
+        }
+      });
+    }, 10000);
+
+    return () => clearInterval(slideInterval);
+  }, []);
 
   const handleTabClick = (type) => {
-    setRankingType(type);
-    fetchExtendedRankings(type);
+    setCurrentType(type);
   };
+
+  if (loading) {
+    // return <div className="rankings loading">로딩 중...</div>;
+  }
 
   return (
     <div className="rankings">
       <div className="ranking-section">
         <h3>카테고리 검색 순위</h3>
-        <div className="ranking-list">
-          {searchRankings.slice(0, MAX_DISPLAY_ITEMS).map((item, index) => (
-            <div key={index} className="ranking-item">
-              <span>{index + 1}. {item.name}</span>
-              <span>{item.count}회</span>
-            </div>
-          ))}
-          {searchRankings.length === 0 && <div>검색 기록이 없습니다.</div>}
+        <div className="tabs">
+          <button
+            className={`tab-button ${currentType === 'daily' ? 'active' : ''}`}
+            onClick={() => handleTabClick('daily')}
+          >
+            일간
+          </button>
+          <button
+            className={`tab-button ${currentType === 'weekly' ? 'active' : ''}`}
+            onClick={() => handleTabClick('weekly')}
+          >
+            주간
+          </button>
+          <button
+            className={`tab-button ${currentType === 'monthly' ? 'active' : ''}`}
+            onClick={() => handleTabClick('monthly')}
+          >
+            월간
+          </button>
         </div>
-        <button className="rankingmore-button" onClick={handleMoreClick}>더보기</button>
-      </div>
-
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button" onClick={() => setIsModalOpen(false)}>
-              &times;
-            </span>
-            <div className="tabs">
-              <button
-                className={`tab-button ${rankingType === 'daily' ? 'active' : ''}`}
-                onClick={() => handleTabClick('daily')}
-              >
-                일간
-              </button>
-              <button
-                className={`tab-button ${rankingType === 'weekly' ? 'active' : ''}`}
-                onClick={() => handleTabClick('weekly')}
-              >
-                주간
-              </button>
-              <button
-                className={`tab-button ${rankingType === 'monthly' ? 'active' : ''}`}
-                onClick={() => handleTabClick('monthly')}
-              >
-                월간
-              </button>
-            </div>
-            <div className="extended-ranking-list">
-              {rankingType === 'daily' ? (
-                // 일별 순위 표시 (전체 검색 순위)
-                extendedRankings.map((item, index) => (
-                  <div key={index} className="ranking-item">
-                    <span>{index + 1}. {item.name}</span>
-                    <span>{item.count}회</span>
-                  </div>
-                ))
-              ) : (
-                // 주간/월간 순위 표시
-                extendedRankings.map((item, index) => (
-                  <div key={index} className="ranking-item">
-                    <span>{index + 1}. {item.category}</span>
-                    <span>{item.searchCount}회</span>
-                  </div>
-                ))
-              )}
-              {extendedRankings.length === 0 && <div>데이터가 없습니다.</div>}
-            </div>
+        
+        <div className="ranking-list slide-container">
+          <div className={`ranking-slide ${currentType}`}>
+            {rankings[currentType].slice(0, MAX_DISPLAY_ITEMS).map((item, index) => (
+              <div key={index} className="ranking-item">
+                <span>{index + 1}. {item.name}</span>
+                <span>{item.count}회</span>
+              </div>
+            ))}
+            {rankings[currentType].length === 0 && 
+              <div className="no-data">데이터가 없습니다.</div>
+            }
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
