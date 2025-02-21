@@ -39,7 +39,7 @@
 }
 
 /* 카테고리 제목 */
-.category-title {
+.checklist-category-title {
     font-size: 18px;
     font-weight: bold;
     display: flex;
@@ -49,14 +49,14 @@
 }
 
 /* 카테고리명 왼쪽 정렬 */
-.category-title span {
+.checklist-category-title span {
     flex-grow: 1; /* 버튼을 오른쪽으로 밀어줌 */
     display: flex;
     align-items: center;
 }
 
 /* 수정 및 삭제 버튼을 오른쪽 정렬 */
-.category-title button {
+.checklist-category-title button {
     margin-left: 8px; /* 버튼 간격 추가 */
 }
 

@@ -103,7 +103,7 @@ export default function Category({ checklist }) {
             <div className="category-grid">
                 {categories.map((category) => (
                     <div key={category.id} className="category-block">
-                        <div className="category-title">
+                        <div className="checklist-category-title">
                             {editCategoryId === category.id ? (
                                 <>
                                     <input
