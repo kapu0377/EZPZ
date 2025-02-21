@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const INCHEON_API_KEY = "FUM7xFhbGE8Ui7ljC9EtXTAFE4zszroC5kr7fJRI/NZeKAHZmMV11gJJCgz25zXFuW9YMgjUnA6aeOabWDOipg==";
+const INCHEON_API_KEY = process.env.REACT_APP_INCHEON_API_KEY;
 const BASE_URL = "http://apis.data.go.kr";
 
 export const fetchICNParkingData = async () => {
