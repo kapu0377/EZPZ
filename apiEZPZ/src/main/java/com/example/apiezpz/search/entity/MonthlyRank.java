@@ -5,29 +5,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class CategoryRank {
+@Table(name = "monthly_rank")
+public class MonthlyRank {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, unique = true)
+
     private String category;
-    
-    @Column(nullable = false)
+
     private Long searchCount;
-    
-    @Column(nullable = false)
-    private LocalDateTime lastUpdated;
-    
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    private LocalDateTime createdAt;
+
     @PrePersist
-    @PreUpdate
-    protected void onUpdate() {
-        lastUpdated = LocalDateTime.now();
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
-} 
+}

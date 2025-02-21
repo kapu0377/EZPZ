@@ -1,0 +1,95 @@
+.airport-rating-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  .average-ratings {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .ratings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .rating-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+  
+  .rating-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .rating-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .star-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .star-rating label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .stars {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .stars input[type="radio"] {
+    display: none;
+  }
+  
+  .star {
+    cursor: pointer;
+    transition: color 200ms;
+  }
+  
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  .submit-rating-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #a0a0a0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  
+  .submit-rating-button:hover {
+    background-color: #606060;
+  }

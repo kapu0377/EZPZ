@@ -1,6 +1,7 @@
 .container {
   display: flex;
-  padding: 20px;
+  padding: 40px;
+  margin-bottom: 35px;
   gap: 20px;
 }
 
@@ -131,15 +132,16 @@ h3 {
 }
 
 .comments-section {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  margin-top: -45px;
+  margin-bottom: 30px;
+  padding-top: 35px;
 }
 
 .comment-form {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  padding-top: 20px;
 }
 
 .comment-input {
@@ -327,14 +329,12 @@ h3 {
 
 .post-buttons {
   position: absolute;
-  bottom: 50px;
+  bottom: 30px;
   left: 20px;
   right: 20px;
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
-  border-top: 1px solid #eee;
-  background-color: white;
 }
 
 .right-buttons {
@@ -343,6 +343,7 @@ h3 {
 }
 
 .back-button {
+  position: relative;
   background-color: #4a5568;
   color: white;
 }
@@ -376,6 +377,7 @@ h3 {
 }
 
 .post-buttons {
+  position: relative;
   display: flex;
   gap: 10px;
   margin-top: 30px;
@@ -470,18 +472,16 @@ h3 {
   align-items: center;
   gap: 5px;
   margin-top: 20px;
-  position: fixed;
+  position: relative;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
   padding: 10px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .page-number {
   padding: 5px 10px;
-  border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;

@@ -15,39 +15,39 @@ const KUVFeeModal = ({ isOpen, onClose }) => {
           <table className="fee-table">
             <thead>
               <tr>
-                <th rowSpan="2" className="center">구분</th>
-                <th colSpan="2" className="center">기본요금(BASIC CHARGE)</th>
-                <th className="center">1일/24시간<br/>(AFTER 5 HRS)</th>
-                <th className="center">추가 1일마다<br/>(REMARK)</th>
+                <th rowSpan="2">구분</th>
+                <th colSpan="2">기본요금</th>
+                <th>1일/24시간</th>
+                <th>추가 1일마다</th>
               </tr>
               <tr>
-                <th className="center">30분(30MIN)</th>
-                <th className="center">5시간까지
-                    10분마다<br/>(EVERY 10MIN, UNTIL 5 HRS)</th>
-                <th className="center">24시간 까지<br/>(UNTIL 24 HRS)</th>
-                <th className="center">24시간(24HRS)</th>
+                <th>30분</th>
+                <th>5시간까지
+                    10분마다</th>
+                <th>24시간 까지</th>
+                <th>24시간</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="center">소형<br/>(LESS THAN 1 TON)</td>
-                <td className="center">600원</td>
-                <td className="center">200원</td>
-                <td className="center">6,000원</td>
-                <td className="center">6,000원</td>
+                <td>소형</td>
+                <td>600원</td>
+                <td>200원</td>
+                <td>6,000원</td>
+                <td>6,000원</td>
               </tr>
               <tr>
-                <td className="center">대형<br/>(MORE THAN 1 TON)</td>
-                <td className="center">700원</td>
-                <td className="center">200원</td>
-                <td className="center">7,000원</td>
-                <td className="center">7,000원</td>
+                <td>대형</td>
+                <td>700원</td>
+                <td>200원</td>
+                <td>7,000원</td>
+                <td>7,000원</td>
               </tr>
               <tr>
-                <td className="center">24시간 초과시</td>
-                <td colSpan="2" className="center">상기요금 반복적용</td>
-                <td className="center">상기요금 반복적용</td>
-                <td className="center">상기요금 반복적용</td>
+                <td>24시간 초과시</td>
+                <td colSpan="2">상기요금 반복적용</td>
+                <td>상기요금 반복적용</td>
+                <td>상기요금 반복적용</td>
               </tr>
             </tbody>
           </table>

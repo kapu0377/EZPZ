@@ -1,7 +1,7 @@
-package com.example.apiezpz.service;
+package com.example.apiezpz.prohibited.service;
 
-import com.example.apiezpz.domain.Prohibit;
-import com.example.apiezpz.repository.ProhibitedItemsRepository;
+import com.example.apiezpz.prohibited.domain.Prohibit;
+import com.example.apiezpz.prohibited.repository.ProhibitedItemsRepository;
 import org.springframework.stereotype.Service;
 
 

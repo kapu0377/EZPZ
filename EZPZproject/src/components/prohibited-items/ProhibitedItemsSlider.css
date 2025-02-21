@@ -3,8 +3,7 @@
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 2.0s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -12,9 +11,27 @@
   overflow: hidden;
 }
 
+.prohibited-items-slider:hover {
+  transform: none;
+}
+
 .slider-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon:hover {
+  transform: translateX(3px); /* 호버 시 오른쪽으로 이동 */
 }
 
 .slider-header h2 {
@@ -47,21 +64,34 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   z-index: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.slide-exit {
+  opacity: 0;
+  transform: translateX(-10%);
+}
+
+.slide-enter {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .slide-item {
   background: white;
-  padding: 15px;
+  padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(102, 102, 102, 0.1);
+  box-shadow: 0 8px 8px rgba(102, 102, 102, 0.1);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
-  transition: box-shadow 0.3s ease;
+  gap: 10px;
+  border: 2px solid rgb(231, 231, 231);
 }
 
 .slide-item:hover {
-  box-shadow: 0 4px 12px rgba(102, 102, 102, 0.15);
+  background-color: white;
+  transform: none;
 }
 
 .slide-icon {
@@ -75,6 +105,7 @@
 
 .slide-text {
   flex: 1;
+  text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 .slide-text h3 {
@@ -98,15 +129,22 @@
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #ddd;
   transition: background-color 0.3s ease;
+  cursor: pointer;
+  margin: 0 5px;
 }
 
 .dot.active {
   background: #666;
+  transform: scale(1.2);
+}
+
+.dot:hover {
+  background: #999;
 }
 
 @media (max-width: 768px) {
@@ -128,4 +166,6 @@
     min-width: 50px;
     height: 50px;
   }
+
+  
 } 

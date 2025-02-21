@@ -35,7 +35,7 @@ const itemApi = {
       }));
     } catch (error) {
       console.error('검색 랭킹 조회 실패:', error);
-      return []; // 에러 시 빈 배열 반환
+      return []; 
     }
   },
 
@@ -48,6 +48,45 @@ const itemApi = {
     } catch (error) {
       console.error('검색 기록 조회 실패:', error);
       throw error;
+    }
+  },
+
+  getDailyRankings: async () => {
+    try {
+      const response = await axiosInstance.get('/api/search/daily-ranking');
+      return response.data.map(item => ({
+        name: item.category,
+        count: item.searchCount
+      }));
+    } catch (error) {
+      console.error('일간 랭킹 조회 실패:', error);
+      return [];
+    }
+  },
+
+  getWeeklyRankings: async () => {
+    try {
+      const response = await axiosInstance.get('/api/search/weekly-ranking');
+      return response.data.map(item => ({
+        name: item.category,
+        count: item.searchCount
+      }));
+    } catch (error) {
+      console.error('주간 랭킹 조회 실패:', error);
+      return [];
+    }
+  },
+
+  getMonthlyRankings: async () => {
+    try {
+      const response = await axiosInstance.get('/api/search/monthly-ranking');
+      return response.data.map(item => ({
+        name: item.category,
+        count: item.searchCount
+      }));
+    } catch (error) {
+      console.error('월간 랭킹 조회 실패:', error);
+      return [];
     }
   },
 
@@ -82,4 +121,4 @@ const itemApi = {
   }
 };
 
-export default itemApi; 
+export default itemApi;

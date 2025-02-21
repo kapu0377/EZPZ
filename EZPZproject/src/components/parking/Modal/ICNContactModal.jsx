@@ -46,7 +46,7 @@ const ContactModal = ({ isOpen, onClose }) => {
         { department: '테러,침입,탈주 신고', tel: '032-741-0202' },
         { department: '수도고장 신고', tel: '032-744-8900~1' },
         { department: '승강설비고장 신고', tel: '032-741-3482' },
-        { department: '통신서비스 불편신고(인터넷,전화,TV)', tel: '통신서비스 불편신고(인터넷,전화,TV)' },
+        { department: '통신서비스 불편신고(인터넷,전화,TV)', tel: '032-743-7000' },
         { 
           department: '전기고장 신고', 
           tel: `032-741-7430(제2여객터미널)
