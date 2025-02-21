@@ -18,15 +18,50 @@ const ObjectDetection = () =>{
       reader.readAsDataURL(file);
     }
   };
-  const handleObjectDetection = () =>{
+  const handleObjectDetection = async () =>{
     const formData = new FormData();
     formData.append("file", file);
-    const response = axios.post("http://localhost:8088/api/odimg", 
+    const response = await axios.post("http://localhost:8088/api/odimg", 
       formData,
       {header:{"Content-Type":"multipart/form-data"}}
     );
     console.log(response.data);
+    const data = await response.json();
+    const detectedObjects = data.responses[0].localizedObjectAnnotations || [];
+    setObjects(detectedObjects);
+    drawBoundingBoxes(detectedObjects);
   }
+  const drawBoundingBoxes = (detectedObjects) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    img.src = image;
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      detectedObjects.forEach((obj) => {
+        const vertices = obj.boundingPoly.normalizedVertices;
+
+        if (vertices.length === 4) {
+          const x = vertices[0].x * img.width;
+          const y = vertices[0].y * img.height;
+          const width = (vertices[1].x - vertices[0].x) * img.width;
+          const height = (vertices[2].y - vertices[0].y) * img.height;
+
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x, y, width, height);
+
+          ctx.fillStyle = "red";
+          ctx.font = "16px Arial";
+          ctx.fillText(obj.name, x, y - 5);
+        }
+      });
+    };
+  };
   return(
     <div className="flex flex-col items-center gap-4 p-4">
       <input type="file" accept="image/*" onChange={handleImageChange} />
