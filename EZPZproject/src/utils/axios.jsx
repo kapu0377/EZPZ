@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:8088',
   headers: {
     'Content-Type': 'application/json',
   }
@@ -30,32 +30,23 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-          throw new Error('No refresh token available');
-        }
-
-        const refreshResponse = await axios.create({
-          baseURL: 'http://localhost:8080',
-          headers: { 'Content-Type': 'application/json' }
-        }).post('/api/auth/refresh', { refreshToken });
+        const accessToken = localStorage.getItem('accessToken');
+        const username = localStorage.getItem('username');
+        const response = await axios.post('http://localhost:8088/api/auth/reissue', {
+          accessToken: accessToken,
+          username: username
+        });
         
-        const { accessToken, refreshToken: newRefreshToken } = refreshResponse.data;
-        if (!accessToken) {
-          throw new Error('No access token received');
+        const { accessToken: newAccessToken } = response.data;
+        if (newAccessToken) {
+          localStorage.setItem('accessToken', newAccessToken);
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
         }
-        
-        localStorage.setItem('accessToken', accessToken);
-        if (newRefreshToken) {
-          localStorage.setItem('refreshToken', newRefreshToken);
-        }
-
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        clearStorageAndRedirect();
-        return Promise.reject(refreshError);
+      } catch (error) {
+        localStorage.clear();
+        window.location.href = '/login';
+        return Promise.reject(error);
       }
     }
     return Promise.reject(error);
