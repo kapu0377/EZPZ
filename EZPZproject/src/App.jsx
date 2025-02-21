@@ -16,6 +16,7 @@ import AirportParkingPage from "./pages/AirportParkingPage";
 import 'swiper/css';  // 기본 스타일
 import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
 import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경우)
+import ObjectDetection from "./pages/ObjectDetection";
 function App() {
   return (
     <AuthProvider>
@@ -27,6 +28,7 @@ function App() {
             <Route path="/board" element={<Notice />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/parking" element={<AirportParkingPage />} />
+            <Route path="/ObjectDetection" element={<ObjectDetection />} />
           </Routes>
         </Layout>
       </Router>
