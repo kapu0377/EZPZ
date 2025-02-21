@@ -9,7 +9,7 @@
 
 /* 아이템 입력 필드 */
 .item-container input[type="text"] {
-    width: calc(100% - 80px); /* 버튼과 균형 맞추기 */
+    width: 60%;
     padding: 8px;
     margin: 5px 0;
     border: 1px solid #ccc;
