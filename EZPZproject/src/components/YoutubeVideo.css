@@ -1,13 +1,39 @@
 .youtube-container {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 비율 */
-  }
-  
-  .youtube-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 20px auto; /* ✅ 내부 패딩 대신 margin 사용 */
+}
+
+.youtube-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 16 / 9; /* ✅ 반응형 유지 */
+  overflow: hidden;
+}
+
+.youtube-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ✅ 버튼 스타일 */
+.random-video-btn {
+  margin-top: 15px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.random-video-btn:hover {
+  background-color: #0056b3;
+}
