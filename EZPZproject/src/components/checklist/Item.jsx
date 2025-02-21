@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getItems, addItem, updateItem, deleteItem, toggleItemCheck } from "../../api/checklist/checklist_itemApi";
 import "./Item.css"
 
-export default function Item({ category }) {
+export default function Item({ category, isEditMode }) {
     const [items, setItems] = useState([]);
     const [newItemName, setNewItemName] = useState("");
     const [editItemId, setEditItemId] = useState(null);
@@ -16,7 +16,7 @@ export default function Item({ category }) {
         const data = await getItems(category.id);
         setItems(data);
     };
-
+    //아이템 추가
     const handleAddItem = async () => {
         if (!newItemName.trim()) return alert("아이템 이름을 입력하세요.");
 
@@ -28,36 +28,25 @@ export default function Item({ category }) {
         setNewItemName("");
         loadItems();
     };
-
+    //아이템 수정
     const handleUpdateItem = async (itemId) => {
         if (!editItemName.trim()) return alert("아이템 이름을 입력하세요.");
         await updateItem(itemId, editItemName);
         setEditItemId(null);
         loadItems();
     };
-
+    //아이템 삭제
     const handleDeleteItem = async (itemId) => {
         if (window.confirm("아이템을 삭제하시겠습니까?")) {
             await deleteItem(itemId);
             loadItems();
         }
     };
-
-    // const handleToggleCheck = async (itemId, checked) => {
-    //     await toggleItemCheck(itemId, checked);
-    //     loadItems();
-    // };
+    //체크상태 변경
     const handleToggleCheck = async (itemId, checked) => {
-        const success = await toggleItemCheck(itemId, checked);
-        if (success) {
-            setItems((prevItems) => 
-                prevItems.map((item) => 
-                    item.id === itemId ? { ...item, checked: !item.checked } : item
-                )
-            );
-        }
+        await toggleItemCheck(itemId, checked);
+        loadItems();
     };
-    
 
     return (
         <div className="item-container">
@@ -83,20 +72,30 @@ export default function Item({ category }) {
                         ) : (
                             <>
                                 <span>{item.name}</span>
-                                <button onClick={() => { setEditItemId(item.id); setEditItemName(item.name); }}>수정</button>
-                                <button onClick={() => handleDeleteItem(item.id)}>삭제</button>
+                                {/* 편집 모드일 때만 수정/삭제 버튼 표시 */}
+                                {isEditMode && (
+                                    <>
+                                        <button onClick={() => { setEditItemId(item.id); setEditItemName(item.name); }}>수정</button>
+                                        <button onClick={() => handleDeleteItem(item.id)}>삭제</button>
+                                    </>
+                                )}
                             </>
                         )}
                     </li>
                 ))}
             </ul>
-            <input
-                type="text"
-                placeholder="새 아이템 이름"
-                value={newItemName}
-                onChange={(e) => setNewItemName(e.target.value)}
-            />
-            <button onClick={handleAddItem}>추가</button>
+             {/* 아이템 추가 창을 편집 모드에서만 표시 */}
+             {isEditMode && (
+                <div className="item-add-container">
+                    <input
+                        type="text"
+                        placeholder="새 아이템 이름"
+                        value={newItemName}
+                        onChange={(e) => setNewItemName(e.target.value)}
+                    />
+                    <button onClick={handleAddItem}>추가</button>
+                </div>
+            )}
         </div>
     );
 }

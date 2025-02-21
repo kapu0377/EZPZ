@@ -8,8 +8,7 @@ export default function App() {
 
     return (
         <div>
-            {/* <h1 className="title">여행 체크리스트</h1> */}
-            {/* ✅ 안내 문구 추가 */}
+            {/* 안내 문구 추가 */}
             <p className="checklist-warning">
                 🚨 전자담배, 보조배터리, 라이터는 휴대 수화물입니다. 🚨
             </p>

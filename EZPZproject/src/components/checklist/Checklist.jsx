@@ -11,7 +11,7 @@ import ChecklistEditModal from "./ChecklistEditModal";
 
 export default function Checklist({ onSelectChecklist }) {
     const [checklists, setChecklists] = useState([]);
-    const [selectedChecklist, setSelectedChecklist] = useState(null); // ✅ 현재 선택된 체크리스트
+    const [selectedChecklist, setSelectedChecklist] = useState(null); // 현재 선택된 체크리스트
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editChecklist, setEditChecklist] = useState(null);
 
@@ -24,7 +24,7 @@ export default function Checklist({ onSelectChecklist }) {
         setChecklists(data);
     };
 
-    // ✅ 체크리스트 추가
+    // 체크리스트 추가
     const handleAddChecklist = async (title, departureDate, returnDate) => {
         const success = await addChecklist({ title, departureDate, returnDate });
         if (success) {
@@ -33,7 +33,7 @@ export default function Checklist({ onSelectChecklist }) {
         }
     };
 
-    // ✅ 체크리스트 수정
+    // 체크리스트 수정
     const handleUpdateChecklist = async (id, updatedData) => {
         const success = await updateChecklist(id, updatedData);
         if (success) {
@@ -42,15 +42,15 @@ export default function Checklist({ onSelectChecklist }) {
         }
     };
 
-    // ✅ 체크리스트 삭제 (카테고리도 함께 초기화)
+    // 체크리스트 삭제 (카테고리도 함께 초기화)
     const handleDeleteChecklist = async (id) => {
         if (window.confirm("체크리스트에 포함된 모든 데이터가 삭제됩니다.\n 체크리스트를 삭제하시겠습니까?")) {
             const success = await deleteChecklist(id);
             if (success) {
                 setChecklists(checklists.filter((checklist) => checklist.id !== id)); // ✅ UI에서 삭제 반영
                 if (selectedChecklist && selectedChecklist.id === id) {
-                    setSelectedChecklist(null); // ✅ 선택된 체크리스트 초기화 (카테고리 목록 숨김)
-                    onSelectChecklist(null); // ✅ 부모 컴포넌트로 빈 값 전달하여 카테고리 목록 숨김
+                    setSelectedChecklist(null); // 선택된 체크리스트 초기화 (카테고리 목록 숨김)
+                    onSelectChecklist(null); // 부모 컴포넌트로 빈 값 전달하여 카테고리 목록 숨김
                 }
             }
         }
@@ -66,7 +66,7 @@ export default function Checklist({ onSelectChecklist }) {
                     <li key={list.id}>
                         <span onClick={() => {
                             setSelectedChecklist(list);
-                            onSelectChecklist(list); // ✅ 선택된 체크리스트 업데이트
+                            onSelectChecklist(list); // 선택된 체크리스트 업데이트
                         }}>
                             <div>
                             {list.title}
@@ -81,14 +81,14 @@ export default function Checklist({ onSelectChecklist }) {
                 ))}
             </ul>
 
-            {/* ✅ 체크리스트 추가 모달 */}
+            {/* 체크리스트 추가 모달 */}
             <ChecklistAddModal 
                 isOpen={isAddModalOpen} 
                 onClose={() => setIsAddModalOpen(false)}
                 onAdd={handleAddChecklist}
             />
 
-            {/* ✅ 체크리스트 수정 모달 */}
+            {/* 체크리스트 수정 모달 */}
             {editChecklist && (
                 <ChecklistEditModal 
                     isOpen={!!editChecklist} 

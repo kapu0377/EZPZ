@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "./ChecklistAddModal.css"; // ✅ 스타일 적용
+import "./ChecklistAddModal.css";
 
 export default function ChecklistAddModal({ isOpen, onClose, onAdd }) {
     const [title, setTitle] = useState("");
     const [departureDate, setDepartureDate] = useState("");
     const [returnDate, setReturnDate] = useState("");
 
-    if (!isOpen) return null; // ✅ 모달이 열려 있을 때만 표시
+    if (!isOpen) return null; // 모달이 열려 있을 때만 표시
 
     const handleSubmit = async () => {
         if (!title.trim() || !departureDate.trim() || !returnDate.trim()) {
@@ -16,7 +16,7 @@ export default function ChecklistAddModal({ isOpen, onClose, onAdd }) {
 
         await onAdd(title, departureDate, returnDate);
 
-        // ✅ 입력 필드 초기화 및 모달 닫기
+        // 입력 필드 초기화 및 모달 닫기
         setTitle("");
         setDepartureDate("");
         setReturnDate("");

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./CategoryAddModal.css"; // ✅ 스타일 적용
+import "./CategoryAddModal.css";
 
 export default function CategoryAddModal({ isOpen, onClose, onAdd }) {
     const [categoryName, setCategoryName] = useState("");
 
-    if (!isOpen) return null; // ✅ 모달이 열려 있을 때만 표시
+    if (!isOpen) return null; // 모달이 열려 있을 때만 표시
 
     const handleSubmit = async () => {
         if (!categoryName.trim()) {
@@ -15,7 +15,7 @@ export default function CategoryAddModal({ isOpen, onClose, onAdd }) {
         const success = await onAdd(categoryName);
         if (success) {
             setCategoryName("");
-            onClose(); // ✅ 추가 후 모달 닫기
+            onClose(); // 추가 후 모달 닫기
         }
     };
 

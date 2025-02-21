@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8088/api";
 
-// ✅ JWT 토큰을 가져와 Authorization 헤더 추가
+// JWT 토큰을 가져와 Authorization 헤더 추가
 const getAuthHeader = () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -13,7 +13,7 @@ const getAuthHeader = () => {
     return { Authorization: `Bearer ${token}` };
 };
 
-// ✅ 체크리스트 목록 가져오기
+// 체크리스트 목록 가져오기
 export const getChecklists = async () => {
     try {
         const response = await axios.get(`${API_BASE_URL}/checklist/list`, {
@@ -26,7 +26,7 @@ export const getChecklists = async () => {
     }
 };
 
-// ✅ 체크리스트 추가
+// 체크리스트 추가
 export const addChecklist = async (newChecklist) => {
     try {
         await axios.post(`${API_BASE_URL}/checklist/`, newChecklist, {
@@ -39,7 +39,7 @@ export const addChecklist = async (newChecklist) => {
     }
 };
 
-// ✅ 체크리스트 수정
+// 체크리스트 수정
 export const updateChecklist = async (id, checklistData) => {
     try {
         await axios.put(`${API_BASE_URL}/checklist/${id}`, checklistData, {
@@ -52,7 +52,7 @@ export const updateChecklist = async (id, checklistData) => {
     }
 };
 
-// ✅ 체크리스트 삭제
+// 체크리스트 삭제
 export const deleteChecklist = async (id) => {
     try {
         await axios.delete(`${API_BASE_URL}/checklist/${id}`, {
@@ -65,7 +65,7 @@ export const deleteChecklist = async (id) => {
     }
 };
 
-// ✅ 짐 싸기 초기화
+// 짐 싸기 초기화
 export const resetPacking = async (checklistId) => {
     try {
         await axios.put(`${API_BASE_URL}/checklist/${checklistId}/reset`, null, {

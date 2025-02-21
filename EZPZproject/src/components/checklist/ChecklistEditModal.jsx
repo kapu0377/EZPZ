@@ -14,7 +14,7 @@ export default function ChecklistEditModal({ isOpen, onClose, checklist, onUpdat
         }
     }, [checklist]);
 
-    if (!isOpen) return null; // ✅ 모달이 열려 있을 때만 표시
+    if (!isOpen) return null; // 모달이 열려 있을 때만 표시
 
     const handleSubmit = async () => {
         if (!title.trim() || !departureDate.trim() || !returnDate.trim()) {
@@ -24,7 +24,7 @@ export default function ChecklistEditModal({ isOpen, onClose, checklist, onUpdat
 
         await onUpdate(checklist.id, { title, departureDate, returnDate });
 
-        onClose(); // ✅ 수정 후 모달 닫기
+        onClose(); // 수정 후 모달 닫기
     };
 
     return (
