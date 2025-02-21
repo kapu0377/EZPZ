@@ -1,6 +1,6 @@
 /* 체크리스트 전체 카드 스타일 */
 .checklist-container {
-    width: 45%;
+    width: 50%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -54,5 +54,10 @@
     background-color: #f8f9fa;
     border-radius: 6px;
     margin-bottom: 8px;
+}
+
+.checklist-container span:hover {
+    background-color: #ececec;
+    border-radius: 8px;
 }
 

@@ -2,7 +2,7 @@ import { useState } from "react"
 import itemApi from "../api/itemApi"
 import "./SearchInput.css"
 
-const SearchInput = ({ onSearchResult, onReset }) => {
+const SearchInput = ({ onSearchResult }) => {
   const [inputValue, setInputValue] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showBatteryModal, setShowBatteryModal] = useState(false)
@@ -69,20 +69,25 @@ const SearchInput = ({ onSearchResult, onReset }) => {
         if (result && !result.error && result.restrictions) {
           let status;
           let details = result.restrictions;
-          const actualAllowed = !result.isAllowed;
-          const actualConditional = !result.isConditional;
+          const actualAllowed = !result.isAllowed;  
+          const actualConditional = result.isConditional;
 
-          if (actualAllowed) {
-            status = "반입가능";
+          const isCheckedBaggageOnly = details.toLowerCase().includes('수하물만') || 
+                                     details.toLowerCase().includes('위탁수하물만');
+
+          if (!actualAllowed) {
+            status = "반입금지";
+          } else if (actualConditional || isCheckedBaggageOnly) {
+            status = "부분허용";
           } else {
-            status = actualConditional ? "부분허용" : "반입금지";
+            status = "반입가능";
           }
           
           newResult = {
             item: inputValue.trim(),
             status: status,
             details: details,
-            isConditional: actualConditional
+            isConditional: actualConditional || isCheckedBaggageOnly
           };
         } else {
           newResult = {
@@ -96,10 +101,16 @@ const SearchInput = ({ onSearchResult, onReset }) => {
         onSearchResult(newResult);
         setInputValue("");
         
-        const updatedRankings = await itemApi.getSearchRankings();
-        window.dispatchEvent(new CustomEvent('rankingsUpdated', { 
-          detail: updatedRankings 
-        }));
+        try {
+          const updatedRankings = await itemApi.getSearchRankings();
+          if (updatedRankings && updatedRankings.length > 0) {
+            window.dispatchEvent(new CustomEvent('rankingsUpdated', { 
+              detail: updatedRankings 
+            }));
+          }
+        } catch (error) {
+          console.error("랭킹 업데이트 실패:", error);
+        }
         
       } catch (error) {
         console.error("검색 오류:", error);
@@ -114,7 +125,6 @@ const SearchInput = ({ onSearchResult, onReset }) => {
     <div className="search-input">
       <div className="search-input-header">
         <span>기내반입가능여부조회</span>
-        <button onClick={onReset}>초기화</button>
       </div>
       <div className="search-input-field">
         <input

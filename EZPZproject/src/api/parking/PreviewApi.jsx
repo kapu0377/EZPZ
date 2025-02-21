@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PARKING_API_KEY = "FUM7xFhbGE8Ui7ljC9EtXTAFE4zszroC5kr7fJRI/NZeKAHZmMV11gJJCgz25zXFuW9YMgjUnA6aeOabWDOipg==";
+const PARKING_API_KEY = process.env.REACT_APP_AIRPORTAPI_KEY;
 
 // 공항 코드와 상세 정보 매핑
 export const AIRPORT_CODES = {

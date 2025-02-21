@@ -1,8 +1,12 @@
+/* ✅ `.prohibited-items`의 너비를 100%로 변경하여 반응형 적용 */
 .prohibited-items {
+  width: 100%;
+  max-width: 1200px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   text-align: center;
+  margin: 0 auto;
 }
 
 .description {
@@ -12,7 +16,6 @@
 }
 
 .cards-container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -76,10 +79,10 @@
 
 /* 카드 그리드 수정 */
 .all-categories {
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  align-items: start;
 }
 
 /* 카드 컬럼 */
@@ -88,11 +91,12 @@
   flex-direction: column;
   gap: 30px;
   align-items: center;
+  margin-top: 25px;
 }
 
 /* 카드 스타일 수정 */
 .card {
-  width: 300px;
+  width: 75%;
   height: 200px;
   padding: 20px;
   border-radius: 8px;
@@ -234,6 +238,7 @@
   margin-bottom: 15px;
 }
 
+/* ✅ 설명 섹션 배경 이미지가 잘리지 않도록 조정 */
 .description-section {
   font-size: 16px;
   color: white;
@@ -244,6 +249,8 @@
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
+  max-width: 100%;
+  height: 80%;
 }
 
 .description-section h1,
@@ -261,8 +268,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6); /* 오버레이를 좀 더 진하게 */
+  background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 /* 모달 오버레이 */
@@ -613,11 +622,10 @@ tr:hover {
 
 /* ✅ 전체 컨테이너 스타일 */
 .prohibited-items-container {
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
   gap: 20px;
 }
 
@@ -664,20 +672,34 @@ tr:hover {
 
 /* 모달 스타일 유지 */
 
-/* 반응형 디자인 */
+/* ✅ 반응형 디자인 추가 */
 @media (max-width: 1024px) {
+  .prohibited-items {
+    padding: 10px;
+  }
+
   .all-categories {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 1024px 이하에서는 2개씩 */
+  }
+
+  .description-section {
+    font-size: 14px;
+    padding: 15px;
   }
 }
 
 @media (max-width: 768px) {
   .all-categories {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 768px 이하에서는 1개씩 */
   }
 
-  .category-column {
-    margin-bottom: 20px;
+  .description-section {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .category-title {
+    font-size: 16px;
   }
 }
 
