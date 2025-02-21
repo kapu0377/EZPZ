@@ -5,8 +5,7 @@ import Layout from "./components/layout/Layout";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import EZPackingLayout from "./components/EZPackingLayout";
-// import MyPage from "./api/checklistAllCode"
-import MyPage from "./components/checklist/Main"
+import CheckList from "./components/checklist/Main"
 import "./App.css";
 import "./components/notice/Notice.css";
 import Notice from "./pages/Notice";
@@ -25,7 +24,7 @@ function App() {
             <Route path="/" element={<EZPackingLayout />} />
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
-            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/checklist" element={<CheckList />} />
             <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>

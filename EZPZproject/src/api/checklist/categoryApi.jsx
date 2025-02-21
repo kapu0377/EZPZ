@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8088/api";
 
+//카테고리별 아이템 가져오기
 export const getCategoriesWithItems = async (checklistId) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/categories/list/${checklistId}`);
@@ -12,6 +13,7 @@ export const getCategoriesWithItems = async (checklistId) => {
     }
 };
 
+//카테고리 추가
 export const addCategory = async (checklistId, categoryName) => {
     try {
         await axios.post(`${API_BASE_URL}/categories/${checklistId}`, { name: categoryName });
@@ -25,6 +27,7 @@ export const addCategory = async (checklistId, categoryName) => {
     }
 };
 
+//카테고리 수정
 export const updateCategory = async (categoryId, newName) => {
     try {
         await axios.put(`${API_BASE_URL}/categories/${categoryId}`, { name: newName });
@@ -35,6 +38,7 @@ export const updateCategory = async (categoryId, newName) => {
     }
 };
 
+//카테고리 삭제
 export const deleteCategory = async (categoryId) => {
     try {
         await axios.delete(`${API_BASE_URL}/categories/${categoryId}`);

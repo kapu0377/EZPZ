@@ -1,5 +1,6 @@
 package com.example.apiezpz.checklist.controller;
 
+import com.example.apiezpz.auth.security.JwtTokenProvider;
 import com.example.apiezpz.checklist.dto.ChecklistDTO;
 import com.example.apiezpz.checklist.service.ChecklistService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +16,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChecklistController {
     private final ChecklistService checklistService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 특정 회원의 체크리스트 추가
-   @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void addChecklist(@RequestParam Long memberId, @RequestBody ChecklistDTO checklistDTO) {
-        log.info(checklistDTO);
-        checklistService.registerChecklist(memberId, checklistDTO);
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void addChecklist(@RequestHeader("Authorization") String token, @RequestBody ChecklistDTO checklistDTO) {
+        String username = jwtTokenProvider.getUsernameFromToken(token.substring(7)); // Bearer 제거 후 username 추출
+        checklistService.registerChecklist(username, checklistDTO);
     }
+
 
     // 특정 카테고리 조회
     @GetMapping("/{id}")
@@ -31,24 +34,28 @@ public class ChecklistController {
     }
 
     // 회원별 체크리스트 목록 조회
-    @GetMapping(value = "/list/{memberId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ChecklistDTO> list(@PathVariable("memberId") Long memberId){
-        return checklistService.list(memberId);
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ChecklistDTO> list(@RequestHeader("Authorization") String token) {
+        String username = jwtTokenProvider.getUsernameFromToken(token.substring(7)); // 토큰에서 username 추출
+        return checklistService.list(username);
     }
 
     // 체크리스트 삭제
     @DeleteMapping(value= "/{id}")
-    public void deleteChecklist(@RequestParam Long memberId, @PathVariable("id") Long id){
-        checklistService.removeChecklist(memberId, id);
+    public void deleteChecklist(@RequestHeader("Authorization") String token, @PathVariable("id") Long id){
+        String username = jwtTokenProvider.getUsernameFromToken(token.substring(7)); // 토큰에서 username 추출
+        checklistService.removeChecklist(username, id);
     }
+
 
     // 체크리스트 이름 수정
     @PutMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateChecklist(@RequestParam Long memberId, @PathVariable("id") Long id, @RequestBody ChecklistDTO checklistDTO ){
-        //잘못된 id가 발생하지 못하도록
+    public void updateChecklist(@RequestHeader("Authorization") String token, @PathVariable("id") Long id, @RequestBody ChecklistDTO checklistDTO ){
+        String username = jwtTokenProvider.getUsernameFromToken(token.substring(7)); // ✅ 토큰에서 username 추출
         checklistDTO.setId(id);
-        checklistService.modifyChecklist(memberId, checklistDTO);
+        checklistService.modifyChecklist(username, checklistDTO);
     }
+
 
     // 모든 아이템의 체크 상태를 해제하는 엔드포인트
     @PutMapping("/{checklistId}/reset")

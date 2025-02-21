@@ -1,6 +1,6 @@
 /* 카테고리 전체 컨테이너 */
 .category-container {
-    width: 50%;
+    width: 120%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -9,37 +9,123 @@
     margin-bottom: 20px;
 }
 
-/* 카테고리 블록 (제목과 아이템 목록을 세로로 배치) */
+/* 버튼 정렬 */
+.category-buttons {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 15px;
+}
+
+.category-buttons button {
+    margin-left: 5px;
+}
+/* 카테고리 목록을 2줄로 나누기 */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 레이아웃 */
+    gap: 15px;
+}
+
+/* 카테고리 블록 */
 .category-block {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
     padding: 15px;
     border-radius: 10px;
     background-color: #f9f9f9;
-    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 카테고리 제목 (아이템 목록 위로 배치) */
-.category-title {
+/* 카테고리 제목 */
+.checklist-category-title {
     font-size: 18px;
     font-weight: bold;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 10px;
+    color: black;
 }
 
-/* 카테고리명과 버튼 정렬 */
-.category-title span {
-    flex-grow: 1;
+/* 카테고리명 왼쪽 정렬 */
+.checklist-category-title span {
+    flex-grow: 1; /* 버튼을 오른쪽으로 밀어줌 */
+    display: flex;
+    align-items: center;
+}
+
+/* 수정 및 삭제 버튼을 오른쪽 정렬 */
+.checklist-category-title button {
+    margin-left: 8px; /* 버튼 간격 추가 */
+}
+
+/* 카테고리 버튼 */
+.category-add-btn, .category-reset-btn {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.category-add-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.category-reset-btn {
+    background-color: #dc3545;
+    color: white;
 }
 
 /* 아이템 리스트 */
 .item-list {
     list-style: none;
     padding: 0;
+    margin: 0;
     width: 100%;
+}
+
+/* 기본 카테고리 추가 버튼 스타일 */
+.category-default-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.category-default-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.category-default-btn:hover {
+    background-color: #218838;
+}
+
+/* 편집 모드 버튼 */
+.edit-mode-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.edit-mode-btn.active {
+    background-color: #28a745;
+}
+
+.edit-mode-btn:hover {
+    background-color: #0056b3;
 }
