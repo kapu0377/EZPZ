@@ -1,0 +1,84 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .terminal-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .tab {
+    padding: 8px 16px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .tab.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .contact-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed; /* 추가: 고정 너비 레이아웃 사용 */
+  }
+  
+  .contact-table th,
+  .contact-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  /* 각 열의 너비 비율 조정 */
+  .contact-table th:nth-child(1),
+  .contact-table td:nth-child(1) {
+    width: 25%; /* 구분 열 */
+  }
+  
+  .contact-table th:nth-child(2),
+  .contact-table td:nth-child(2) {
+    width: 35%; /* 부서명 열 */
+  }
+  
+  .contact-table th:nth-child(3),
+  .contact-table td:nth-child(3) {
+    width: 40%; /* 연락처 열 - 가장 넓게 */
+  }
+  
+  /* 긴 텍스트 처리를 위한 스타일 */
+  .contact-table td {
+    word-break: keep-all; /* 단어 단위로 줄바꿈 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  }

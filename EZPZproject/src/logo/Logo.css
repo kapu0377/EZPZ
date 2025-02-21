@@ -1,0 +1,86 @@
+.logo {
+  position: relative;
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+  white-space: nowrap;
+  height: 60px; /* 추가: 고정 높이 설정 */
+}
+
+.logo-text, .logo-hover {
+  font-size: 48px;
+  font-weight: bold;
+  display: inline-block;
+  position: absolute; /* 수정: 두 요소 모두 absolute로 설정 */
+  top: 0;
+  left: 0;
+}
+
+.logo-text {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.logo-hover {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.logo-hover .small {
+  font-size: 24px;
+  display: inline-block;
+  overflow: hidden;
+  width: 0;
+  transition: all 0.3s ease;
+  transform: translateY(8px);
+  margin-right: -5px;
+  opacity: 1;
+}
+
+.logo:hover .logo-text {
+  opacity: 0;
+}
+
+.logo:hover .logo-hover {
+  opacity: 1;
+}
+
+.logo:hover .logo-hover .small {
+  width: 82px;
+}
+
+.small {
+  transition: all 0.3s ease;
+}
+
+.small.changing {
+  width: 0 !important;
+  opacity: 0;
+  transform: translateX(-20px) translateY(8px);
+}
+
+.icon-container {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.5s ease;
+  margin-left: 5px;
+}
+
+.icon-container svg {
+  width: 32px;
+  height: 32px;
+}
+
+.logo:hover .icon-container {
+  opacity: 1;
+  transform: translateY(-50%) translateX(10px);
+}
+
+.icon-container.changing {
+  opacity: 0;
+  transform: translateY(-50%) translateX(-20px);
+}

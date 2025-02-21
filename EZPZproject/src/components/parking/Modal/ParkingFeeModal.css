@@ -1,0 +1,208 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 1100px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.terminal-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 16px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.fee-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  table-layout: fixed;
+}
+
+.fee-table th, .fee-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  vertical-align: middle;
+  word-break: keep-all; 
+}
+
+.fee-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* 각 열의 너비 조정 */
+.fee-table th:first-child {
+  width: 15%; /* 구분 열 */
+}
+
+.fee-table th:nth-child(2),
+.fee-table th:nth-child(3) {
+  width: 20%; /* 월~목요일 소형/대형 열 */
+}
+
+.fee-table th:nth-child(4),
+.fee-table th:nth-child(5) {
+  width: 22.5%; /* 금~일,공휴일 소형/대형 열 */
+}
+
+.fee-table td {
+  text-align: center;
+  vertical-align: middle;
+  height: 50px;
+  word-break: keep-all;
+}
+
+.fee-table td:first-child {
+  text-align: center;
+  font-weight: 500;
+}
+
+.fee-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.fee-table ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fee-table li {
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+.fee-table thead th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  height: 50px;
+}
+
+/* 긴 텍스트를 위한 줄바꿈 처리 */
+.fee-table th[colspan="2"] {
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.fee-table br + span {
+  font-size: 0.9em;
+  color: #666;
+  display: block;
+  margin-top: 4px;
+}
+
+.fee-table .center {
+  text-align: center;
+}
+
+.fee-table .en {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.parking-notice {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.parking-notice p {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.parking-notice .contact {
+  color: #666;
+  margin-top: 15px;
+}
+
+.sub-section {
+  margin-top: 30px;
+}
+
+.sub-section h3 {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.special-notice {
+  color: #0066cc;
+  font-weight: 500;
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.warning-text {
+  color: #dc3545;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.notice-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #666;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
