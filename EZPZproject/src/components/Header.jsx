@@ -1,20 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../logo/Logo";
 import TopBar from "./TopBar";
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
+  
   return (
     <header className="header">
       <TopBar />
       <div className="header-content">
         <Logo />
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        {/* <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
           ☰
-        </button>
-        <div className={`nav-container ${menuOpen ? "active" : ""}`}>
+        </button> */}
+        <div className="nav-container">
           <nav className="main-nav">
             <Link to="/prohibited">금지물품</Link>
             <Link to="/board">게시판</Link>
