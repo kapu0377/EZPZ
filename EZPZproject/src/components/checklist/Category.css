@@ -13,6 +13,9 @@
         max-width: 100%;
     }
 }
+.category-list-title {
+    margin-bottom: 10px;
+}
 
 /* 버튼 정렬 */
 .category-buttons {
@@ -145,4 +148,13 @@
 
 .edit-mode-btn:hover {
     background-color: #0056b3;
+}
+
+.category-edit-input {
+    width: 70%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
 }

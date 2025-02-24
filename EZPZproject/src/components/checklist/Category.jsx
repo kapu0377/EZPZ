@@ -6,8 +6,7 @@ import { defaultCategories } from "../../api/checklist/defaultCategories";
 import Item from "./Item";
 import "./Category.css";
 import CategoryAddModal from "./CategoryAddModal";
-// import { FaEdit, FaTrashAlt } from "react-icons/fa";    //수정,삭제 아이콘
-import { FaEdit, FaTrashAlt, FaPlus, FaCheck, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaCheck, FaTimes } from "react-icons/fa";  //수정,삭제,저장,취소 아이콘
 
 export default function Category({ checklist }) {
     const [categories, setCategories] = useState([]);
@@ -88,7 +87,7 @@ export default function Category({ checklist }) {
 
     return (
         <div className="category-container">
-            <h3>{checklist.title} ({checklist.departureDate} ~ {checklist.returnDate}) - 카테고리 목록</h3>
+            <h3 className="category-list-title">{checklist.title} ({checklist.departureDate} ~ {checklist.returnDate}) - 카테고리&아이템 목록</h3>
             <div className="category-buttons">
                 <button className="category-add-btn" onClick={() => setIsAddModalOpen(true)}>카테고리 추가</button>
                 <button className="category-reset-btn" onClick={handleResetPacking}>짐 싸기 초기화</button>
@@ -108,7 +107,7 @@ export default function Category({ checklist }) {
                         <div className="checklist-category-title">
                             {editCategoryId === category.id ? (
                                 <>
-                                    <input
+                                    <input className="category-edit-input"
                                         type="text"
                                         value={editCategoryName}
                                         onChange={(e) => setEditCategoryName(e.target.value)}
@@ -122,8 +121,8 @@ export default function Category({ checklist }) {
                                     {/* 편집 모드일 때만 수정/삭제 버튼 표시 */}
                                     {isEditMode && (
                                         <div className="category-btn-group">
-                                            <button className="edit-btn" onClick={() => { setEditCategoryId(category.id); setEditCategoryName(category.name); }}><FaEdit /></button>
-                                            <button className="delete-btn" onClick={() => handleDeleteCategory(category.id)}><FaTrashAlt /></button>
+                                            <button className="category-edit-btn" onClick={() => { setEditCategoryId(category.id); setEditCategoryName(category.name); }}><FaEdit /></button>
+                                            <button className="category-delete-btn" onClick={() => handleDeleteCategory(category.id)}><FaTrashAlt /></button>
                                         </div>
                                     )}
                                 </>

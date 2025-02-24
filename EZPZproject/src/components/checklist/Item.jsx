@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { getItems, addItem, updateItem, deleteItem, toggleItemCheck } from "../../api/checklist/checklist_itemApi";
 import "./Item.css"
-// import { FaEdit, FaTrashAlt } from "react-icons/fa";    //수정,삭제 버튼
-import { FaEdit, FaTrashAlt, FaPlus, FaCheck, FaTimes } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaPlus, FaCheck, FaTimes } from "react-icons/fa";  //수정,삭제,추가,저장,취소 아이콘
 
 export default function Item({ category, isEditMode }) {
     const [items, setItems] = useState([]);

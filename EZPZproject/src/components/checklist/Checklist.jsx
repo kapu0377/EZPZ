@@ -6,8 +6,8 @@ import {
     updateChecklist
 } from "../../api/checklist/checklistApi";
 import "./Checklist.css";
-import ChecklistAddModal from "./ChecklistAddModal";
 import ChecklistEditModal from "./ChecklistEditModal";
+import ChecklistAddModal from "./ChecklistAddModal";
 
 export default function Checklist({ onSelectChecklist }) {
     const [checklists, setChecklists] = useState([]);

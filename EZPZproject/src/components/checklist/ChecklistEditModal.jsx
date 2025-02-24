@@ -34,7 +34,7 @@ export default function ChecklistEditModal({ isOpen, onClose, checklist, onUpdat
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} />
                 <input type="date" value={returnDate} min={departureDate} onChange={(e) => setReturnDate(e.target.value)} />
-                <div className="modal-buttons">
+                <div className="checklist-modal-buttons">
                     <button className="cancel-btn" onClick={onClose}>취소</button>
                     <button className="save-btn" onClick={handleSubmit}>저장</button>
                 </div>
