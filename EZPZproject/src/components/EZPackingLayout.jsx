@@ -3,6 +3,7 @@ import SearchSection from "./SearchSection";
 import ProhibitedItemsSlider from "./prohibited-items/ProhibitedItemsSlider";
 import ParkingSlider from "./parking/ParkingSlider";
 import YoutubeVideo from "./YoutubeVideo";
+import RecentPosts from "./post/RecentPost";
 
 const EZPackingLayout = () => {
   return (
@@ -12,7 +13,7 @@ const EZPackingLayout = () => {
         <div className="content-box"><ProhibitedItemsSlider /></div>
         <div className="content-box"><YoutubeVideo/></div>
         <div className="content-box"><ParkingSlider/></div>
-        <div className="content-box">게시판</div>
+        <div className="content-box"><RecentPosts/></div>
       </div>
     </div>
   );
