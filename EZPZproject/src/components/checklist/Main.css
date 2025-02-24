@@ -1,13 +1,33 @@
 /* 전체 컨테이너 - 체크리스트와 카테고리를 가로 정렬 */
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* 체크리스트 1, 카테고리 2 비율 */
+    gap: 30px;
     max-width: 1500px;
     margin: auto;
-    gap: 30px; /* 체크리스트와 카테고리 사이 간격 조정 */
+    padding: 20px;
+    align-items: flex-start;
 }
+.container.centered {
+    display: flex; 
+    justify-content: center; /* 가로 중앙 정렬 */
+    height: 80vh; /* 화면의 80% 높이에서 중앙 배치 */
+}
+
+/* 📌 태블릿에서는 1:1 비율 */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* 📌 모바일에서는 1열 정렬 */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* 안내 문구 스타일 */
 .checklist-warning {
@@ -19,5 +39,12 @@
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ffeeba;
-    margin-bottom: 15px;
+}
+
+.checklist-alert {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
 }
