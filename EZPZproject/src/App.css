@@ -293,7 +293,7 @@ body {
   background-color: var(--primary-black);
   color: var(--primary-white);
   padding: 3rem 2rem;
-  margin-top: auto;
+  margin-top: 60px;
 }
 
 .footer-info {
