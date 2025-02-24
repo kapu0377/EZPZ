@@ -4,12 +4,15 @@ import Logo from "../logo/Logo";
 import TopBar from "./TopBar";
 
 const Header = () => {
-  return (
 
+  return (
     <header className="header">
-      <TopBar/>
+      <TopBar />
       <div className="header-content">
         <Logo />
+        {/* <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </button> */}
         <div className="nav-container">
           <nav className="main-nav">
             <Link to="/prohibited">금지물품</Link>

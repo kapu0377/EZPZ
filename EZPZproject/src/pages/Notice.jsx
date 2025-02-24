@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {createPost, updatePost, deletePost} from "../api/postApi";
 import '../components/notice/Notice.css';
-import { getComments, createComment, updateComment, deleteComment } from '../api/commentApi';
+import { Link, useNavigate } from "react-router-dom";
 
 const App = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -26,7 +26,7 @@ const App = () => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState("");
   const [username, setUsername] = useState(null);
-
+  const token = localStorage.getItem('accessToken');
   // 검색 실행 함수
   const handleSearch = () => {
     setActiveSearch(searchTerm);
@@ -264,14 +264,30 @@ const App = () => {
     }
   };
 
-  // 게시글 상세보기로 이동할 때
   const handleViewPost = (post) => {
     setSelectedPost(post);
     setIsDetailView(true);
+    window.history.pushState({ isDetail: true }, '', window.location.pathname);
+  };
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (!event.state?.isDetail) {
+        setIsDetailView(false);
+        setSelectedPost(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleBackToList = () => {
+    setIsDetailView(false);
+    setSelectedPost(null);
     window.history.pushState(null, '', window.location.pathname);
   };
 
-  // 댓글 관련 함수들 수정
   const fetchComments = async () => {
     try {
       const response = await fetch(`http://localhost:8088/api/comments/post/${selectedPost.id}`);
@@ -398,44 +414,49 @@ const App = () => {
           <h2 className="title">자유 게시판</h2>
           
           <div className="search-box">
-            <select 
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value)}
-              className="search-select"
-            >
-              <option value="title">제목</option>
-              <option value="writer">작성자</option>
-              <option value="content">내용</option>
-            </select>
-            <input
-              type="text"
-              placeholder={`${
-                searchType === 'title' ? '제목' : 
-                searchType === 'writer' ? '작성자' : '내용'
-              } 검색...`}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch();
-                }
-              }}
-              className="search-input"
-            />
-            <button 
-              onClick={handleSearch}
-              className="search-button"
-            >
-              검색
-            </button>
-            <button 
-              onClick={handleAddClick}
-              className="add-button"
-              title="글쓰기"
-            >
-              글쓰기
-            </button>
-          </div>
+  <select 
+    value={searchType}
+    onChange={(e) => setSearchType(e.target.value)}
+    className="search-select"
+  >
+    <option value="title">제목</option>
+    <option value="writer">작성자</option>
+    <option value="content">내용</option>
+  </select>
+  <input
+    type="text"
+    placeholder={`${
+      searchType === 'title' ? '제목' : 
+      searchType === 'writer' ? '작성자' : '내용'
+    } 검색...`}
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    onKeyPress={(e) => {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+    }}
+    className="search-input"
+  />
+  <button 
+    onClick={handleSearch}
+    className="search-button"
+  >
+    검색
+  </button>
+
+  {/* 로그인 상태에서만 글쓰기 버튼 렌더링 */}
+  {token ? (
+    <button
+      onClick={handleAddClick}
+      className="add-button"
+      title="글쓰기"
+    >
+      글쓰기
+    </button>
+  ) : null}
+</div>
+
 
           <div className="items-list">
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -559,108 +580,117 @@ const App = () => {
                   <div className="post-content">{selectedPost.content}</div>
                 </div>
                 <div className="post-buttons">
-                  <div className="left-buttons">
-                    <button onClick={() => setIsDetailView(false)} className="button back-button">
-                      목록으로
-                    </button>
-                  </div>
-                  <div className="right-buttons">
-                    {selectedPost.writer === localStorage.getItem('username') && (
-                      <>
-                        <button 
-                          onClick={handleEditClick}
-                          className="button edit-button"
-                        >
-                          수정하기
-                        </button>
-                        <button 
-                          onClick={handleDeleteClick}
-                          className="button delete-button"
-                        >
-                          삭제하기
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
+  <div className="left-buttons">
+    <button onClick={handleBackToList} className="button back-button">
+      목록으로
+    </button>
+  </div>
+  <div className="right-buttons">
+    {selectedPost.writer === localStorage.getItem('username') && (
+      <>
+        <button 
+          onClick={handleEditClick}
+          className="button edit-button"
+        >
+          수정하기
+        </button>
+        <button 
+          onClick={handleDeleteClick}
+          className="button delete-button"
+        >
+          삭제하기
+        </button>
+      </>
+    )}
+  </div>
+</div>
 
-                {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
-                <div className="comments-section">
-                  <h3>댓글</h3>
-                  <div className="comment-form">
-                    <input
-                      type="text"
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                      placeholder="댓글을 입력하세요"
-                      className="comment-input"
-                    />
-                    <button onClick={handleAddComment} className="comment-submit">
-                      등록
-                    </button>
-                  </div>
-                  <div className="comments-list">
-                    {comments.map((comment) => (
-                      <div key={comment.id} className="comment-item">
-                        {editingCommentId === comment.id ? (
-                          // 수정 모드
-                          <div className="comment-edit-form">
-                            <input
-                              type="text"
-                              value={editCommentText}
-                              onChange={(e) => setEditCommentText(e.target.value)}
-                              className="comment-input"
-                            />
-                            <div className="comment-edit-buttons">
-                              <button
-                                onClick={() => handleEditComment(comment.id)}
-                                className="button edit-button"
-                              >
-                                저장
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setEditingCommentId(null);
-                                  setEditCommentText("");
-                                }}
-                                className="button cancel-button"
-                              >
-                                취소
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          // 일반 모드
-                          <>
-                            <div className="comment-content">
-                              <span className="comment-author">{comment.writer}</span>
-                              <span className="comment-text">{comment.content}</span>
-                              <span className="comment-date">
-                                {new Date(comment.createdAt).toLocaleDateString()}
-                              </span>
-                            </div>
-                            {comment.writer === localStorage.getItem('username') && (
-                              <div className="comment-buttons">
-                                <button
-                                  onClick={() => handleEditButtonClick(comment)}
-                                  className="comment-edit"
-                                >
-                                  수정
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteComment(comment.id)}
-                                  className="comment-delete"
-                                >
-                                  삭제
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
+  {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
+  <div className="comments-section">
+  <h3>댓글</h3>
+
+  {/* 로그인 상태에서만 댓글 입력 폼을 렌더링 */}
+  {token ? (
+    <div className="comment-form">
+      <input
+        type="text"
+        value={commentText}
+        onChange={(e) => setCommentText(e.target.value)}
+        placeholder="댓글을 입력하세요"
+        className="comment-input"
+      />
+      <button onClick={handleAddComment} className="comment-submit">
+        등록
+      </button>
+    </div>
+  ) : (
+    <p>로그인 후 댓글을 작성할 수 있습니다.</p> // 로그인하지 않으면 안내 메시지
+  )}
+
+  <div className="comments-list">
+    {comments.map((comment) => (
+      <div key={comment.id} className="comment-item">
+        {editingCommentId === comment.id ? (
+          // 수정 모드
+          <div className="comment-edit-form">
+            <input
+              type="text"
+              value={editCommentText}
+              onChange={(e) => setEditCommentText(e.target.value)}
+              className="comment-input"
+            />
+            <div className="comment-edit-buttons">
+              <button
+                onClick={() => handleEditComment(comment.id)}
+                className="button edit-button"
+              >
+                저장
+              </button>
+              <button
+                onClick={() => {
+                  setEditingCommentId(null);
+                  setEditCommentText("");
+                }}
+                className="button cancel-button"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        ) : (
+          // 일반 모드
+          <>
+            <div className="comment-content">
+              <span className="comment-author">{comment.writer}</span>
+              <span className="comment-text">{comment.content}</span>
+              <span className="comment-date">
+                {new Date(comment.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+            {comment.writer === localStorage.getItem('username') && (
+              <div className="comment-buttons">
+                <button
+                  onClick={() => handleEditButtonClick(comment)}
+                  className="comment-edit"
+                >
+                  수정
+                </button>
+                <button
+                  onClick={() => handleDeleteComment(comment.id)}
+                  className="comment-delete"
+                >
+                  삭제
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
               </>
             )
           )}

@@ -1,11 +1,12 @@
+/* ✅ `.prohibited-items`의 너비를 100%로 변경하여 반응형 적용 */
 .prohibited-items {
-  width: 1200px;
+  width: 100%;
+  max-width: 1200px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   text-align: center;
   margin: 0 auto;
-  margin-top: 5px;
 }
 
 .description {
@@ -237,6 +238,7 @@
   margin-bottom: 15px;
 }
 
+/* ✅ 설명 섹션 배경 이미지가 잘리지 않도록 조정 */
 .description-section {
   font-size: 16px;
   color: white;
@@ -247,8 +249,8 @@
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  height: 80%;
 }
 
 .description-section h1,
@@ -670,20 +672,34 @@ tr:hover {
 
 /* 모달 스타일 유지 */
 
-/* 반응형 디자인 */
+/* ✅ 반응형 디자인 추가 */
 @media (max-width: 1024px) {
+  .prohibited-items {
+    padding: 10px;
+  }
+
   .all-categories {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 1024px 이하에서는 2개씩 */
+  }
+
+  .description-section {
+    font-size: 14px;
+    padding: 15px;
   }
 }
 
 @media (max-width: 768px) {
   .all-categories {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 768px 이하에서는 1개씩 */
   }
 
-  .category-column {
-    margin-bottom: 20px;
+  .description-section {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .category-title {
+    font-size: 16px;
   }
 }
 
