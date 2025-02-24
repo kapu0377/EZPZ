@@ -1,10 +1,10 @@
 package com.example.apiezpz.auth.controller;
 
+import com.example.apiezpz.auth.entity.User;
+import com.example.apiezpz.auth.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.apiezpz.auth.dto.LoginRequest;
 import com.example.apiezpz.auth.dto.SignUpRequest;
@@ -18,6 +18,9 @@ import com.example.apiezpz.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -27,6 +30,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
     // 회원가입
     @PostMapping("/signup")
@@ -110,4 +114,39 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // 회원수정
+    // 회원 정보 수정 엔드포인트 추가
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String token, @RequestBody SignUpRequest updatedUserInfo) {
+        try {
+            String username = jwtTokenProvider.getUsernameFromToken(token.replace("Bearer ", ""));
+            authService.updateUser(username, updatedUserInfo);
+            return ResponseEntity.ok("회원 정보가 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String token) {
+        try {
+            String username = jwtTokenProvider.getUsernameFromToken(token.replace("Bearer ", ""));
+            User user = userRepository.findByUsername(username);
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+            }
+
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("name", user.getName());
+            userInfo.put("phone", user.getPhone());
+            userInfo.put("email", user.getEmail());
+            userInfo.put("address", user.getAddress());
+
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 실패");
+        }
+    }
+
 }

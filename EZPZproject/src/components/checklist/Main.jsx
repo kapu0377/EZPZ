@@ -3,7 +3,6 @@ import Checklist from "./Checklist";
 import Category from "./Category";
 import "./Main.css";
 import Login from "../Login";   //로그인 컴포넌트 추가
-import "../prohibited-items/ProhibitedItems.css";
 
 export default function App() {
     const [selectedChecklist, setSelectedChecklist] = useState(null);
