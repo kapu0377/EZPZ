@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {createPost, updatePost, deletePost} from "../api/postApi";
+import { useParams, useNavigate, useLocation } from "react-router-dom"; // useParams 추가
 import '../components/notice/Notice.css';
-import { Link, useNavigate } from "react-router-dom";
 
 const App = () => {
+  const { no } = useParams(); // URL 파라미터에서 게시글 번호 가져오기
   const navigate = useNavigate();
+  const location = useLocation();
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -29,6 +30,27 @@ const App = () => {
   const [username, setUsername] = useState(null);
   const [currentCommentPage, setCurrentCommentPage] = useState(1);
   const commentsPerPage = 4; // 페이지당 댓글 수를 4개로 변경
+
+  useEffect(() => {
+    if (no) {
+      fetchPostDetail(no);
+    }
+  }, [no]);
+
+  const fetchPostDetail = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:8088/api/posts/${postId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch post detail');
+      }
+      const data = await response.json();
+      setSelectedPost(data);
+      setIsDetailView(true);
+    } catch (error) {
+      console.error('Error fetching post detail:', error);
+      navigate('/board');
+    }
+  };
 
   // 검색 실행 함수
   const handleSearch = () => {

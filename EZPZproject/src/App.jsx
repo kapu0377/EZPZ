@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";  // Router는 제거하고 Routes와 Route만 가져옵니다
+import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/layout/Layout";
 import EZPackingLayout from "./components/EZPackingLayout";
@@ -16,7 +16,6 @@ import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경�
 function App() {
   return (
     <AuthProvider>
-      <Router>
         <Layout>
           <Routes>
             <Route path="/" element={<EZPackingLayout />} />
@@ -27,7 +26,6 @@ function App() {
             <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>
-      </Router>
     </AuthProvider>
   );
 }
