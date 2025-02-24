@@ -101,3 +101,36 @@
     background-color: #c82333;
 }
 
+
+/* 아이템 입력 창 정렬 */
+.item-add-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 아이템 입력 필드 */
+.item-add-container input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 아이템 추가 버튼 */
+.item-add-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.item-add-container button:hover {
+    background-color: #0056b3;
+}
+

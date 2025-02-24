@@ -6,6 +6,8 @@ import { defaultCategories } from "../../api/checklist/defaultCategories";
 import Item from "./Item";
 import "./Category.css";
 import CategoryAddModal from "./CategoryAddModal";
+// import { FaEdit, FaTrashAlt } from "react-icons/fa";    //수정,삭제 아이콘
+import { FaEdit, FaTrashAlt, FaPlus, FaCheck, FaTimes } from "react-icons/fa";
 
 export default function Category({ checklist }) {
     const [categories, setCategories] = useState([]);
@@ -111,8 +113,8 @@ export default function Category({ checklist }) {
                                         value={editCategoryName}
                                         onChange={(e) => setEditCategoryName(e.target.value)}
                                     />
-                                    <button onClick={() => handleUpdateCategory(category.id)}>저장</button>
-                                    <button onClick={() => setEditCategoryId(null)}>취소</button>
+                                    <button onClick={() => handleUpdateCategory(category.id)}><FaCheck /></button>
+                                    <button onClick={() => setEditCategoryId(null)}><FaTimes /></button>
                                 </>
                             ) : (
                                 <>
@@ -120,8 +122,8 @@ export default function Category({ checklist }) {
                                     {/* 편집 모드일 때만 수정/삭제 버튼 표시 */}
                                     {isEditMode && (
                                         <div className="category-btn-group">
-                                            <button className="edit-btn" onClick={() => { setEditCategoryId(category.id); setEditCategoryName(category.name); }}>수정</button>
-                                            <button className="delete-btn" onClick={() => handleDeleteCategory(category.id)}>삭제</button>
+                                            <button className="edit-btn" onClick={() => { setEditCategoryId(category.id); setEditCategoryName(category.name); }}><FaEdit /></button>
+                                            <button className="delete-btn" onClick={() => handleDeleteCategory(category.id)}><FaTrashAlt /></button>
                                         </div>
                                     )}
                                 </>

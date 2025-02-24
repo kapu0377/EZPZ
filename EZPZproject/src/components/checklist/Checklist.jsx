@@ -58,9 +58,8 @@ export default function Checklist({ onSelectChecklist }) {
 
     return (
         <div className="checklist-container">
-            
             <h2>체크리스트</h2>
-            <button onClick={() => setIsAddModalOpen(true)}>체크리스트 추가</button>
+            <button className="add-btn" onClick={() => setIsAddModalOpen(true)}>체크리스트 추가</button>
             <ul>
                 {checklists.map((list) => (
                     <li key={list.id}>

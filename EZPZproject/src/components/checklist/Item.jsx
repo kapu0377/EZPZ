@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { getItems, addItem, updateItem, deleteItem, toggleItemCheck } from "../../api/checklist/checklist_itemApi";
 import "./Item.css"
+// import { FaEdit, FaTrashAlt } from "react-icons/fa";    //수정,삭제 버튼
+import { FaEdit, FaTrashAlt, FaPlus, FaCheck, FaTimes } from "react-icons/fa";
 
 export default function Item({ category, isEditMode }) {
     const [items, setItems] = useState([]);
@@ -50,7 +52,7 @@ export default function Item({ category, isEditMode }) {
 
     return (
         <div className="item-container">
-            
+            {/* 아이템 리스트 */}
             <ul>
                 {items.map((item) => (
                     <li key={item.id}>
@@ -66,8 +68,8 @@ export default function Item({ category, isEditMode }) {
                                     value={editItemName}
                                     onChange={(e) => setEditItemName(e.target.value)}
                                 />
-                                <button onClick={() => handleUpdateItem(item.id)}>저장</button>
-                                <button onClick={() => setEditItemId(null)}>취소</button>
+                                <button onClick={() => handleUpdateItem(item.id)}><FaCheck /></button>
+                                <button onClick={() => setEditItemId(null)}><FaTimes /></button>
                             </>
                         ) : (
                             <>
@@ -75,8 +77,8 @@ export default function Item({ category, isEditMode }) {
                                 {/* 편집 모드일 때만 수정/삭제 버튼 표시 */}
                                 {isEditMode && (
                                     <>
-                                        <button onClick={() => { setEditItemId(item.id); setEditItemName(item.name); }}>수정</button>
-                                        <button onClick={() => handleDeleteItem(item.id)}>삭제</button>
+                                        <button onClick={() => { setEditItemId(item.id); setEditItemName(item.name); }}><FaEdit /></button>
+                                        <button onClick={() => handleDeleteItem(item.id)}><FaTrashAlt /></button>
                                     </>
                                 )}
                             </>
@@ -84,8 +86,8 @@ export default function Item({ category, isEditMode }) {
                     </li>
                 ))}
             </ul>
-             {/* 아이템 추가 창을 편집 모드에서만 표시 */}
-             {isEditMode && (
+            {/* 아이템 추가 창을 편집 모드에서만 표시 */}
+            {isEditMode && (
                 <div className="item-add-container">
                     <input
                         type="text"
@@ -93,9 +95,10 @@ export default function Item({ category, isEditMode }) {
                         value={newItemName}
                         onChange={(e) => setNewItemName(e.target.value)}
                     />
-                    <button onClick={handleAddItem}>추가</button>
+                    <button onClick={handleAddItem}><FaPlus /></button>
                 </div>
             )}
+
         </div>
     );
 }
