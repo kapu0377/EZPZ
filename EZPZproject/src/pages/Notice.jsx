@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {createPost, updatePost, deletePost} from "../api/postApi";
 import '../components/notice/Notice.css';
-import { getComments, createComment, updateComment, deleteComment } from '../api/commentApi';
+import { Link, useNavigate } from "react-router-dom";
 
 const App = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -264,14 +264,30 @@ const App = () => {
     }
   };
 
-  // 게시글 상세보기로 이동할 때
   const handleViewPost = (post) => {
     setSelectedPost(post);
     setIsDetailView(true);
+    window.history.pushState({ isDetail: true }, '', window.location.pathname);
+  };
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (!event.state?.isDetail) {
+        setIsDetailView(false);
+        setSelectedPost(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleBackToList = () => {
+    setIsDetailView(false);
+    setSelectedPost(null);
     window.history.pushState(null, '', window.location.pathname);
   };
 
-  // 댓글 관련 함수들 수정
   const fetchComments = async () => {
     try {
       const response = await fetch(`http://localhost:8088/api/comments/post/${selectedPost.id}`);
@@ -565,7 +581,7 @@ const App = () => {
                 </div>
                 <div className="post-buttons">
   <div className="left-buttons">
-    <button onClick={() => setIsDetailView(false)} className="button back-button">
+    <button onClick={handleBackToList} className="button back-button">
       목록으로
     </button>
   </div>
@@ -590,8 +606,8 @@ const App = () => {
 </div>
 
 
-                {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
-                <div className="comments-section">
+  {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
+  <div className="comments-section">
   <h3>댓글</h3>
 
   {/* 로그인 상태에서만 댓글 입력 폼을 렌더링 */}
