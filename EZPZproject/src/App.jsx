@@ -16,7 +16,6 @@ import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경�
 function App() {
   return (
     <AuthProvider>
-      <Router>
         <Layout>
           <Routes>
             <Route path="/" element={<EZPackingLayout />} />
@@ -27,7 +26,6 @@ function App() {
             <Route path="/parking" element={<AirportParkingPage />} />
           </Routes>
         </Layout>
-      </Router>
     </AuthProvider>
   );
 }
