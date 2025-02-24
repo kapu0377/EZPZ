@@ -71,7 +71,6 @@ export const AuthProvider = ({ children }) => {
         });
         
         console.log('로그인 성공 - 상태 업데이트 완료');
-        window.location.href = '/';
         return true;
       }
       
@@ -120,8 +119,3 @@ function clearAuthData() {
   localStorage.removeItem("name");
   sessionStorage.removeItem("searchResults");
 }
-
-
-
-
-
