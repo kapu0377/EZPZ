@@ -31,10 +31,30 @@ export default function ChecklistEditModal({ isOpen, onClose, checklist, onUpdat
         <div className="modal-overlay">
             <div className="modal-content">
                 <h2>체크리스트 수정</h2>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-                <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} />
-                <input type="date" value={returnDate} min={departureDate} onChange={(e) => setReturnDate(e.target.value)} />
-                <div className="modal-buttons">
+                <div className="date-input-container">
+                    <label htmlFor="tour title">여행 제목</label>
+                    <input id="tour title" placeholder="여행 제목을 입력해주세요." type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                </div>
+                <div className="date-input-container">
+                    <label htmlFor="departure-date">출발일</label>
+                    <input
+                        id="departure-date"
+                        type="date"
+                        value={departureDate}
+                        onChange={(e) => setDepartureDate(e.target.value)}
+                    />
+                </div>
+                <div className="date-input-container">
+                    <label htmlFor="return-date">도착일</label>
+                    <input
+                        id="return-date"
+                        type="date"
+                        value={returnDate}
+                        min={departureDate}
+                        onChange={(e) => setReturnDate(e.target.value)}
+                    />
+                </div>
+                <div className="checklist-modal-buttons">
                     <button className="cancel-btn" onClick={onClose}>취소</button>
                     <button className="save-btn" onClick={handleSubmit}>저장</button>
                 </div>
