@@ -91,6 +91,8 @@ function ProhibitedItems() {
   const [detectionData, setDetectionData] = useState([]);
   const [chartData, setChartData] = useState(null);
   const [isAirportModalOpen, setIsAirportModalOpen] = useState(false);
+  const [selectedAllowedCategory, setSelectedAllowedCategory] = useState(null);
+  const [isAllowedModalOpen, setIsAllowedModalOpen] = useState(false);
 
   // API 호출: 금지 물품 데이터, 공항 목록
   useEffect(() => {
@@ -149,7 +151,8 @@ function ProhibitedItems() {
               if (fireArmsCategories.includes(item.category)) {
                 category = "화기류";
               }
-              groupedData[category] = (groupedData[category] || 0) + item.detectionCount;
+              groupedData[category] =
+                (groupedData[category] || 0) + item.detectionCount;
               if (!["김해공항", "김포공항"].includes(selectedAirport)) {
                 totalSum += item.detectionCount;
               }
@@ -178,9 +181,7 @@ function ProhibitedItems() {
             ],
           });
         })
-        .catch((error) =>
-          console.error("적발 현황 불러오기 오류:", error)
-        );
+        .catch((error) => console.error("적발 현황 불러오기 오류:", error));
     }
   }, [selectedAirport]);
 
@@ -194,13 +195,26 @@ function ProhibitedItems() {
     setIsModalOpen(false);
   };
 
+  const openAllowedModal = (category) => {
+    setSelectedAllowedCategory(category);
+    setIsAllowedModalOpen(true);
+  };
+  
+  const closeAllowedModal = () => {
+    setIsAllowedModalOpen(false);
+  };
+  
+
   // 선택된 카테고리에 해당하는 금지 물품 필터링
   const filteredItems = itemsData.filter(
     (item) => item.gubun === selectedCategory
   );
 
   return (
-    <div className="prohibited-items" style={{ maxWidth: "1200px", maxHeight: "120%", padding: "0 0px" }}>
+    <div
+      className="prohibited-items"
+      style={{ maxWidth: "1200px", maxHeight: "120%", padding: "0 0px" }}
+    >
       <div className="description-section">
         <h1>항공기 반입 금지물품</h1>
         <p>항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
