@@ -2,9 +2,16 @@ import { useState } from "react";
 import Checklist from "./Checklist";
 import Category from "./Category";
 import "./Main.css";
+import Login from "../Login";   //로그인 컴포넌트 추가
 
 export default function App() {
     const [selectedChecklist, setSelectedChecklist] = useState(null);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 상태 추가
+
+    const handleOpenLoginModal = () => {
+        alert("로그인이 필요한 서비스입니다.\n 로그인 후 다시 이용해주세요."); // 알림창 표시
+        setIsLoginModalOpen(true); // 로그인 모달 열기
+    };
 
     return (
         <div>
@@ -16,9 +23,10 @@ export default function App() {
                 소중한 여행을 위해 여러분이 챙긴 짐을 체크해주세요!
             </p>
             <div className={`container ${!selectedChecklist ? "centered" : ""}`}>
-                <Checklist onSelectChecklist={setSelectedChecklist} />
+                <Checklist onSelectChecklist={setSelectedChecklist} onRequireLogin={handleOpenLoginModal} />
                 {selectedChecklist && <Category checklist={selectedChecklist} />}
             </div>
+            <Login isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
         </div>
     );
 }

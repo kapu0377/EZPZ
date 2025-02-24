@@ -6,8 +6,7 @@ const API_BASE_URL = "http://localhost:8088/api";
 const getAuthHeader = () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-        console.error("❌ 토큰이 없습니다. 로그인 후 다시 시도해주세요.");
-        window.alert("로그인이 필요한 서비스입니다.\n로그인 후 다시 시도해주세요.");
+        // console.error("❌ 토큰이 없습니다. 로그인 후 다시 시도해주세요.");
         return {};
     }
     return { Authorization: `Bearer ${token}` };
@@ -21,7 +20,7 @@ export const getChecklists = async () => {
         });
         return response.data;
     } catch (error) {
-        console.error("❌ 체크리스트 불러오기 실패:", error.response ? error.response.data : error.message);
+        // console.error("❌ 체크리스트 불러오기 실패:", error.response ? error.response.data : error.message);
         return [];
     }
 };
