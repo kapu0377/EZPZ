@@ -9,7 +9,7 @@ export default function App() {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 상태 추가
 
     const handleOpenLoginModal = () => {
-        alert("로그인이 필요한 서비스입니다.\n 로그인 후 다시 이용해주세요."); // 알림창 표시
+        alert("로그인이 필요한 서비스입니다.\n로그인 후 다시 이용해주세요."); // 알림창 표시
         setIsLoginModalOpen(true); // 로그인 모달 열기
     };
 

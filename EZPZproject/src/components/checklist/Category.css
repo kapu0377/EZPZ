@@ -78,7 +78,7 @@
 }
 
 .category-add-btn {
-    background-color: #007bff;
+    background-color: #4a90e2;
     color: white;
     font-size: 14px;
     font-weight: bold;
@@ -89,7 +89,7 @@
 }
 
 .category-reset-btn {
-    background-color: #dc3545;
+    background-color: #fc5e6e;
     color: white;
     font-size: 14px;
     font-weight: bold;
@@ -131,7 +131,7 @@
 
 /* 편집 모드 버튼 */
 .edit-mode-btn {
-    background-color: #007bff;
+    background-color: #28a745;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -147,7 +147,7 @@
 }
 
 .edit-mode-btn:hover {
-    background-color: #0056b3;
+    background-color: #218538;
 }
 
 .category-edit-input {
