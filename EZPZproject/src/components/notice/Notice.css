@@ -1,4 +1,5 @@
 .container {
+  margin-top: 30px;
   position: relative;
   display: flex;
   margin-bottom: 85px;
@@ -296,7 +297,7 @@ h3 {
   margin: 0 auto;
   padding: 20px;
   min-height: 600px;
-  max-height: 800px;
+  max-height: 850px;
   background-color: white;
   position: relative;
 }
