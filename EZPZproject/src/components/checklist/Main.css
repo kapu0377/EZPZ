@@ -1,49 +1,102 @@
 /* 전체 컨테이너 - 체크리스트와 카테고리를 가로 정렬 */
 .container {
     display: grid;
-    grid-template-columns: 1fr 2fr; /* 체크리스트 1, 카테고리 2 비율 */
+    grid-template-columns: 1fr 2fr;
+    /* 체크리스트 1, 카테고리 2 비율 */
     gap: 30px;
-    max-width: 1500px;
+    max-width: 1200px;
     margin: auto;
     padding: 20px;
     align-items: flex-start;
 }
+
 .container.centered {
-    display: flex; 
-    justify-content: center; /* 가로 중앙 정렬 */
-    height: 80vh; /* 화면의 80% 높이에서 중앙 배치 */
+    display: flex;
+    justify-content: center;
+    /* 가로 중앙 정렬 */
+    height: 80vh;
+    /* 화면의 80% 높이에서 중앙 배치 */
 }
 
-/* 📌 태블릿에서는 1:1 비율 */
+/* 태블릿에서는 1:1 비율 */
 @media (max-width: 1024px) {
     .container {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-/* 📌 모바일에서는 1열 정렬 */
+/* 모바일에서는 1열 정렬 */
 @media (max-width: 768px) {
     .container {
         grid-template-columns: 1fr;
     }
 }
 
-
-/* 안내 문구 스타일 */
-.checklist-warning {
-    font-size: 16px;
-    font-weight: bold;
-    color: red;
+/* 설명 섹션 (제목 및 부제목) 중앙 정렬 및 너비 조정 */
+.description-section2 {
+    position: relative; /* 배경을 적용할 기준 요소 설정 */
+    max-width: 1200px;
+    max-height: 100%;
+    margin: 0 auto;
     text-align: center;
-    background-color: #fff3cd; /* 연한 노란색 배경 */
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: url("../../assets/img/airport.jpg") no-repeat center center;
+    background-size: cover;
+    font-size: 16px;
+    color: white;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* 배경이 넘치지 않도록 설정 */
+}
+
+.description-section2::before {
+    content: "";
+    position: absolute; /* 부모(.description-section2)를 기준으로 배경 적용 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 어두운 배경 효과 */
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.description-section2 h1,
+.description-section2 p {
+    color: white;
+    position: relative; /* 배경보다 위에 있도록 설정 */
+    z-index: 2;
+}
+
+/* 체크리스트 안내 문구 중앙 정렬 */
+.checklist-warning {
+    max-width: 1200px;
+    margin: 10px auto;
     padding: 10px;
-    border-radius: 6px;
+    text-align: center;
+    background-color: #fff3cd;
+    color: #856404;
     border: 1px solid #ffeeba;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+
+    .description-section2,
+    .checklist-warning {
+        max-width: 90%;
+    }
 }
 
 .checklist-alert {
+    color: white;
     font-size: 16px;
-    font-weight: bold;
     text-align: center;
     padding: 10px;
     border-radius: 6px;
