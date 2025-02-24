@@ -121,7 +121,7 @@ const AirportParkingPage = () => {
 
   return (
     <div className="airport-parking-container" style={{ minHeight: 'calc(100vh - 400px)' }}>
-      <h1>전국 공항 주차장 현황</h1>
+      <h1>🚗 전국 공항 주차장 현황 🚗</h1>
       
       <div className="airport-buttons">
         <button

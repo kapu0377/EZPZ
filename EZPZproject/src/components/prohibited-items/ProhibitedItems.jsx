@@ -261,9 +261,9 @@ function ProhibitedItems() {
   });
 
   return (
-    <div className="prohibited-items">
-      <div className="description-section">
-        <h1>항공기 반입 물품 안내</h1>
+    <div className="prohibited-items" style={{ maxWidth: "1200px",maxHeight:"120%", padding: "0 0px" }}>
+      <div className="description-section" >
+        <h1>항공기 반입 금지물품 </h1>
         <p>항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
       </div>
 
