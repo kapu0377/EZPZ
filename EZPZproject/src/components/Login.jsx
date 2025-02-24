@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import Register from "./Register";
-import authApi from "../api/authApi";
 import "./Login.css";
 
 const Login = ({ isOpen, onClose }) => {
@@ -33,6 +32,7 @@ const Login = ({ isOpen, onClose }) => {
 
   const handleLoginClose = () => {
     setIsRegisterOpen(false);
+    setCredentials({ username: "", password: "" });
     onClose();
   };
 
@@ -55,6 +55,7 @@ const Login = ({ isOpen, onClose }) => {
               setCredentials({ ...credentials, username: e.target.value })
             }
             required
+            autoComplete="off"
           />
           <input
             type="password"
@@ -64,6 +65,7 @@ const Login = ({ isOpen, onClose }) => {
               setCredentials({ ...credentials, password: e.target.value })
             }
             required
+             autoComplete="off"
           />
           <button type="submit">로그인</button>
           <div className="login-links">
