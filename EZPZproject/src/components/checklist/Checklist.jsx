@@ -9,7 +9,7 @@ import "./Checklist.css";
 import ChecklistEditModal from "./ChecklistEditModal";
 import ChecklistAddModal from "./ChecklistAddModal";
 
-export default function Checklist({ onSelectChecklist, onRequireLogin }) {
+export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateChecklist  }) {
     const [checklists, setChecklists] = useState([]);
     const [selectedChecklist, setSelectedChecklist] = useState(null); // 현재 선택된 체크리스트
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -49,6 +49,10 @@ export default function Checklist({ onSelectChecklist, onRequireLogin }) {
         if (success) {
             loadChecklists(); // 목록 갱신
             setEditChecklist(null); // 수정 모달 닫기
+            //수정된 체크리스트 업데이트
+            const updatedChecklist = { id, ...updatedData };
+            setSelectedChecklist(updatedChecklist);
+            onUpdateChecklist(updatedChecklist);
         }
     };
 

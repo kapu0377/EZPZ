@@ -13,6 +13,10 @@ export default function App() {
         setIsLoginModalOpen(true); // 로그인 모달 열기
     };
 
+    const handleChecklistUpdate = (updatedChecklist) => {
+        setSelectedChecklist(updatedChecklist);
+    };
+
     return (
         <div>
             <div className="description-section2">
@@ -28,7 +32,7 @@ export default function App() {
             </p>
 
             <div className={`container ${!selectedChecklist ? "centered" : ""}`}>
-                <Checklist onSelectChecklist={setSelectedChecklist} onRequireLogin={handleOpenLoginModal} />
+                <Checklist onSelectChecklist={setSelectedChecklist} onRequireLogin={handleOpenLoginModal} onUpdateChecklist={handleChecklistUpdate} />
                 {selectedChecklist && <Category checklist={selectedChecklist} />}
             </div>
             <Login isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
