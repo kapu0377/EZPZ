@@ -290,6 +290,9 @@ body {
 
 /* 푸터 스타일 */
 .footer {
+  display: flex;
+  justify-content: space-between; /* 양쪽 끝으로 정렬 */
+  align-items: center;
   background-color: var(--primary-black);
   color: var(--primary-white);
   padding: 3rem 2rem;
@@ -299,6 +302,22 @@ body {
 .footer-info {
   opacity: 0.8;
   line-height: 1.6;
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px; /* 아이콘 간 간격 */
+}
+
+.social-icon {
+  font-size: 24px; /* 아이콘 크기 */
+  color: white;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
 }
 
 .footer-logos {
