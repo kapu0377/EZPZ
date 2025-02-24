@@ -1,6 +1,5 @@
 package com.example.apiezpz.checklist.domain;
 
-import com.example.apiezpz.domain.APIUser;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;

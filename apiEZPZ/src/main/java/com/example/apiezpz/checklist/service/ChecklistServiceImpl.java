@@ -6,8 +6,6 @@ import com.example.apiezpz.checklist.dto.CategoryDTO;
 import com.example.apiezpz.checklist.dto.ChecklistDTO;
 import com.example.apiezpz.checklist.repository.ChecklistRepository;
 import com.example.apiezpz.checklist.repository.ChecklistItemRepository;
-import com.example.apiezpz.domain.APIUser;
-import com.example.apiezpz.repository.APIUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
