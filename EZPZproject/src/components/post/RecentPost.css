@@ -43,13 +43,19 @@
   }
   
   .post-title {
-    font-size: 18px !important;
-    color: #555454;
+    font-size: 16px !important;
+    color: #575757;
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 15px;
+    cursor: pointer;
+  }
+  
+  .post-title:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
+    color: #666;
   }
   
   .post-date {

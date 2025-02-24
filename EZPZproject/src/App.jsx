@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";  // Router는 제거하고 Routes와 Route만 가져옵니다
+import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/layout/Layout";
 import EZPackingLayout from "./components/EZPackingLayout";

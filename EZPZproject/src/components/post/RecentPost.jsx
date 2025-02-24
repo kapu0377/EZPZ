@@ -19,7 +19,6 @@ const RecentPosts = () => {
         throw new Error('Failed to fetch posts');
       }
       const data = await response.json();
-      // 최신 5개 게시물만 필터링
       const latestPosts = data.slice(0, 5);
       setRecentPosts(latestPosts);
     } catch (error) {
@@ -29,8 +28,23 @@ const RecentPosts = () => {
     }
   };
 
-  const handlePostClick = (postId) => {
-    navigate('/board', { state: { selectedPostId: postId } });
+  const handlePostClick = async (postId) => {
+    try {
+      // 게시글 상세 정보를 먼저 가져옵니다
+      const response = await fetch(`http://localhost:8088/api/posts/${postId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch post detail');
+      }
+      
+      // 상세 페이지로 이동하면서 상태도 함께 전달
+      navigate(`/board/${postId}`, {
+        state: {
+          isDetailView: true
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching post detail:', error);
+    }
   };
 
   return (
@@ -46,14 +60,16 @@ const RecentPosts = () => {
       ) : (
         <div className="posts-container">
           {recentPosts.map((post) => (
-            <div 
-              key={post.id} 
-              className="post-row"
-              onClick={() => handlePostClick(post.id)}
-            >
-              <span className="post-title" style={{ fontSize: '11px' }}>{post.title}</span>
+            <div key={post.id} className="post-row">
+              <span 
+                className="post-title" 
+                onClick={() => handlePostClick(post.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                {post.title}
+              </span>
               <div className="post-info">
-                <span className="post-date" style={{ fontSize: '11px' }}>
+                <span className="post-date">
                   {new Date(post.createdAt).toLocaleDateString('ko-KR', {
                     month: '2-digit',
                     day: '2-digit'
