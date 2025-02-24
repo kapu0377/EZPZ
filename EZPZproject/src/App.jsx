@@ -16,15 +16,18 @@ import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경�
 function App() {
   return (
     <AuthProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<EZPackingLayout />} />
-          <Route path="/prohibited" element={<ProhibitedItems />} />
-          <Route path="/board" element={<Notice />} />
-          <Route path="/checklist" element={<CheckList />} />
-          <Route path="/parking" element={<AirportParkingPage />} />
-        </Routes>
-      </Layout>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<EZPackingLayout />} />
+            <Route path="/prohibited" element={<ProhibitedItems />} />
+            <Route path="/board" element={<Notice />} />
+            <Route path="/board/:no" element={<Notice />} />
+            <Route path="/checklist" element={<CheckList />} />
+            <Route path="/parking" element={<AirportParkingPage />} />
+          </Routes>
+        </Layout>
+      </Router>
     </AuthProvider>
   );
 }
