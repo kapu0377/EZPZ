@@ -15,7 +15,7 @@ export default function App() {
             <p className="checklist-alert">
                 소중한 여행을 위해 여러분이 챙긴 짐을 체크해주세요!
             </p>
-            <div className="container">
+            <div className={`container ${!selectedChecklist ? "centered" : ""}`}>
                 <Checklist onSelectChecklist={setSelectedChecklist} />
                 {selectedChecklist && <Category checklist={selectedChecklist} />}
             </div>
