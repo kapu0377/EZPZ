@@ -134,7 +134,7 @@ const App = () => {
     setSelectedPost(null);  // 선택된 게시글 초기화
   };
 
-  // 게시글 등록/수정 함수
+  // 게시글 등록/수정 함수 수정
   const addOrUpdatePost = async () => {
     if (!title.trim() || !content.trim()) {
       alert("제목과 내용을 모두 입력해주세요.");
@@ -155,7 +155,7 @@ const App = () => {
       const postData = {
         title: title,
         content: content,
-        writer: localStorage.getItem('username') || '작성자',  // 로컬 스토리지에서 username 가져오기
+        writer: localStorage.getItem('username') || '작성자',
         createdAt: new Date().toISOString(),
         viewCount: 0
       };
@@ -170,33 +170,35 @@ const App = () => {
       });
   
       if (!response.ok) {
-        // 에러 응답 내용 확인
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to save post');
       }
+      
       const savedPost = await response.json();
     
       // 게시글 목록 업데이트
       if (editId) {
-        // 수정의 경우 해당 게시글만 업데이트
         setPosts(prevPosts =>
           prevPosts.map(post => 
             post.id === editId ? savedPost : post
           )
         );
+        // 수정 후 상세보기 화면으로 이동
+        setSelectedPost(savedPost);
+        setIsDetailView(true);
+        setIsWriting(false);
+        window.history.pushState(null, '', `/board/${savedPost.id}`);
       } else {
-        // 새 게시글 추가의 경우 목록 맨 위에 추가
         setPosts(prevPosts => [savedPost, ...prevPosts]);
+        setIsDetailView(false);
       }
+
       alert(editId ? '게시글이 수정되었습니다.' : '게시글이 등록되었습니다.');
-      setIsWriting(false);
       setTitle("");
       setContent("");
       setEditId(null);
-      setSelectedPost(null);  // 선택된 게시글 초기화
-      setIsDetailView(false); // 상세 보기 모드 해제
     } catch (error) {
-      console.error('Error details:', error);
+      console.error('Error:', error);
       alert('게시글 저장에 실패했습니다. ' + error.message);
     }
   };
