@@ -3,6 +3,7 @@ package com.example.apiezpz.auth.service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import com.example.apiezpz.checklist.repository.ChecklistRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+
+    private final ChecklistRepository checklistRepository;
 
     // 1) 회원가입
     public void signup(SignUpRequest request) {
@@ -120,11 +123,52 @@ public class AuthService {
         refreshTokenRepository.deleteByUsername(username);
     }
 
-    // 만료까지 남은 시간 계산 메서드
+    // 5) 회원수정
+    public void updateUser(String username, SignUpRequest updatedUserInfo) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+
+        // 변경 가능한 필드 업데이트
+        user.setName(updatedUserInfo.getName());
+        user.setPhone(updatedUserInfo.getPhone());
+        user.setEmail(updatedUserInfo.getEmail());
+        user.setAddress(updatedUserInfo.getAddress());
+
+        // 비밀번호 변경이 요청된 경우만 업데이트
+        if (updatedUserInfo.getPassword() != null && !updatedUserInfo.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updatedUserInfo.getPassword()));
+        }
+
+        userRepository.save(user);
+    }
+
+   // 만료까지 남은 시간 계산 메서드
     private Long calcExpirySeconds(String token) {
         LocalDateTime expiry = jwtTokenProvider.getTokenExpiryDateTime(token);
         LocalDateTime now = LocalDateTime.now();
         long diffInSeconds = ChronoUnit.SECONDS.between(now, expiry);
         return Math.max(diffInSeconds, 0);
     }
+
+    public void deleteUser(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        // 입력된 비밀번호 검증
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return; // 비밀번호 불일치
+        }
+
+        // 탈퇴회원 관련 데이터 삭제 (체크리스트, 게시글, 댓글)
+        checklistRepository.deleteByUsername(user.getUsername());
+//        postRepository.deleteByUserId(user.getId());
+//        commentRepository.deleteByUserId(user.getId());
+        //토큰 삭제
+        refreshTokenRepository.deleteByUsername(user.getName());
+        // 회원 삭제
+        userRepository.delete(user);
+        System.out.println("회원 탈퇴 완료: " + username);
+    }
+
+
 }
