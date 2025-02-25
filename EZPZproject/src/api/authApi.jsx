@@ -1,4 +1,3 @@
-import axios from 'axios';
 import axiosInstance from '../utils/axios';
 
 const authApi = {
@@ -30,12 +29,12 @@ const authApi = {
       const response = await axiosInstance.post('/api/auth/logout', {
         accessToken: accessToken
       });
-      
+
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('username');
       localStorage.removeItem('name');
-      
+
       return response.data;
     } catch (error) {
       console.error('로그아웃 실패:', error);
@@ -51,20 +50,68 @@ const authApi = {
         accessToken: accessToken,
         username: username
       });
-      
+
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
       if (newAccessToken) {
         localStorage.setItem('accessToken', newAccessToken);
         localStorage.setItem('refreshToken', newRefreshToken);
       }
-      
+
       return response.data;
     } catch (error) {
       console.error('토큰 재발급 실패:', error);
       throw error;
     }
-  }
+  },
+
+  updateUser: async (userData) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axiosInstance.put('/api/auth/update', userData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("회원 정보 수정 실패:", error);
+      throw error;
+    }
+  },
+
+  getUserProfile: async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axiosInstance.get('/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("사용자 정보 불러오기 실패:", error);
+      throw error;
+    }
+  },
+
+  deleteUser: async (password) => {
+    try {
+      const response = await axiosInstance.delete("/api/auth/delete", {
+        data: { password }, // 현재 비밀번호를 함께 전송
+      });
+      return response.data;
+    } catch (error) {
+      console.error("회원 탈퇴 실패:", error.response?.data || error);
+      throw error;
+    }
+  },
+
+
 };
+
+
 
 export default authApi;
 
@@ -88,7 +135,7 @@ axiosInstance.interceptors.response.use(
       try {
         const response = await axiosInstance.post('/api/auth/reissue');
         const { accessToken } = response.data;
-        
+
         if (accessToken) {
           localStorage.setItem('accessToken', accessToken);
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;

@@ -3,7 +3,6 @@ import Checklist from "./Checklist";
 import Category from "./Category";
 import "./Main.css";
 import Login from "../Login";   //로그인 컴포넌트 추가
-import "../prohibited-items/ProhibitedItems.css";
 
 export default function App() {
     const [selectedChecklist, setSelectedChecklist] = useState(null);
@@ -12,6 +11,10 @@ export default function App() {
     const handleOpenLoginModal = () => {
         alert("로그인이 필요한 서비스입니다.\n로그인 후 다시 이용해주세요."); // 알림창 표시
         setIsLoginModalOpen(true); // 로그인 모달 열기
+    };
+
+    const handleChecklistUpdate = (updatedChecklist) => {
+        setSelectedChecklist(updatedChecklist);
     };
 
     return (
@@ -29,7 +32,7 @@ export default function App() {
             </p>
 
             <div className={`container ${!selectedChecklist ? "centered" : ""}`}>
-                <Checklist onSelectChecklist={setSelectedChecklist} onRequireLogin={handleOpenLoginModal} />
+                <Checklist onSelectChecklist={setSelectedChecklist} onRequireLogin={handleOpenLoginModal} onUpdateChecklist={handleChecklistUpdate} />
                 {selectedChecklist && <Category checklist={selectedChecklist} />}
             </div>
             <Login isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
