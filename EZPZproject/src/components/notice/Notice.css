@@ -297,7 +297,6 @@ h3 {
   margin: 0 auto;
   padding: 20px;
   min-height: 600px;
-  max-height: 850px;
   background-color: white;
   position: relative;
 }
@@ -372,7 +371,7 @@ h3 {
 .post-content {
   min-height: 250px;
   padding: 30px;
-  background-color: #b4c2d0;
+  background-color: #f8f9fa;
   border-radius: 8px;
   line-height: 1.8;
   font-size: 20px;
