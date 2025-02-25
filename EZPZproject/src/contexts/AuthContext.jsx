@@ -11,29 +11,26 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       const storedAccessToken = localStorage.getItem("accessToken");
-      
+    
       if (storedAccessToken) {
         try {
-          // 액세스 토큰이 있는 경우 사용자 정보 복구
-          const username = localStorage.getItem("username");
-          const name = localStorage.getItem("name");
-
-          if (username) {
-            setToken(storedAccessToken);
+          const userData = await authApi.getUserProfile(); // API에서 모든 회원 정보 가져오기
+          if (userData) {
             setUser({
-              username,
-              name: name || username,
+              username: userData.username,
+              name: userData.name,
+              phone: userData.phone || "", // 추가
+              address: userData.address || "", // 추가
+              email: userData.email || "", // 추가
             });
-          } else {
-            clearAuthData();
           }
         } catch (error) {
-          console.error("인증 초기화 실패:", error);
-          handleLogout();
+          console.error("사용자 정보를 가져오는 중 오류 발생:", error);
         }
       }
       setIsInitialized(true);
     };
+    
 
     initializeAuth();
   }, []);
@@ -95,12 +92,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (updatedUser) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUser,
+    }));
+    localStorage.setItem("name", updatedUser.name); // localStorage에도 반영
+  };
+
   if (!isInitialized) {
     return <div>로딩 중...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout: handleLogout, token }}>
+    <AuthContext.Provider value={{ user, login, logout: handleLogout, token, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -343,10 +343,8 @@ const App = () => {
 
       if (response.ok) {
         setCommentText('');
+        setCurrentCommentPage(1);
         await fetchComments();
-        // 새 댓글 추가 후 마지막 페이지로 이동
-        const newTotalPages = Math.ceil((comments.length + 1) / commentsPerPage);
-        setCurrentCommentPage(newTotalPages);
       }
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -434,12 +432,28 @@ const App = () => {
     setCurrentCommentPage(pageNumber);
   };
 
+  // 목록으로 버튼 클릭 핸들러 추가
+  const handleGoToList = () => {
+    setIsWriting(false);
+    setIsDetailView(false);
+    setTitle("");
+    setContent("");
+    setSelectedPost(null);  // 선택된 게시글 초기화
+    navigate('/board');     // 게시판 목록 페이지로 이동
+  };
+
   return (
-    <div className="container">
+    <div className="notice-container">
+      
       {!isDetailView ? (
         // 게시글 목록 화면
         <div className="left-section">
-          <h2 className="title">자유 게시판</h2>
+           <div className="description-section2">
+                <h1>자유 게시판</h1>
+                <p className="checklist-alert">
+                    건의사항이나 개선할 점 등 자유롭게 글을 남겨주세요.
+                </p>
+            </div >
           
           <div className="search-box">
             <select 
@@ -551,7 +565,7 @@ const App = () => {
             // 글작성 화면
             <>
               <div className="post-header">
-                <h2 className="post-title">새 글 작성</h2>
+                <h2 className="post-title">게시글</h2>
               </div>
               <div className="post-body">
                 <input
@@ -599,14 +613,16 @@ const App = () => {
                 <div className="post-header">
                   <h2 className="post-title">{selectedPost.title}</h2>
                   <div className="post-info">
-                    <span className="post-writer">작성자: {selectedPost.writer}</span>
-                    <span className="post-date">
-                      작성일: {new Date(selectedPost.createdAt).toLocaleDateString('ko-KR', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}
-                    </span>
+                    <span className="post-writer">작성자: {selectedPost.writer}</span><br></br>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <span className="post-date">
+                        {new Date(selectedPost.createdAt).toLocaleDateString('ko-KR', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        })}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="post-body">
@@ -614,42 +630,40 @@ const App = () => {
                 </div>
                 <div className="post-buttons">
                   <div className="left-buttons">
-                    <button
-                      onClick={handleBackToList}
+                    <button 
+                      onClick={handleGoToList}
                       className="button back-button"
                     >
                       목록으로
                     </button>
                   </div>
-                  <div className="right-buttons">
-                    {selectedPost.writer === localStorage.getItem('username') && (
-                      <>
-                        <button
-                          onClick={() => {
-                            if(window.confirm('게시글을 수정하시겠습니까?')) {
-                              setTitle(selectedPost.title);
-                              setContent(selectedPost.content);
-                              setEditId(selectedPost.id);
-                              setIsWriting(true);
-                            }
-                          }}
-                          className="button edit-button"
-                        >
-                          수정하기
-                        </button>
-                        <button
-                          onClick={() => {
-                            if(window.confirm('정말 삭제하시겠습니까?')) {
-                              handleDelete(selectedPost.id);
-                            }
-                          }}
-                          className="button delete-button"
-                        >
-                          삭제하기
-                        </button>
-                      </>
-                    )}
-                  </div>
+                  {selectedPost.writer === localStorage.getItem('username') && (
+                    <div className="right-buttons">
+                      <button 
+                        onClick={() => {
+                          if(window.confirm('게시글을 수정하시겠습니까?')) {
+                            setTitle(selectedPost.title);
+                            setContent(selectedPost.content);
+                            setEditId(selectedPost.id);
+                            setIsWriting(true);
+                          }
+                        }}
+                        className="button edit-button"
+                      >
+                        수정
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if(window.confirm('정말 삭제하시겠습니까?')) {
+                            handleDelete(selectedPost.id);
+                          }
+                        }}
+                        className="button delete-button"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}

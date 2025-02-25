@@ -6,9 +6,10 @@
   gap: 20px;
 }
 
+
 .left-section {
   flex: 1;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   gap: 15px;
 }
@@ -25,6 +26,10 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  max-width: 1200px; /* 좌우 폭 제한 */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .search-select {
@@ -79,6 +84,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 1200px; /* 좌우 폭 제한 */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .item {
@@ -292,12 +301,12 @@ h3 {
 }
 
 .detail-section {
+  top: 30px;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   min-height: 600px;
-  max-height: 850px;
   background-color: white;
   position: relative;
 }
@@ -372,7 +381,7 @@ h3 {
 .post-content {
   min-height: 250px;
   padding: 30px;
-  background-color: #b4c2d0;
+  background-color: #f8f9fa;
   border-radius: 8px;
   line-height: 1.8;
   font-size: 20px;

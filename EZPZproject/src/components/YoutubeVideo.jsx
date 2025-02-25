@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import "./YoutubeVideo.css";
 
 const YoutubeVideo = () => {
-  const videoList = [
-    "NkjUHze7tdY",
-    "lL50mfAA9HY",
-    "iyjGDYcZluM",
-    "390DJiHxDpw",
-    "poVJpl-iDWo",
-    "YXGR8JRrK5I",
-    "dPYidPBFH5I"
+  const videoList = [ //채널명-영상 제목
+    "NkjUHze7tdY",  //인천공항-수하물 스티커를 떼야 하는 이유
+    "lL50mfAA9HY",  //올댓크루-항공승무원 기내 안전 데모
+    "iyjGDYcZluM", //KTV NEWS-"선반에 넣지 마세요" ... 보조배터리, 기내에서 '이렇게' 보관해야 한다
+    "390DJiHxDpw",  //행정안전부-항공기 탑승 및 사고 시 국민행동요령
+    "poVJpl-iDWo",  //국토교통부-수하물 위탁, 기다리지 말고 셀프로 하세요! [탑승수속꿀팁)
+    "YXGR8JRrK5I", //KBS News-“항공기내 보조배터리 5개 제한…보관은 비닐백에” / KBS 2025.02.13.
+    "dPYidPBFH5I" //YTN-[자막뉴스] "벌써 절차 끝?!" 인천공항 새 출국 시스템 사용기
   ];
 
   const getRandomVideo = () => {
