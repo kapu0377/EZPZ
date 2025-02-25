@@ -8,9 +8,11 @@ import {
 import "./Checklist.css";
 import ChecklistEditModal from "./ChecklistEditModal";
 import ChecklistAddModal from "./ChecklistAddModal";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateChecklist  }) {
-    const [checklists, setChecklists] = useState([]);
+    const { checklists, fetchChecklists } = useAuth();
+    // const [checklists, setChecklists] = useState([]);
     const [selectedChecklist, setSelectedChecklist] = useState(null); // 현재 선택된 체크리스트
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editChecklist, setEditChecklist] = useState(null);
@@ -21,7 +23,7 @@ export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateC
 
     const loadChecklists = async () => {
         const data = await getChecklists();
-        setChecklists(data);
+        fetchChecklists(data);
     };
 
     // 체크리스트 추가
@@ -61,7 +63,7 @@ export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateC
         if (window.confirm("체크리스트에 포함된 모든 데이터가 삭제됩니다.\n 체크리스트를 삭제하시겠습니까?")) {
             const success = await deleteChecklist(id);
             if (success) {
-                setChecklists(checklists.filter((checklist) => checklist.id !== id)); // UI에서 삭제 반영
+                fetchChecklists(checklists.filter((checklist) => checklist.id !== id)); // UI에서 삭제 반영
                 if (selectedChecklist && selectedChecklist.id === id) {
                     setSelectedChecklist(null); // 선택된 체크리스트 초기화 (카테고리 목록 숨김)
                     onSelectChecklist(null); // 부모 컴포넌트로 빈 값 전달하여 카테고리 목록 숨김

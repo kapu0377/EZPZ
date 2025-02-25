@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import authApi from '../api/authApi';
+import { getChecklists } from "../api/checklist/checklistApi";
 
 const AuthContext = createContext(null);
 
@@ -7,11 +8,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [checklists, setChecklists] = useState([]);
 
   useEffect(() => {
     const initializeAuth = async () => {
       const storedAccessToken = localStorage.getItem("accessToken");
-    
+
       if (storedAccessToken) {
         try {
           const userData = await authApi.getUserProfile(); // API에서 모든 회원 정보 가져오기
@@ -24,13 +26,14 @@ export const AuthProvider = ({ children }) => {
               email: userData.email || "", // 추가
             });
           }
+          fetchChecklists();  //체크리스트 자동 불러오기
         } catch (error) {
           console.error("사용자 정보를 가져오는 중 오류 발생:", error);
         }
       }
       setIsInitialized(true);
     };
-    
+
 
     initializeAuth();
   }, []);
@@ -50,28 +53,29 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      console.log('로그인 시도:', credentials);
+      // console.log('로그인 시도:', credentials);
       const data = await authApi.login(credentials);
-      console.log('로그인 응답:', data);
-      
+      // console.log('로그인 응답:', data);
+
       if (data.accessToken) {
         // 토큰과 사용자 정보를 localStorage에 저장
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('username', data.username);
         localStorage.setItem('name', data.name);
-        
+
         // Context 상태 업데이트
         setToken(data.accessToken);
         setUser({
           username: data.username,
           name: data.name
         });
-        
-        console.log('로그인 성공 - 상태 업데이트 완료');
-        window.location.href = '/';
+
+        // console.log('로그인 성공 - 상태 업데이트 완료');
+        // window.location.href = '/';
+        fetchChecklists();
         return true;
       }
-      
+
       console.error('토큰이 없는 응답:', data);
       return false;
     } catch (error) {
@@ -82,13 +86,22 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('name');
       setToken(null);
       setUser(null);
-      
+
       if (error.response?.data) {
         alert(error.response.data);
       } else {
         alert("로그인에 실패했습니다.");
       }
       return false;
+    }
+  };
+
+  const fetchChecklists = async () => {
+    try {
+      const data = await getChecklists();
+      setChecklists(data);
+    } catch (error) {
+      console.error("체크리스트 불러오기 실패:", error);
     }
   };
 
@@ -105,7 +118,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout: handleLogout, token, updateUser }}>
+    <AuthContext.Provider value={{ user, login, logout: handleLogout, token, updateUser, checklists, fetchChecklists  }}>
       {children}
     </AuthContext.Provider>
   );
