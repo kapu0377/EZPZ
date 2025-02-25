@@ -1,5 +1,6 @@
 package com.example.apiezpz.objectdetection.controller;
 
+import com.example.apiezpz.objectdetection.dto.ObjectDetectionDTO;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,11 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ObjectDetectionController {
   @PostMapping("/api/odimg")
-  public List<AnnotateImageResponse> objectDetection(@RequestParam("file") MultipartFile file) {
+  public List<ObjectDetectionDTO> objectDetection(@RequestParam("file") MultipartFile file) {
     try{
       if(file.isEmpty()){
 //        return "Image is empty";
@@ -38,7 +40,22 @@ public class ObjectDetectionController {
         // Perform the request
         BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
         List<AnnotateImageResponse> responses = response.getResponsesList();
-        return responses;
+        return responses.get(0).getLocalizedObjectAnnotationsList().stream()
+            .map(entity -> {
+              ObjectDetectionDTO objResponse = new ObjectDetectionDTO();
+              objResponse.setName(entity.getName());
+              objResponse.setScore(entity.getScore());
+              objResponse.setVertexList(entity.getBoundingPoly().getNormalizedVerticesList().stream()
+                  .map(vertex -> {
+                    ObjectDetectionDTO.Vertex v = new ObjectDetectionDTO.Vertex();
+                    v.setX(vertex.getX());
+                    v.setY(vertex.getY());
+                    return v;
+                  })
+                  .collect(Collectors.toList()));
+              return objResponse;
+            })
+            .collect(Collectors.toList());
 //        System.out.println("-------RESPONSE------------------------------------------------------------------------");
 //        System.out.println(response);
 //        System.out.println("=======RESPONSES================================================================");
