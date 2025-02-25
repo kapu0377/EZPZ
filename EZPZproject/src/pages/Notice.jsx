@@ -358,15 +358,14 @@ const App = () => {
   };
 
   // 댓글 수정 저장 핸들러
-  const handleEditComment = async (commentId) => {
+  const handleEditComment = async () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
-
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8088/api/comments/${editingCommentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
