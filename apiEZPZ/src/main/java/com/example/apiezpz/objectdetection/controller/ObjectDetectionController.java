@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Google Vision API를 사용한 이미지 객체 탐지
 @RestController
 public class ObjectDetectionController {
   @PostMapping("/api/odimg")
@@ -56,22 +57,6 @@ public class ObjectDetectionController {
               return objResponse;
             })
             .collect(Collectors.toList());
-//        System.out.println("-------RESPONSE------------------------------------------------------------------------");
-//        System.out.println(response);
-//        System.out.println("=======RESPONSES================================================================");
-//        System.out.println(responses);
-        // Display the results
-//        for (AnnotateImageResponse res : responses) {
-//          for (LocalizedObjectAnnotation entity : res.getLocalizedObjectAnnotationsList()) {
-//            System.out.format("Object name: %s%n", entity.getName());
-//            System.out.format("Confidence: %s%n", entity.getScore());
-//            System.out.format("Normalized Vertices:%n");
-//            entity
-//                .getBoundingPoly()
-//                .getNormalizedVerticesList()
-//                .forEach(vertex -> System.out.format("- (%s, %s)%n", vertex.getX(), vertex.getY()));
-//          }
-//        }
       }
     }catch (Exception e){
       e.printStackTrace();
