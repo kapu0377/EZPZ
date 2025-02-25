@@ -14,6 +14,7 @@ import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
 import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경우)
 import EditProfile from "./components/EditProfile";
 
+import ObjectDetection from "./pages/ObjectDetection";
 function App() {
   return (
     <AuthProvider>
@@ -25,6 +26,7 @@ function App() {
             <Route path="/board/:no" element={<Notice />} />
             <Route path="/checklist" element={<CheckList />} />
             <Route path="/parking" element={<AirportParkingPage />} />
+            <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
           </Routes>
         </Layout>
