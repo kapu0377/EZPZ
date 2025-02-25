@@ -443,11 +443,17 @@ const App = () => {
   };
 
   return (
-    <div className="container">
+    <div className="notice-container">
+      
       {!isDetailView ? (
         // 게시글 목록 화면
         <div className="left-section">
-          <h2 className="title">자유 게시판</h2>
+           <div className="description-section2">
+                <h1>자유 게시판</h1>
+                <p className="checklist-alert">
+                    건의사항이나 개선할 점 등 자유롭게 글을 남겨주세요.
+                </p>
+            </div >
           
           <div className="search-box">
             <select 

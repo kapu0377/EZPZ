@@ -18,7 +18,7 @@ export default function App() {
     };
 
     return (
-        <div>
+        <div className="checklist-main-container">
             <div className="description-section2">
                 <h1>여행 체크리스트</h1>
                 <p className="checklist-alert">

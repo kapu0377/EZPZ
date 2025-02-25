@@ -1,14 +1,15 @@
-.container {
-  margin-top: 30px;
+.notice-container {
   position: relative;
   display: flex;
   margin-bottom: 85px;
   gap: 20px;
+  min-height: calc(100vh - 400px);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .left-section {
   flex: 1;
-  display: flex;
   flex-direction: column;
   gap: 15px;
 }

@@ -1,4 +1,8 @@
 /* 전체 컨테이너 - 체크리스트와 카테고리를 가로 정렬 */
+.checklist-main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 .container {
     display: grid;
     grid-template-columns: 1fr 2fr; /* 체크리스트 1, 카테고리 2 비율 */
