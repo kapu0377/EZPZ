@@ -323,7 +323,7 @@ h3 {
 
 .post-content {
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #f0f0f0;
   border-radius: 8px;
   line-height: 1.8;
   font-size: 20px;
@@ -372,7 +372,7 @@ h3 {
 .post-content {
   min-height: 250px;
   padding: 30px;
-  background-color: #b4c2d0;
+  background-color: #f0f0f0;
   border-radius: 8px;
   line-height: 1.8;
   font-size: 20px;
@@ -546,7 +546,8 @@ td:nth-child(4) {
 }
 
 /* 셀 스타일 */
-th, td {
+th,
+td {
   padding: 8px 4px;
   border-bottom: 1px solid #ddd;
 }
@@ -562,4 +563,4 @@ th {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   color: #333;
-} 
+}
