@@ -374,17 +374,21 @@ const App = () => {
         },
         body: JSON.stringify({
           content: editCommentText,
-          writer: localStorage.getItem('username') || '작성자'
-        }),
+          writer: localStorage.getItem('username')
+        })
       });
 
       if (response.ok) {
         setEditingCommentId(null);
         setEditCommentText('');
-        fetchComments();
+        await fetchComments();
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '댓글 수정에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error updating comment:', error);
+      console.error('Error:', error);
+      alert(error.message);
     }
   };
 
@@ -396,10 +400,13 @@ const App = () => {
       return;
     }
 
-    if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
+    if (!window.confirm('댓글을 삭제하시겠습니까?')) {
+      return;
+    }
 
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const writer = localStorage.getItem('username');
+      const response = await fetch(`http://localhost:8088/api/comments/${commentId}?writer=${encodeURIComponent(writer)}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -407,10 +414,16 @@ const App = () => {
       });
 
       if (response.ok) {
-        fetchComments();
+        await fetchComments();
+        alert('댓글이 삭제되었습니다.');
+      } else if (response.status === 403) {
+        alert('삭제 권한이 없습니다.');
+      } else {
+        throw new Error('댓글 삭제에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      console.error('Error:', error);
+      alert(error.message);
     }
   };
 
@@ -679,7 +692,6 @@ const App = () => {
                     {currentComments.map((comment) => (
                       <div key={comment.id} className="comment-item">
                         {editingCommentId === comment.id ? (
-                          // 수정 모드
                           <div className="comment-edit-form">
                             <input
                               type="text"
@@ -689,7 +701,7 @@ const App = () => {
                             />
                             <div className="comment-edit-buttons">
                               <button
-                                onClick={handleEditComment}
+                                onClick={() => handleEditComment(comment.id)}
                                 className="button edit-button"
                               >
                                 저장
@@ -697,7 +709,7 @@ const App = () => {
                               <button
                                 onClick={() => {
                                   setEditingCommentId(null);
-                                  setEditCommentText("");
+                                  setEditCommentText('');
                                 }}
                                 className="button cancel-button"
                               >
@@ -706,7 +718,6 @@ const App = () => {
                             </div>
                           </div>
                         ) : (
-                          // 일반 모드
                           <>
                             <div className="comment-content">
                               <span className="comment-author">{comment.writer}</span>
