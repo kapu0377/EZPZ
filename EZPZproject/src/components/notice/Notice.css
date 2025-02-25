@@ -298,7 +298,6 @@ h3 {
   margin: 0 auto;
   padding: 20px;
   min-height: 600px;
-  max-height: 850px;
   background-color: white;
   position: relative;
 }
@@ -547,8 +546,7 @@ td:nth-child(4) {
 }
 
 /* 셀 스타일 */
-th,
-td {
+th, td {
   padding: 8px 4px;
   border-bottom: 1px solid #ddd;
 }
@@ -564,4 +562,4 @@ th {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   color: #333;
-}
+} 
