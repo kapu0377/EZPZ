@@ -1,5 +1,6 @@
 .logo {
   position: relative;
+  align-items: center;
   text-decoration: none;
   color: black;
   display: inline-block;
