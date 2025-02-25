@@ -1,4 +1,3 @@
-import axios from 'axios';
 import axiosInstance from '../utils/axios';
 
 const authApi = {
@@ -97,7 +96,22 @@ const authApi = {
     }
   },
 
+  deleteUser: async (password) => {
+    try {
+      const response = await axiosInstance.delete("/api/auth/delete", {
+        data: { password }, // 현재 비밀번호를 함께 전송
+      });
+      return response.data;
+    } catch (error) {
+      console.error("회원 탈퇴 실패:", error.response?.data || error);
+      throw error;
+    }
+  },
+
+
 };
+
+
 
 export default authApi;
 

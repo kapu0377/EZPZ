@@ -4,6 +4,9 @@ import com.example.apiezpz.auth.entity.User;
 import com.example.apiezpz.auth.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.apiezpz.auth.dto.LoginRequest;
@@ -127,6 +130,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    //회원 정보
     @GetMapping("/me")
     public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String token) {
         try {
@@ -146,6 +151,26 @@ public class AuthController {
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 실패");
+        }
+    }
+
+    //회원 탈퇴
+    @DeleteMapping("/delete")
+    @PreAuthorize("isAuthenticated()") // 인증된 사용자만 접근 가능
+    public ResponseEntity<?> deleteUser(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody Map<String, String> requestBody // 클라이언트에서 비밀번호 받기
+    ) {
+        try {
+            String username = userDetails.getUsername();
+            String inputPassword = requestBody.get("password"); // 클라이언트에서 입력한 비밀번호
+
+            authService.deleteUser(username, inputPassword); // 비밀번호 검증 후 삭제 실행
+
+            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("회원 탈퇴 중 오류 발생: " + e.getMessage());
         }
     }
 
