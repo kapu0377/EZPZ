@@ -18,7 +18,8 @@ const EditProfile = () => {
     const [password, setPassword] = useState(""); // 현재 비밀번호 입력
     const [confirmPassword, setConfirmPassword] = useState(""); // 비밀번호 확인
 
-    useEffect(() => {
+     // user 값이 변경될 때 updatedUser 업데이트 (새로고침 없이 반영)
+     useEffect(() => {
         if (user) {
             setUpdatedUser({
                 name: user.name || "",
@@ -28,7 +29,8 @@ const EditProfile = () => {
                 password: "", // 새 비밀번호는 기본적으로 비움
             });
         }
-    }, [user]);
+    }, [user]); // user 변경 감지
+    
 
     const handleChange = (e) => {
         setUpdatedUser({ ...updatedUser, [e.target.name]: e.target.value });
@@ -38,13 +40,8 @@ const EditProfile = () => {
         e.preventDefault();
         try {
             await authApi.updateUser(updatedUser);
-            updateUser(updatedUser); // 회원 정보 수정 후 TopBar 반영
+            await updateUser(); // 회원 정보 수정 후 TopBar에 즉시 반영
             alert("회원 정보가 수정되었습니다.");
-            // 상태를 초기화하여 입력 필드 비우기
-            setUpdatedUser((prev) => ({
-                ...prev,
-                password: "", // 새 비밀번호 필드 초기화
-            }));
             // 탈퇴 비밀번호 입력 필드 비우기
             setPassword("");
             setConfirmPassword("");
@@ -90,7 +87,7 @@ const EditProfile = () => {
             <section className="profile-section">
                 <h2>회원 정보 수정</h2>
                 <form onSubmit={handleSubmit}>
-                    <label>이름</label>
+                <label>이름</label>
                     <input type="text" name="name" value={updatedUser.name} onChange={handleChange} required />
 
                     <label>이메일</label>
