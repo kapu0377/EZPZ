@@ -53,6 +53,8 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    // google vision api
+    implementation 'com.google.cloud:google-cloud-vision:3.54.0'
 }
 
 tasks.named('test') {
