@@ -6,6 +6,7 @@
   gap: 20px;
 }
 
+
 .left-section {
   flex: 1;
   /* display: flex; */
@@ -25,6 +26,10 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  max-width: 1200px; /* 좌우 폭 제한 */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .search-select {
@@ -79,6 +84,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 1200px; /* 좌우 폭 제한 */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .item {
