@@ -18,14 +18,15 @@
     text-align: center;
 }
 
-.modal-buttons {
+.checklist-modal-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
 
 .save-btn {
-    background-color: #007bff;
+    width: 50%;
+    background-color: #4a90e2;
     color: white;
     border: none;
     padding: 10px;
@@ -34,6 +35,7 @@
 }
 
 .cancel-btn {
+    width: 50%;
     background-color: #ccc;
     border: none;
     padding: 10px;

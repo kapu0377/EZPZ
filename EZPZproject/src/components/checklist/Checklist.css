@@ -1,13 +1,29 @@
-/* 체크리스트 전체 카드 스타일 */
+/* 체크리스트 컨테이너 */
 .checklist-container {
-    width: 50%;
+    width: 100%;
+    max-width: 400px; /* 체크리스트 크기 조정 */
     padding: 20px;
-    border: 1px solid #ddd;
     border-radius: 12px;
     background-color: #fff;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 모바일에서는 100% 너비 */
+@media (max-width: 768px) {
+    .checklist-container {
+        max-width: 100%;
+    }
+}
+
+.checklist-container h2 {
     text-align: center;
 }
+
+
+.add-btn:hover {
+    background-color: #0056b3;
+}
+
 
 /* 입력 필드 스타일 */
 .checklist-container input {
@@ -20,20 +36,20 @@
 }
 
 /* 버튼 스타일 */
-.checklist-container button {
-    width: 90%;
+.add-btn, .edit-btn, .delete-btn {
+    width: 100%;
     padding: 12px;
     margin-top: 8px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #007bff;
+    background-color: #4a90e2;
     color: white;
     font-size: 16px;
     font-weight: bold;
 }
 
-.checklist-container button:hover {
+.checklist-container .add-btn:hover, .edit-btn:hover, .delete-btn:hover {
     background-color: #0056b3;
 }
 

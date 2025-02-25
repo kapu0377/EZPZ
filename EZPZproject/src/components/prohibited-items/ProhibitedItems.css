@@ -243,6 +243,7 @@
   font-size: 16px;
   color: white;
   padding: 20px;
+  margin-top: 15px;
   margin-bottom: 20px;
   background: url("../../assets/img/airport.jpg") no-repeat center center;
   background-size: cover;
@@ -250,7 +251,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
   max-width: 100%;
-  height: 80%;
+  height: 70%;
 }
 
 .description-section h1,
@@ -299,6 +300,23 @@
   position: relative;
   max-height: 80vh;
   overflow-y: auto;
+}
+.open-airport-modal-btn {
+  background-color: #ffffff; /* 버튼 배경색 */
+  color: #000000; /* 텍스트 색상 */
+  border: 0 2px 2px gray;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 20px auto;
+  display: block;
+}
+
+.open-airport-modal-btn:hover {
+  background-color: #ffffff; /* 호버 시 배경색 변화 */
+  transform: translateY(-3px); /* 살짝 위로 이동 */
 }
 
 /* 닫기 버튼 */
