@@ -1,17 +1,20 @@
 /* 체크리스트 컨테이너 */
 .checklist-container {
     width: 100%;
-    max-width: 400px; /* 체크리스트 크기 조정 */
+    max-width: 400px; /* 기본 크기 */
     padding: 20px;
     border-radius: 12px;
     background-color: #fff;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    box-sizing: border-box;
 }
 
 /* 모바일에서는 100% 너비 */
 @media (max-width: 768px) {
     .checklist-container {
         max-width: 100%;
+        width: 100%;
     }
 }
 
@@ -75,5 +78,20 @@
 .checklist-container span:hover {
     background-color: #ececec;
     border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .checklist-container {
+        font-size: 12px;
+    }
+
+    .checklist-container h2 {
+        font-size: 14px;
+    }
+
+    .checklist-container button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
 }
 
