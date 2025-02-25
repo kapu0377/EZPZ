@@ -3,9 +3,6 @@ package com.example.apiezpz.auth.service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import com.example.apiezpz.checklist.repository.ChecklistRepository;
-import com.example.apiezpz.comment.repository.CommentRepository;
-import com.example.apiezpz.post.repository.PostRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +29,6 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-
-    private final ChecklistRepository checklistRepository;
-    private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
 
     // 1) 회원가입
     public void signup(SignUpRequest request) {
@@ -155,4 +148,5 @@ public class AuthService {
         long diffInSeconds = ChronoUnit.SECONDS.between(now, expiry);
         return Math.max(diffInSeconds, 0);
     }
+
 }
