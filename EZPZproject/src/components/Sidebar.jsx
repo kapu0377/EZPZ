@@ -28,7 +28,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
               공항 별 적발현황
             </Link>
             <Link to="/item-search" onClick={() => setMenuOpen(false)}>
-              항공 물품 검색색
+              항공 물품 검색
             </Link>
           </div>
         )}
