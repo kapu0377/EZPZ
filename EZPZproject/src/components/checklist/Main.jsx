@@ -39,7 +39,7 @@ export default function App() {
                 🚨 전자담배, 보조배터리, 라이터는 휴대 수화물입니다. 🚨
             </p>
 
-            <div className={`container ${!selectedChecklist ? "centered" : ""}`}>
+            <div className={`container ${!selectedChecklist && window.innerWidth > 768 ? "centered" : ""}`}>
                 <Checklist onSelectChecklist={setSelectedChecklist} onRequireLogin={handleOpenLoginModal} onUpdateChecklist={handleChecklistUpdate} />
                 {selectedChecklist && <Category checklist={selectedChecklist} />}
             </div>
