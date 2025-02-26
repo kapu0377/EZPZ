@@ -13,6 +13,7 @@ import 'swiper/css';  // 기본 스타일
 import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
 import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경우)
 import EditProfile from "./components/EditProfile";
+import Faq from "./pages/Faq";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
             <Route path="/board/:no" element={<Notice />} />
+            <Route path="/faq" element={<Faq />} />
             <Route path="/checklist" element={<CheckList />} />
             <Route path="/parking" element={<AirportParkingPage />} />
             <Route path="/edit-profile" element={<EditProfile />} />
