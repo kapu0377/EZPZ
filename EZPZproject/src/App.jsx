@@ -18,6 +18,7 @@ import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경�
 import EditProfile from "./components/EditProfile";
 import RankingPage from "./components/ranking/RankingPage";
 import ObjectDetection from "./pages/ObjectDetection";
+import { HelmetProvider } from 'react-helmet-async';
 function App() {
   return (
     <HelmetProvider>
@@ -35,7 +36,6 @@ function App() {
             <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/airport-detections" element={<AirportDetectionPage />} />
-            {/* <Route path="/item-search" element={<ItemSearch />} /> */}
             <Route path="/rankings" element={<RankingPage />} />
           </Routes>
         </Layout>

@@ -45,7 +45,6 @@ const SearchPage = () => {
       }
       return [...prev, result];
     });
-    // 검색 후 자동으로 검색 탭으로 전환
     setActiveTab("search");
   };
 
@@ -64,7 +63,7 @@ const SearchPage = () => {
 
   return (
     <div className="search-page">
-       <div className="description-section2">
+      <div className="description-section2">
         <h1>항공기 반입 물품 검색</h1>
         <p>항공기에 반입 가능한 물품을 검색하고 결과를 확인하세요.</p>
       </div>
@@ -121,6 +120,10 @@ const SearchPage = () => {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="rankings-container">
+          <Rankings />
         </div>
       </div>
     </div>

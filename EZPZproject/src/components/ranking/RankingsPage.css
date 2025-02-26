@@ -42,6 +42,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    min-height: 600px;  
   }
   
   .rankings-tabs {
@@ -74,6 +75,8 @@
   
   .rankings-content {
     padding: 2rem;
+    min-height: 400px; /* 컨텐츠 최소 높이 추가 */
+    position: relative;
   }
   
   .rankings-date {
@@ -91,6 +94,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+    min-height: 300px; /* 리스트 최소 높이 추가 */
   }
   
   .ranking-item-full {
@@ -99,7 +103,9 @@
     padding: 1rem;
     border-radius: 8px;
     background-color: #f8f9fa;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    height: 60px; /* 고정 높이 설정 */
+    box-sizing: border-box;
   }
   
   .ranking-item-full:hover {
@@ -146,27 +152,26 @@
   }
   
   .rankings-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
   }
   
   .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid rgba(0, 0, 0, 0.1);
+    margin: 0 auto 1rem;
+    border: 3px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     border-top-color: #4285f4;
     animation: spin 1s ease-in-out infinite;
-    margin-bottom: 1rem;
   }
   
   @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
   }
   
   .no-data {

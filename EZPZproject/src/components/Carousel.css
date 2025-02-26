@@ -1,0 +1,14 @@
+.slick-slider {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .slick-list {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .slick-slide {
+    border-radius: 10px;
+    overflow: hidden;
+  }

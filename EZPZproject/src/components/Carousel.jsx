@@ -2,6 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./Carousel.css";
 
 const Carousel = () => {
   const settings = {
@@ -12,26 +13,30 @@ const Carousel = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: true
+    arrows: true,
+    className: "carousel-slider"
   };
 
   const carouselStyle = {
     width: '100%',
-    maxWidth: '720px',
-    margin: '0 auto',
-    padding: '0 20px'
+    maxWidth: '1200px',
+    margin: '20px auto',
+    padding: '0 20px',
+    borderRadius: '10px',
+    overflow: 'hidden'
   };
 
   const slideStyle = {
     position: 'relative',
-    height: '400px'
+    height: '350px',
+    borderRadius: '10px',
+    overflow: 'hidden'
   };
 
   const imageStyle = {
     width: '100%',
     height: '100%',
-    objectFit: 'cover',
-    borderRadius: '10px'
+    objectFit: 'cover'
   };
 
   const textStyle = {
@@ -47,7 +52,7 @@ const Carousel = () => {
       <Slider {...settings}>
         <div style={slideStyle}>
           <img 
-            src="https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1587019158091-1a103c5dd17f?w=1200&h=350&auto=format&fit=crop" 
             alt="여행 준비" 
             style={imageStyle}
           />
@@ -56,7 +61,7 @@ const Carousel = () => {
         </div>
         <div style={slideStyle}>
           <img 
-            src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=350&auto=format&fit=crop" 
             alt="인기 여행지" 
             style={imageStyle}
           />
@@ -65,7 +70,7 @@ const Carousel = () => {
         </div>
         <div style={slideStyle}>
           <img 
-            src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1499591934245-40b55745b905?w=1200&h=350&auto=format&fit=crop" 
             alt="계절별 아이템" 
             style={imageStyle}
           />

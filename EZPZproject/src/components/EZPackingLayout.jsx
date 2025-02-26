@@ -4,10 +4,12 @@ import ProhibitedItemsSlider from "./prohibited-items/ProhibitedItemsSlider";
 import ParkingSlider from "./parking/ParkingSlider";
 import YoutubeVideo from "./YoutubeVideo";
 import RecentPosts from "./post/RecentPost";
+import Carousel from "./Carousel";
 
 const EZPackingLayout = () => {
   return (
     <div className="ez-packing-layout">
+        <Carousel />
       <SearchSection />
       <div className="main-content">
         <div className="content-box"><ProhibitedItemsSlider /></div>
