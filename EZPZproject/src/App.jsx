@@ -8,13 +8,15 @@ import "./App.css";
 import "./components/notice/Notice.css";
 import Notice from "./pages/Notice";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
+import AirportDetectionPage from "./components/prohibited-items/AirportDetectionPage"
 import AirportParkingPage from "./pages/AirportParkingPage";
+// import FAQ from "./pages/FAQ"
 import 'swiper/css';  // 기본 스타일
 import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
 import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경우)
 import EditProfile from "./components/EditProfile";
-import Faq from "./pages/Faq";
 
+import ObjectDetection from "./pages/ObjectDetection";
 function App() {
   return (
     <AuthProvider>
@@ -24,10 +26,12 @@ function App() {
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
             <Route path="/board/:no" element={<Notice />} />
-            <Route path="/faq" element={<Faq />} />
+            {/* <Route path="/faq" element={<FAQ />} /> */}
             <Route path="/checklist" element={<CheckList />} />
             <Route path="/parking" element={<AirportParkingPage />} />
+            <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/airport-detections" element={<AirportDetectionPage />} />
           </Routes>
         </Layout>
     </AuthProvider>

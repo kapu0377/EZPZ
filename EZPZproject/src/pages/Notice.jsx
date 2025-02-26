@@ -358,15 +358,14 @@ const App = () => {
   };
 
   // 댓글 수정 저장 핸들러
-  const handleEditComment = async (commentId) => {
+  const handleEditComment = async () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
-
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8088/api/comments/${editingCommentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -456,11 +455,17 @@ const App = () => {
   };
 
   return (
-    <div className="container">
+    <div className="notice-container">
+      
       {!isDetailView ? (
         // 게시글 목록 화면
         <div className="left-section">
-          <h2 className="title">자유 게시판</h2>
+           <div className="description-section2">
+                <h1>자유 게시판</h1>
+                <p className="checklist-alert">
+                    건의사항이나 개선할 점 등 자유롭게 글을 남겨주세요.
+                </p>
+            </div >
           
           <div className="search-box">
             <select 

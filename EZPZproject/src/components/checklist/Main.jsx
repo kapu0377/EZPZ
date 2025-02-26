@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Checklist from "./Checklist";
 import Category from "./Category";
 import "./Main.css";
 import Login from "../Login";   //로그인 컴포넌트 추가
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function App() {
+    const { user, fetchChecklists, checklists } = useAuth();
     const [selectedChecklist, setSelectedChecklist] = useState(null);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 상태 추가
 
@@ -17,8 +19,14 @@ export default function App() {
         setSelectedChecklist(updatedChecklist);
     };
 
+    useEffect(() => {
+        if (user) {
+            fetchChecklists();
+        }
+    }, [user]);
+
     return (
-        <div>
+        <div className="checklist-main-container">
             <div className="description-section2">
                 <h1>여행 체크리스트</h1>
                 <p className="checklist-alert">
