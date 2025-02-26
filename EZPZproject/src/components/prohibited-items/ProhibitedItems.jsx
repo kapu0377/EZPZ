@@ -216,7 +216,9 @@ function ProhibitedItems() {
     >
       <div className="description-section2">
         <h1>항공기 반입 금지물품</h1>
-        <p className="checklist-alert">항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
+        <p className="checklist-alert">
+          항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.
+        </p>
       </div>
 
       <div className="all-categories">
@@ -328,78 +330,6 @@ function ProhibitedItems() {
                 )}
               </tbody>
             </table>
-          </div>
-        </div>
-      )}
-      {/* 공항별 적발 현황 모달 오픈 버튼 */}
-      <button
-        className="open-airport-modal-btn"
-        onClick={() => setIsAirportModalOpen(true)}
-      >
-        공항 별 적발 현황 보기
-      </button>
-
-      {/* 공항별 적발 현황 모달 */}
-      {isAirportModalOpen && (
-        <div
-          className="modal-overlay"
-          onClick={() => setIsAirportModalOpen(false)}
-        >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="close-btn"
-              onClick={() => setIsAirportModalOpen(false)}
-            >
-              ✖
-            </button>
-            <h2>공항 별 적발 현황</h2>
-            <div className="airport-select-box">
-              <label>공항 선택: </label>
-              <select
-                value={selectedAirport}
-                onChange={(e) => setSelectedAirport(e.target.value)}
-              >
-                {airportList.map((airport, index) => (
-                  <option key={index} value={airport.airportName}>
-                    {airport.airportName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="chart-container">
-              {chartData ? (
-                <Bar
-                  data={chartData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: { display: false },
-                      title: {
-                        display: true,
-                        text: "공항 별 적발 현황",
-                        font: { size: 20 },
-                        padding: 20,
-                      },
-                    },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        grid: { display: true, color: "rgba(0, 0, 0, 0.1)" },
-                        ticks: { font: { size: 14 } },
-                      },
-                      x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 14 } },
-                      },
-                    },
-                  }}
-                  style={{ height: "500px" }}
-                />
-              ) : (
-                <p>데이터를 불러오는 중...</p>
-              )}
-            </div>
           </div>
         </div>
       )}
