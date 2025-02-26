@@ -355,7 +355,7 @@ body {
   background-color: var(--primary-white);
   border-radius: 12px;
   width: 100%; /* 전체 너비 유지 */
-  max-width: 500px; /* 최대 크기 설정 */
+  max-width: 550px; /* 최대 크기 설정 */
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease-in-out;
