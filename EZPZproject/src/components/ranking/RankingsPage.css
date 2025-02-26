@@ -1,0 +1,217 @@
+.rankings-page {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .description-section {
+    font-size: 16px;
+    color: white;
+    padding: 20px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    background: url("../../assets/img/airport.jpg") no-repeat center center;
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-width: 100%;
+    height: 70%;
+  }
+  
+  .description-section h1,
+  .description-section p {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 텍스트 가독성 향상 */
+  }
+  
+  .description-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    max-width: 1200px;
+    width: 100%;
+  }
+  .rankings-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .rankings-tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f9fa;
+  }
+  
+  .rankings-tabs .tab-button {
+    flex: 1;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+  }
+  
+  .rankings-tabs .tab-button.active {
+    color: #4285f4;
+    border-bottom: 3px solid #4285f4;
+    background-color: #fff;
+  }
+  
+  .rankings-tabs .tab-button:hover:not(.active) {
+    background-color: #f0f0f0;
+  }
+  
+  .rankings-content {
+    padding: 2rem;
+  }
+  
+  .rankings-date {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .rankings-date p {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .rankings-list-full {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .ranking-item-full {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    transition: transform 0.2s ease;
+  }
+  
+  .ranking-item-full:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #f0f4ff;
+  }
+  
+  .ranking-number {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #4285f4;
+    color: white;
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+  
+  .ranking-item-full:nth-child(1) .ranking-number {
+    background-color: #f4b400; /* 금색 */
+  }
+  
+  .ranking-item-full:nth-child(2) .ranking-number {
+    background-color: #9e9e9e; /* 은색 */
+  }
+  
+  .ranking-item-full:nth-child(3) .ranking-number {
+    background-color: #b87333; /* 동색 */
+  }
+  
+  .ranking-name {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  
+  .ranking-count {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  .rankings-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #4285f4;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .no-data {
+    text-align: center;
+    padding: 3rem 0;
+    color: #666;
+    font-size: 1.1rem;
+  }
+  
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    .rankings-page-header h1 {
+      font-size: 2rem;
+    }
+    
+    .rankings-content {
+      padding: 1.5rem;
+    }
+    
+    .ranking-item-full {
+      padding: 0.8rem;
+    }
+    
+    .ranking-number {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+    
+    .ranking-name {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .rankings-tabs .tab-button {
+      font-size: 0.9rem;
+      padding: 0.8rem 0.5rem;
+    }
+    
+    .rankings-page-header h1 {
+      font-size: 1.8rem;
+    }
+    
+    .rankings-content {
+      padding: 1rem;
+    }
+  }

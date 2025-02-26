@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/layout/Layout";
 import EZPackingLayout from "./components/EZPackingLayout";
@@ -16,11 +17,12 @@ import 'swiper/css';  // 기본 스타일
 import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
 import 'swiper/css/pagination';  // 페이지네이션 스타일 (필요한 경우)
 import EditProfile from "./components/EditProfile";
-
+import RankingPage from "./components/ranking/RankingPage";
 import ObjectDetection from "./pages/ObjectDetection";
 function App() {
   return (
-    <AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
         <Layout>
           <Routes>
             <Route path="/" element={<EZPackingLayout />} />
@@ -32,9 +34,11 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/rankings" element={<RankingPage />} />
           </Routes>
         </Layout>
-    </AuthProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 
