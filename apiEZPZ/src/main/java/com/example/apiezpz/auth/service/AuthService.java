@@ -162,9 +162,13 @@ public class AuthService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             return; // 비밀번호 불일치
         }
-
-        // 탈퇴회원 관련 데이터 삭제 (체크리스트, 게시글, 댓글)
+        // 1.토큰 삭제
+        refreshTokenRepository.deleteByUsername(user.getUsername());
+        // 2.탈퇴회원 관련 데이터 삭제 (체크리스트, 게시글, 댓글)
         checklistRepository.deleteByUsername(user.getUsername());
+//        postRepository.deleteByUserId(user.getId());
+//        commentRepository.deleteByUserId(user.getId());
+        // 3.회원 삭제
         postRepository.deleteByWriter(user.getUsername());
         commentRepository.deleteByWriter(user.getUsername());
         //토큰 삭제

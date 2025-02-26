@@ -16,16 +16,7 @@ export const AuthProvider = ({ children }) => {
 
       if (storedAccessToken) {
         try {
-          const userData = await authApi.getUserProfile(); // API에서 모든 회원 정보 가져오기
-          if (userData) {
-            setUser({
-              username: userData.username,
-              name: userData.name,
-              phone: userData.phone || "", // 추가
-              address: userData.address || "", // 추가
-              email: userData.email || "", // 추가
-            });
-          }
+          await fetchUserProfile(); // 최신 사용자 정보 가져오기
           fetchChecklists();  //체크리스트 자동 불러오기
         } catch (error) {
           console.error("사용자 정보를 가져오는 중 오류 발생:", error);
@@ -37,6 +28,16 @@ export const AuthProvider = ({ children }) => {
 
     initializeAuth();
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const userData = await authApi.getUserProfile(); // 최신 사용자 정보 가져오기
+      setUser(userData); // 전체 사용자 정보 업데이트
+      localStorage.setItem("name", userData.name);
+    } catch (error) {
+      console.error("회원 정보 갱신 실패:", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -65,10 +66,7 @@ export const AuthProvider = ({ children }) => {
 
         // Context 상태 업데이트
         setToken(data.accessToken);
-        setUser({
-          username: data.username,
-          name: data.name
-        });
+        await fetchUserProfile(); // 로그인 후 최신 회원 정보 불러오기
 
         // console.log('로그인 성공 - 상태 업데이트 완료');
         // window.location.href = '/';
@@ -105,20 +103,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateUser = (updatedUser) => {
-    setUser((prevUser) => ({
-      ...prevUser,
-      ...updatedUser,
-    }));
-    localStorage.setItem("name", updatedUser.name); // localStorage에도 반영
-  };
 
   if (!isInitialized) {
     return <div>로딩 중...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout: handleLogout, token, updateUser, checklists, fetchChecklists  }}>
+    <AuthContext.Provider value={{ user, login, logout: handleLogout, token, updateUser: fetchUserProfile, checklists, fetchChecklists }}>
       {children}
     </AuthContext.Provider>
   );
