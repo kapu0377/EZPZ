@@ -343,10 +343,8 @@ const App = () => {
 
       if (response.ok) {
         setCommentText('');
+        setCurrentCommentPage(1);
         await fetchComments();
-        // 새 댓글 추가 후 마지막 페이지로 이동
-        const newTotalPages = Math.ceil((comments.length + 1) / commentsPerPage);
-        setCurrentCommentPage(newTotalPages);
       }
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -360,15 +358,14 @@ const App = () => {
   };
 
   // 댓글 수정 저장 핸들러
-  const handleEditComment = async (commentId) => {
+  const handleEditComment = async () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
-
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const response = await fetch(`http://localhost:8088/api/comments/${editingCommentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -376,17 +373,21 @@ const App = () => {
         },
         body: JSON.stringify({
           content: editCommentText,
-          writer: localStorage.getItem('username') || '작성자'
-        }),
+          writer: localStorage.getItem('username')
+        })
       });
 
       if (response.ok) {
         setEditingCommentId(null);
         setEditCommentText('');
-        fetchComments();
+        await fetchComments();
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '댓글 수정에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error updating comment:', error);
+      console.error('Error:', error);
+      alert(error.message);
     }
   };
 
@@ -398,10 +399,13 @@ const App = () => {
       return;
     }
 
-    if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
+    if (!window.confirm('댓글을 삭제하시겠습니까?')) {
+      return;
+    }
 
     try {
-      const response = await fetch(`http://localhost:8088/api/comments/${commentId}`, {
+      const writer = localStorage.getItem('username');
+      const response = await fetch(`http://localhost:8088/api/comments/${commentId}?writer=${encodeURIComponent(writer)}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -409,10 +413,16 @@ const App = () => {
       });
 
       if (response.ok) {
-        fetchComments();
+        await fetchComments();
+        alert('댓글이 삭제되었습니다.');
+      } else if (response.status === 403) {
+        alert('삭제 권한이 없습니다.');
+      } else {
+        throw new Error('댓글 삭제에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      console.error('Error:', error);
+      alert(error.message);
     }
   };
 
@@ -434,12 +444,28 @@ const App = () => {
     setCurrentCommentPage(pageNumber);
   };
 
+  // 목록으로 버튼 클릭 핸들러 추가
+  const handleGoToList = () => {
+    setIsWriting(false);
+    setIsDetailView(false);
+    setTitle("");
+    setContent("");
+    setSelectedPost(null);  // 선택된 게시글 초기화
+    navigate('/board');     // 게시판 목록 페이지로 이동
+  };
+
   return (
-    <div className="container">
+    <div className="notice-container">
+      
       {!isDetailView ? (
         // 게시글 목록 화면
         <div className="left-section">
-          <h2 className="title">자유 게시판</h2>
+           <div className="description-section2">
+                <h1>자유 게시판</h1>
+                <p className="checklist-alert">
+                    건의사항이나 개선할 점 등 자유롭게 글을 남겨주세요.
+                </p>
+            </div >
           
           <div className="search-box">
             <select 
@@ -551,7 +577,7 @@ const App = () => {
             // 글작성 화면
             <>
               <div className="post-header">
-                <h2 className="post-title">새 글 작성</h2>
+                <h2 className="post-title">게시글</h2>
               </div>
               <div className="post-body">
                 <input
@@ -599,14 +625,16 @@ const App = () => {
                 <div className="post-header">
                   <h2 className="post-title">{selectedPost.title}</h2>
                   <div className="post-info">
-                    <span className="post-writer">작성자: {selectedPost.writer}</span>
-                    <span className="post-date">
-                      작성일: {new Date(selectedPost.createdAt).toLocaleDateString('ko-KR', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}
-                    </span>
+                    <span className="post-writer">작성자: {selectedPost.writer}</span><br></br>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <span className="post-date">
+                        {new Date(selectedPost.createdAt).toLocaleDateString('ko-KR', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        })}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="post-body">
@@ -614,42 +642,40 @@ const App = () => {
                 </div>
                 <div className="post-buttons">
                   <div className="left-buttons">
-                    <button
-                      onClick={handleBackToList}
+                    <button 
+                      onClick={handleGoToList}
                       className="button back-button"
                     >
                       목록으로
                     </button>
                   </div>
-                  <div className="right-buttons">
-                    {selectedPost.writer === localStorage.getItem('username') && (
-                      <>
-                        <button
-                          onClick={() => {
-                            if(window.confirm('게시글을 수정하시겠습니까?')) {
-                              setTitle(selectedPost.title);
-                              setContent(selectedPost.content);
-                              setEditId(selectedPost.id);
-                              setIsWriting(true);
-                            }
-                          }}
-                          className="button edit-button"
-                        >
-                          수정하기
-                        </button>
-                        <button
-                          onClick={() => {
-                            if(window.confirm('정말 삭제하시겠습니까?')) {
-                              handleDelete(selectedPost.id);
-                            }
-                          }}
-                          className="button delete-button"
-                        >
-                          삭제하기
-                        </button>
-                      </>
-                    )}
-                  </div>
+                  {selectedPost.writer === localStorage.getItem('username') && (
+                    <div className="right-buttons">
+                      <button 
+                        onClick={() => {
+                          if(window.confirm('게시글을 수정하시겠습니까?')) {
+                            setTitle(selectedPost.title);
+                            setContent(selectedPost.content);
+                            setEditId(selectedPost.id);
+                            setIsWriting(true);
+                          }
+                        }}
+                        className="button edit-button"
+                      >
+                        수정
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if(window.confirm('정말 삭제하시겠습니까?')) {
+                            handleDelete(selectedPost.id);
+                          }
+                        }}
+                        className="button delete-button"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* 댓글 섹션 - 상세보기 화면에서만 표시 */}
@@ -671,7 +697,6 @@ const App = () => {
                     {currentComments.map((comment) => (
                       <div key={comment.id} className="comment-item">
                         {editingCommentId === comment.id ? (
-                          // 수정 모드
                           <div className="comment-edit-form">
                             <input
                               type="text"
@@ -681,7 +706,7 @@ const App = () => {
                             />
                             <div className="comment-edit-buttons">
                               <button
-                                onClick={handleEditComment}
+                                onClick={() => handleEditComment(comment.id)}
                                 className="button edit-button"
                               >
                                 저장
@@ -689,7 +714,7 @@ const App = () => {
                               <button
                                 onClick={() => {
                                   setEditingCommentId(null);
-                                  setEditCommentText("");
+                                  setEditCommentText('');
                                 }}
                                 className="button cancel-button"
                               >
@@ -698,7 +723,6 @@ const App = () => {
                             </div>
                           </div>
                         ) : (
-                          // 일반 모드
                           <>
                             <div className="comment-content">
                               <span className="comment-author">{comment.writer}</span>

@@ -1,10 +1,16 @@
 /* 아이템 입력 및 리스트 전체 컨테이너 */
-.item-container {
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    background-color: #fff;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 기본 2열 */
+    gap: 10px;
+    width: 100%;
+}
+
+/* 화면이 작아질 때 1열로 정렬 */
+@media (max-width: 768px) {
+    .item-list {
+        grid-template-columns: 1fr; /* 1열 */
+    }
 }
 
 /* 아이템 입력 필드 */
@@ -144,7 +150,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
     transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .item-list {
+        font-size: 10px;
+    }
+
+    .item-list label {
+        font-size: 10px;
+    }
 }

@@ -1,0 +1,9 @@
+# diff a/EZPZproject/src/notice/Notice.css b/EZPZproject/src/notice/Notice.css	(rejected hunks)
+# @@ -25,7 +25,6 @@
+#    align-items: center;
+#    gap: 8px;
+#    margin-top: 20px;
+# -  padding: 10px 0;
+#  }
+ 
+#  .comment-pagination button {

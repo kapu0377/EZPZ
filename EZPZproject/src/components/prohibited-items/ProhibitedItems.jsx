@@ -214,9 +214,9 @@ function ProhibitedItems() {
       className="prohibited-items"
       style={{ maxWidth: "1200px", maxHeight: "120%", padding: "0 0px" }}
     >
-      <div className="description-section">
+      <div className="description-section2">
         <h1>항공기 반입 금지물품</h1>
-        <p>항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
+        <p className="checklist-alert">항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
       </div>
 
       <div className="all-categories">
@@ -313,7 +313,7 @@ function ProhibitedItems() {
                 <tr>
                   <th>번호</th>
                   <th>아이템명</th>
-                  <th>허가 여부</th> {/* ✅ 허가 여부 컬럼 추가 */}
+                  <th>기내 반입 여부</th> {/* ✅ 기내 반입입 여부 컬럼 추가 */}
                 </tr>
               </thead>
               <tbody>
@@ -322,7 +322,7 @@ function ProhibitedItems() {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{item}</td>
-                      <td>O</td> {/* ✅ 허가 여부 O 표시 */}
+                      <td>허가</td> {/* ✅ 허가 여부 O 표시 */}
                     </tr>
                   )
                 )}

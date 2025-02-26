@@ -136,6 +136,23 @@
     gap: 10px;
     padding-bottom: 15px;
   }
+
+  .slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slider-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .airport-parking-card {
+    flex: 0 0 100%;
+    transition: transform 0.5s ease-in-out;
+  }
+  
   
 
   
