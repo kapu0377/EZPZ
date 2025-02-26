@@ -250,6 +250,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   position: relative;
   max-width: 100%;
+  z-index: 1;
   height: 70%;
 }
 
@@ -272,6 +273,21 @@
   border-radius: 10px;
   max-width: 1200px;
   width: 100%;
+}
+
+/* ✅ 드롭다운 메뉴가 배너보다 위로 오도록 설정 */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* ✅ 배너보다 높은 값으로 설정 */
 }
 
 /* 모달 오버레이 */
