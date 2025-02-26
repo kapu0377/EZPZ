@@ -32,6 +32,7 @@ function App() {
             <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/airport-detections" element={<AirportDetectionPage />} />
+            {/* <Route path="/item-search" element={<ItemSearch />} /> */}
           </Routes>
         </Layout>
     </AuthProvider>

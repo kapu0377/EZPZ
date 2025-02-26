@@ -1,12 +1,12 @@
 /* ✅ 네비게이션 스타일 */
-.main-nav {
+/* .main-nav {
     display: flex;
     justify-content: flex-end;
     gap: 2rem;
     font-size: 1.2rem;
     font-weight: 600;
     align-items: center;
-  }
+  } */
   
   /* ✅ 드롭다운 기본 스타일 */
   .dropdown {
@@ -57,7 +57,7 @@
     transition: color 0.2s ease-in-out;
   }
   
-  /* ✅ 네비게이션 링크 호버 효과 */
+  ✅ 네비게이션 링크 호버 효과
   .nav-link:hover {
     color: #686868;
   }
