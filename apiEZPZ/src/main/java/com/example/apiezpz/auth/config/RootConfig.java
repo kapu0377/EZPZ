@@ -1,4 +1,4 @@
-package com.example.apiezpz.config;
+package com.example.apiezpz.auth.config;
 
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import authApi from '../api/authApi';
+import { getChecklists } from "../api/checklist/checklistApi";
 
 const AuthContext = createContext(null);
 
@@ -7,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [checklists, setChecklists] = useState([]);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -69,12 +71,6 @@ export const AuthProvider = ({ children }) => {
         // console.log('로그인 성공 - 상태 업데이트 완료');
         // window.location.href = '/';
         fetchChecklists();
-        setUser({
-          username: data.username,
-          name: data.name
-        });
-
-        console.log('로그인 성공 - 상태 업데이트 완료');
         return true;
       }
 
