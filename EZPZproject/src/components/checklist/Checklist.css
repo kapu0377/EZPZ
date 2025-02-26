@@ -82,16 +82,14 @@
 
 @media (max-width: 768px) {
     .checklist-container {
-        font-size: 12px;
+        width: 100%; 
+        max-width: 400px; /* 적절한 최대 너비 유지 */
     }
 
-    .checklist-container h2 {
-        font-size: 14px;
-    }
-
-    .checklist-container button {
-        font-size: 14px;
-        padding: 8px 12px;
+    .category-container {
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px; /* 간격 추가 */
     }
 }
 
