@@ -1,0 +1,64 @@
+/* ✅ 네비게이션 스타일 */
+/* .main-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    align-items: center;
+  } */
+  
+  /* ✅ 드롭다운 기본 스타일 */
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  
+  /* ✅ 드롭다운이 활성화될 때 */
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* ✅ 드롭다운 내부 아이템 스타일 */
+  .dropdown-item {
+    padding: 12px 16px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* ✅ 네비게이션 링크 스타일 */
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  ✅ 네비게이션 링크 호버 효과
+  .nav-link:hover {
+    color: #686868;
+  }
+  
