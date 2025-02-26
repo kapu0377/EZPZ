@@ -45,7 +45,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
               자유게시판
             </Link>
             <Link to="/faq" onClick={() => setMenuOpen(false)}>
-              F&Q
+              FAQ
             </Link>
           </div>
         )}
