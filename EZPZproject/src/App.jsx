@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from "./contexts/AuthContext";
 import Layout from "./components/layout/Layout";
 import EZPackingLayout from "./components/EZPackingLayout";
@@ -29,11 +28,14 @@ function App() {
             <Route path="/prohibited" element={<ProhibitedItems />} />
             <Route path="/board" element={<Notice />} />
             <Route path="/board/:no" element={<Notice />} />
+            <Route path="/faq" element={<Faq />} />
             <Route path="/checklist" element={<CheckList />} />
             <Route path="/parking" element={<AirportParkingPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/airport-detections" element={<AirportDetectionPage />} />
+            {/* <Route path="/item-search" element={<ItemSearch />} /> */}
             <Route path="/rankings" element={<RankingPage />} />
           </Routes>
         </Layout>

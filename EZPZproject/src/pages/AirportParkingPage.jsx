@@ -17,6 +17,7 @@ import KUVFeeModal from '../components/parking/Modal/KUVFeeModal';
 import WJUFeeModal from '../components/parking/Modal/WJUFeeModal';
 import CJJFeeModal from '../components/parking/Modal/CJJFeeModal';
 import RatingSection from '../components/rating/RatingSection';
+import AirportLocation from '../components/parking/AirportLocation';
 
 
 const AirportParkingPage = () => {
@@ -408,6 +409,10 @@ const AirportParkingPage = () => {
           airport={selectedAirport || { id: 'ICN', name: '인천국제공항' }}
         />
       )}
+      {(selectedAirport || incheonData) && (
+        <AirportLocation airport={selectedAirport || { id: 'ICN', name: '인천국제공항' }}/>
+      )}
+      
     </div>
   );
 };

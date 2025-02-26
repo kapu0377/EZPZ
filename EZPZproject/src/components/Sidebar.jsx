@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ menuOpen, setMenuOpen }) => {
-  const [subMenuOpen1, setSubMenuOpen1] = useState(false); // ✅ 서브메뉴 상태 추가
-  const [subMenuOpen2, setSubMenuOpen2] = useState(false); // ✅ 서브메뉴 상태 추가
+  const [subMenuOpen1, setSubMenuOpen1] = useState(false); // ✅ 서브메뉴1 상태 추가
+  const [subMenuOpen2, setSubMenuOpen2] = useState(false); // ✅ 서브메뉴2 상태 추가
 
   return (
     <div className={`sidebar-menu ${menuOpen ? "open" : ""}`}>
@@ -26,6 +26,9 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
             </Link>
             <Link to="/airport-detections" onClick={() => setMenuOpen(false)}>
               공항 별 적발현황
+            </Link>
+            <Link to="/item-search" onClick={() => setMenuOpen(false)}>
+              항공 물품 검색
             </Link>
           </div>
         )}
