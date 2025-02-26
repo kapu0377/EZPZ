@@ -80,7 +80,10 @@ function AirportDetectionPage() {
 
   return (
     <div className="airport-detection-page">
-      <h1>공항별 적발 현황</h1>
+      <div className="description-section2">
+        <h1>국내 공항 적발 현황</h1>
+        <p className="checklist-alert">현재 각 공항들의 금지물품 적발 현황입니다.</p>
+      </div>
 
       <div className="airport-select-box">
         <label>공항 선택: </label>
@@ -105,7 +108,7 @@ function AirportDetectionPage() {
                 title: {
                   display: true,
                   text: "공항 별 적발 현황",
-                  font: { size: 20 },
+                  font: { size: 30 },
                   padding: 20,
                 },
               },
@@ -113,11 +116,11 @@ function AirportDetectionPage() {
                 y: {
                   beginAtZero: true,
                   grid: { display: true, color: "rgba(0, 0, 0, 0.1)" },
-                  ticks: { font: { size: 14 } },
+                  ticks: { font: { size: 20 } },
                 },
                 x: {
                   grid: { display: false },
-                  ticks: { font: { size: 14 } },
+                  ticks: { font: { size: 16 } },
                 },
               },
             }}
