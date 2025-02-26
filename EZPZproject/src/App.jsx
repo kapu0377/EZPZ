@@ -8,6 +8,7 @@ import "./App.css";
 import "./components/notice/Notice.css";
 import Notice from "./pages/Notice";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
+import AirportDetectionPage from "./components/prohibited-items/AirportDetectionPage"
 import AirportParkingPage from "./pages/AirportParkingPage";
 import 'swiper/css';  // 기본 스타일
 import 'swiper/css/navigation';  // 네비게이션 스타일 (필요한 경우)
@@ -28,6 +29,7 @@ function App() {
             <Route path="/parking" element={<AirportParkingPage />} />
             <Route path="/ObjectDetection" element={<ObjectDetection />} />
             <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/airport-detections" element={<AirportDetectionPage />} />
           </Routes>
         </Layout>
     </AuthProvider>

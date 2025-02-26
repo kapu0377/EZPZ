@@ -140,6 +140,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  z-index: 1000;
 }
 
 /* ✅ 사이드바 활성화 */
@@ -164,6 +165,21 @@ body {
   margin-top: 20px;
 }
 
+.sidebar-item {
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 0;
+  transition: color 0.3s ease-in-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-item:hover {
+  color: #a1a1a1;
+}
+
 .sidebar-nav a {
   text-decoration: none;
   color: var(--secondary-black);
@@ -174,7 +190,36 @@ body {
 }
 
 .sidebar-nav a:hover {
-  color: #f5f5f5;
+  color: #a1a1a1;
+}
+
+/* ✅ 서브메뉴 스타일 */
+.sidebar-submenu {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+}
+
+.sidebar-submenu a {
+  font-size: 1rem;
+  font-weight: normal;
+  padding: 8px 0;
+  color: #666;
+  transition: color 0.3s ease-in-out;
+}
+
+.sidebar-submenu a:hover {
+  color: #000;
+}
+
+/* ✅ 화살표 스타일 */
+.arrow {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
 }
 
 
@@ -524,7 +569,7 @@ body {
     justify-content: center;
     height: auto; /* 높이 자동 조정 */
     width: 100%;
-    max-width: 400px;
+    max-width: 550px;
     margin: 0 auto;
   }
 
@@ -598,7 +643,7 @@ body {
     align-items: center;
     justify-content: center;
     height: auto;
-    max-width: 400px;
+    max-width: 550px;
     margin: 0 auto; 
   }
 }
