@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import com.example.apiezpz.checklist.repository.ChecklistRepository;
+import com.example.apiezpz.comment.repository.CommentRepository;
+import com.example.apiezpz.post.repository.PostRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final ChecklistRepository checklistRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     // 1) 회원가입
     public void signup(SignUpRequest request) {
@@ -161,8 +165,8 @@ public class AuthService {
 
         // 탈퇴회원 관련 데이터 삭제 (체크리스트, 게시글, 댓글)
         checklistRepository.deleteByUsername(user.getUsername());
-//        postRepository.deleteByUserId(user.getId());
-//        commentRepository.deleteByUserId(user.getId());
+        postRepository.deleteByWriter(user.getUsername());
+        commentRepository.deleteByWriter(user.getUsername());
         //토큰 삭제
         refreshTokenRepository.deleteByUsername(user.getName());
         // 회원 삭제
