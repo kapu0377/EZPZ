@@ -31,7 +31,7 @@
   }
   
   .chart-container {
-    width: 98%;
+    width: 94%;
     max-width: 1200px;
     height: 600px;
     margin: 0 auto;
@@ -42,7 +42,7 @@
   }
 
   /* ✅ 설명 섹션 배경 이미지가 잘리지 않도록 조정 */
-.description-section2 {
+/* .description-section2 {
   font-size: 16px;
   color: white;
   padding: 20px;
@@ -57,7 +57,7 @@
   width: 100%;
   z-index: 1;
   height: 100%;
-}
+} */
 
 .description-section2 h1,
 .description-section2 p {
