@@ -98,7 +98,11 @@ const authApi = {
 
   deleteUser: async (password) => {
     try {
+      const accessToken = localStorage.getItem("accessToken");
       const response = await axiosInstance.delete("/api/auth/delete", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         data: { password }, // 현재 비밀번호를 함께 전송
       });
       return response.data;
@@ -107,7 +111,6 @@ const authApi = {
       throw error;
     }
   },
-
 
 };
 
