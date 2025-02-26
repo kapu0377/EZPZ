@@ -31,7 +31,7 @@ const Header = () => {
               <div className="dropdown-menu">
                 <Link to="/prohibited" className="dropdown-item">금지물품 목록</Link>
                 <Link to="/airport-detections" className="dropdown-item">공항 별 적발현황</Link>
-                <Link to="/item-search" className="dropdown-item">항공 물품 검색색</Link>
+                <Link to="/item-search" className="dropdown-item">항공 물품 검색</Link>
               </div>
             )}
           </div>
