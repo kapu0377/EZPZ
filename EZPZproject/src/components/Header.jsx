@@ -44,7 +44,7 @@ const Header = () => {
             {dropdownOpen2 && (
               <div className="dropdown-menu">
                 <Link to="/board" className="dropdown-item">자유게시판</Link>
-                <Link to="/faq" className="dropdown-item">F&Q</Link>
+                <Link to="/faq" className="dropdown-item">FAQ</Link>
               </div>
             )}
           </div>
