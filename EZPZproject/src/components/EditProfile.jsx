@@ -43,7 +43,7 @@ const EditProfile = () => {
     // 비밀번호 검증 함수
     const verifyPassword = useCallback(
         async (pw) => {
-            if (!pw || pw.length < 4) {
+            if (!pw || pw.length < 1) {
                 setDbPasswordValid(false);
                 setVerificationMessage("");
                 return;

@@ -55,7 +55,7 @@ public class ItemSearchService {
         Item representativeItem = items.iterator().next();
 
         // 검색 기록 저장
-        searchService.recordSearch(username, representativeItem.getCategory());
+        searchService.recordSearch(username, representativeItem.getCategory(),keyword);
 
         if (hasProhibitedItem) {
             // 완전 금지 물품이 있는 경우

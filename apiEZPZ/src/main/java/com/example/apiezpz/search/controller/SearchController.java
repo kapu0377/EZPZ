@@ -34,7 +34,8 @@ public class SearchController {
     public ResponseEntity<?> recordSearch(@RequestBody Map<String, String> request) {
         String username = request.get("username");
         String category = request.get("category");
-        searchService.recordSearch(username, category);
+        String keyword = request.get("keyword");
+        searchService.recordSearch(username, category, keyword);
         return ResponseEntity.ok().build();
     }
     

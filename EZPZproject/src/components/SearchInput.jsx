@@ -52,6 +52,7 @@ const SearchInput = ({ onSearchResult }) => {
     const username = localStorage.getItem('username');
     if (username) {
       saveSearchHistory(username, inputValue.trim());
+      window.dispatchEvent(new CustomEvent('search-history-updated'));
     }
     
     setShowBatteryModal(false);
@@ -67,7 +68,7 @@ const SearchInput = ({ onSearchResult }) => {
         const result = await itemApi.searchItems(inputValue.trim());
         let newResult;
         
-        if (inputValue.trim().includes('배터리')) {
+        if (inputValue.trim().toLowerCase().includes('배터리')) {
           setShowBatteryModal(true);
           setIsLoading(false);
           return;
@@ -76,20 +77,67 @@ const SearchInput = ({ onSearchResult }) => {
         if (result && !result.error && result.restrictions) {
           let status;
           let details = result.restrictions;
-          const actualAllowed = !result.isAllowed;  
+          
+          console.log("검색 결과 디버깅:", {
+            item: inputValue.trim(),
+            isAllowed: result.isAllowed,
+            isConditional: result.isConditional,
+            restrictions: result.restrictions
+          });
+          
+          const actualAllowed = (result.isAllowed === undefined && 
+                                 details.toLowerCase().includes('반입 가능')) ? 
+                                 true : result.isAllowed;
+          
           const actualConditional = result.isConditional;
+          const hasDbValue = result.isAllowed !== undefined;
+          const indicatesProhibited = details.toLowerCase().includes('반입 불가') || 
+          details.toLowerCase().includes('반입불가') ||
+          details.toLowerCase().includes('모두 불가');
 
           const isCheckedBaggageOnly = details.toLowerCase().includes('수하물만') || 
-                                     details.toLowerCase().includes('위탁수하물만');
-
+          details.toLowerCase().includes('위탁수하물만');
+          
+          console.log("상태 판단 조건:", {
+            actualAllowed,
+            actualConditional,
+            indicatesProhibited,
+            isCheckedBaggageOnly,
+            detailsLower: details.toLowerCase()
+          });
+        
           if (!actualAllowed) {
-            status = "반입금지";
-          } else if (actualConditional || isCheckedBaggageOnly) {
-            status = "부분허용";
-          } else {
-            status = "반입가능";
+            console.log("DB에서 반입불가로 설정됨");
           }
           
+          if (indicatesProhibited) {
+            console.log("텍스트에서 반입불가 표현 발견:", 
+              details.toLowerCase().includes('반입 불가') ? '반입 불가' : 
+              details.toLowerCase().includes('반입불가') ? '반입불가' : 
+              '모두 불가'
+            );
+          }
+        
+          if (hasDbValue) {
+            if (actualConditional || isCheckedBaggageOnly) {
+              status = "부분허용";
+            } else if (!actualAllowed) {
+              status = "반입금지";
+            } else {
+              status = "반입가능";
+            }
+          } else {
+            if (indicatesProhibited) {
+              status = "반입금지";
+            } else if (isCheckedBaggageOnly) {
+              status = "부분허용";
+            } else {
+              status = "반입가능";
+            }
+          }
+          
+          console.log("최종 결정된 상태:", status);
+        
           newResult = {
             item: inputValue.trim(),
             status: status,
@@ -97,21 +145,47 @@ const SearchInput = ({ onSearchResult }) => {
             isConditional: actualConditional || isCheckedBaggageOnly
           };
         } else {
-          newResult = {
+          const potentialDangerousKeywords = [
+            '페인트볼', '마커', '총', '무기', '칼', '가위', '화약', '폭발', '배터리',
+            '에어로졸', '스프레이', '가스', '인화성', '액체', '독극물', '라이터','마약'
+          ];
+          
+          const containsDangerousKeyword = potentialDangerousKeywords.some(
+            keyword => inputValue.trim().toLowerCase().includes(keyword.toLowerCase())
+          );
+          
+          console.log("DB에 없는 항목:", {
             item: inputValue.trim(),
-            status: "반입가능",
-            details: "기내 반입 가능, 특별 제한 없음",
-            isConditional: false
-          };
+            containsDangerousKeyword,
+            matchedKeywords: potentialDangerousKeywords.filter(keyword => 
+              inputValue.trim().toLowerCase().includes(keyword.toLowerCase())
+            )
+          });
+          
+          if (containsDangerousKeyword) {
+            newResult = {
+              item: inputValue.trim(),
+              status: "확인필요",
+              details: "데이터베이스에 정확한 정보가 없습니다. 보안검색대에서 확인이 필요할 수 있습니다.",
+              isConditional: true
+            };
+          } else {
+            newResult = {
+              item: inputValue.trim(),
+              status: "반입가능",
+              details: "기내 반입 가능, 특별 제한 없음",
+              isConditional: false
+            };
+          }
         }
         
         onSearchResult(newResult);
         setInputValue("");
         
-        // 검색 결과 저장 (사용자별 검색 기록)
         const username = localStorage.getItem('username');
         if (username) {
           await saveSearchHistory(username, inputValue.trim());
+          window.dispatchEvent(new CustomEvent('search-history-updated'));
         }
         
         try {
@@ -133,7 +207,6 @@ const SearchInput = ({ onSearchResult }) => {
       }
     }
   };
-
   return (
     <div className="search-input">
       <div className="search-input-header">

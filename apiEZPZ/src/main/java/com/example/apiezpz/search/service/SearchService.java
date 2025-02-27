@@ -32,13 +32,13 @@ public class SearchService {
     private final WeeklyRankRepository weeklyRankRepository;
     private final MonthlyRankRepository monthlyRankRepository;
 
-    public void recordSearch(String username, String category) {
+    public void recordSearch(String username, String category, String keyword) {
         User user = userRepository.findByUsername(username);
         SearchHistory searchHistory = new SearchHistory();
         searchHistory.setCategory(category);
         searchHistory.setUser(user);
         searchHistory.setSearchDate(LocalDateTime.now(ZoneId.of("Asia/Tokyo")));
-        searchHistory.setKeyword(category);
+        searchHistory.setKeyword(keyword);
         searchHistoryRepository.save(searchHistory);
 
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Tokyo"));

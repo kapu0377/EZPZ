@@ -11,6 +11,12 @@ const SearchPage = () => {
     return savedResults ? JSON.parse(savedResults) : [];
   });
   
+  const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = sessionStorage.getItem('currentSearchPage');
+    return savedPage ? parseInt(savedPage) : 1;
+  });
+  const [resultsPerPage] = useState(10);
+  
   const [searchHistory, setSearchHistory] = useState([]);
   const [groupedHistory, setGroupedHistory] = useState({});
   const [activeTab, setActiveTab] = useState("search"); 
@@ -18,10 +24,14 @@ const SearchPage = () => {
   const [historyDays, setHistoryDays] = useState(7); 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); 
+  const [showSearchNotification, setShowSearchNotification] = useState(false);
 
   useEffect(() => {
     sessionStorage.setItem('searchResults', JSON.stringify(searchResults));
-  }, [searchResults]);
+  }, [searchResults]);  
+  useEffect(() => {
+    sessionStorage.setItem('currentSearchPage', currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -93,22 +103,68 @@ const SearchPage = () => {
     return () => window.removeEventListener('login-success', handleLoginSuccess);
   }, [historyDays]);
 
-  const handleSearchResult = (result) => {
-    setSearchResults(prev => {
-      if (prev.length >= 10) {
-        return [...prev.slice(1), result];
+  useEffect(() => {
+    const handleSearchHistoryUpdated = async () => {
+      const username = localStorage.getItem('username');
+      if (username) {
+        try {
+          setIsLoading(true);
+          const history = await getUserSearchHistoryByDays(username, historyDays);
+          setSearchHistory(history);
+          
+          const grouped = history.reduce((acc, item) => {
+            const date = new Date(item.searchDate).toLocaleDateString();
+            if (!acc[date]) {
+              acc[date] = [];
+            }
+            acc[date].push(item);
+            return acc;
+          }, {});
+          
+          setGroupedHistory(grouped);
+        } catch (error) {
+          console.error('검색 기록 로딩 실패:', error);
+        } finally {
+          setIsLoading(false);
+        }
       }
-      return [...prev, result];
-    });
-    setActiveTab("search");
+    };
+
+    window.addEventListener('search-history-updated', handleSearchHistoryUpdated);
+    return () => window.removeEventListener('search-history-updated', handleSearchHistoryUpdated);
+  }, [historyDays]);
+
+  const handleSearchResult = (result) => {
+    setSearchResults(prev => [...prev, result]);
+    
+    // 새 결과가 추가되면 해당 페이지로 이동
+    setCurrentPage(Math.ceil((searchResults.length + 1) / resultsPerPage));
+    
+    // 현재 탭이 history일 경우 알림 표시
+    if (activeTab === "history") {
+      setShowSearchNotification(true);
+      // 3초 후 알림 자동 제거
+      setTimeout(() => {
+        setShowSearchNotification(false);
+      }, 3000);
+    }
   };
 
   const handleRemoveItem = (index) => {
-    setSearchResults(prev => prev.filter((_, i) => i !== index));
+    // 현재 페이지에 표시된 결과의 실제 인덱스 계산
+    const actualIndex = indexOfFirstResult + index;
+    setSearchResults(prev => prev.filter((_, i) => i !== actualIndex));
+    
+    // 현재 페이지에 결과가 없게 되면 이전 페이지로 이동
+    const newTotalPages = Math.ceil((searchResults.length - 1) / resultsPerPage);
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(newTotalPages);
+    }
   };
 
   const handleReset = () => {
     setSearchResults([]);
+    setCurrentPage(1);
     sessionStorage.removeItem('searchResults');
   };
 
@@ -127,6 +183,19 @@ const SearchPage = () => {
   const handleCloseLoginModal = () => {
     setIsLoginModalOpen(false);
   };
+  
+  // 페이지 변경 핸들러
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // 현재 페이지에 표시할 검색 결과 계산
+  const indexOfLastResult = currentPage * resultsPerPage;
+  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+  const currentResults = searchResults.slice(indexOfFirstResult, indexOfLastResult);
+  
+  // 전체 페이지 수 계산
+  const totalPages = Math.ceil(searchResults.length / resultsPerPage);
 
   return (
     <div className="search-page">
@@ -152,10 +221,10 @@ const SearchPage = () => {
               검색 결과
             </button>
             <button 
-              className={`tab-button ${activeTab === "history" ? "active" : ""}`}
+              className={`tab-button ${activeTab === "history" ? "active" : ""} ${showSearchNotification && activeTab === "history" ? "notification" : ""}`}
               onClick={() => handleTabChange("history")}
             >
-              내 검색 기록
+              검색 기록 {showSearchNotification && activeTab === "history" && <span className="notification-dot"></span>}
             </button>
           </div>
 
@@ -163,9 +232,32 @@ const SearchPage = () => {
             {activeTab === "search" ? (
               <div className="search-results-container">
                 <SearchResults 
-                  results={searchResults} 
+                  results={currentResults} 
                   onRemoveItem={handleRemoveItem}
                 />
+                
+                {/* 페이지네이션 컨트롤 추가 */}
+                {searchResults.length > 0 && (
+                  <div className="pagination">
+                    <button 
+                      onClick={() => handlePageChange(currentPage - 1)} 
+                      disabled={currentPage === 1}
+                      className="pagination-button"
+                    >
+                      이전
+                    </button>
+                    
+                    <span className="page-info">{currentPage} / {totalPages || 1}</span>
+                    
+                    <button 
+                      onClick={() => handlePageChange(currentPage + 1)} 
+                      disabled={currentPage === totalPages || totalPages === 0}
+                      className="pagination-button"
+                    >
+                      다음
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="search-history-container">
@@ -217,6 +309,9 @@ const SearchPage = () => {
                     ) : (
                       <p className="no-history">검색 기록이 없습니다.</p>
                     )}
+                    {showSearchNotification && (
+                      <p className="search-notification">새로운 검색 결과가 있습니다!</p>
+                    )}
                   </>
                 )}
               </div>
@@ -225,7 +320,17 @@ const SearchPage = () => {
         </div>
       </div>
       
-      <Login isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} />
+      {isLoginModalOpen && (
+        <Login onClose={handleCloseLoginModal} />
+      )}
+      
+      {showSearchNotification && activeTab === "history" && (
+        <div className="search-notification">
+          <span>새로운 검색 결과가 있습니다. 검색 결과 탭에서 확인하세요!</span>
+          <button onClick={() => handleTabChange("search")}>확인하기</button>
+          <button onClick={() => setShowSearchNotification(false)}>×</button>
+        </div>
+      )}
     </div>
   );
 };
