@@ -208,21 +208,24 @@ const App = () => {
       
       const savedPost = await response.json();
     
+      // 게시글 목록을 다시 불러오기
+    await fetchPosts();
+
       // 게시글 목록 업데이트
       if (editId) {
-        setPosts(prevPosts =>
-          prevPosts.map(post => 
-            post.id === editId ? savedPost : post
-          )
-        );
         // 수정 후 상세보기 화면으로 이동
         setSelectedPost(savedPost);
         setIsDetailView(true);
         setIsWriting(false);
         window.history.pushState(null, '', `/board/${savedPost.id}`);
       } else {
-        setPosts(prevPosts => [savedPost, ...prevPosts]);
+        // 새로운 게시글 등록 후 목록으로 이동
         setIsDetailView(false);
+        setIsWriting(false);
+        navigate('/board');  // 글 등록 후 목록 페이지로 이동
+  
+        // 상태 업데이트가 즉시 반영되지 않을 가능성이 있어 지연 실행
+        setTimeout(() => setSelectedPost(savedPost), 100);
       }
 
       alert(editId ? '게시글이 수정되었습니다.' : '게시글이 등록되었습니다.');
