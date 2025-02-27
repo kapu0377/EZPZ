@@ -55,8 +55,8 @@ export default function ChecklistEditModal({ isOpen, onClose, checklist, onUpdat
                     />
                 </div>
                 <div className="checklist-modal-buttons">
-                    <button className="cancel-btn" onClick={onClose}>취소</button>
-                    <button className="save-btn" onClick={handleSubmit}>저장</button>
+                    <button className="category-cancel-btn" onClick={onClose}>취소</button>
+                    <button className="category-save-btn" onClick={handleSubmit}>저장</button>
                 </div>
             </div>
         </div>
