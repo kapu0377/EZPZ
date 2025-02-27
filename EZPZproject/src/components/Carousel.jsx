@@ -27,7 +27,7 @@ const Carousel = () => {
   };
 
   const slideStyle = {
-    position: 'relative',
+    position: 'relative', // 슬라이드 개별적인 스타일 적용
     height: '350px',
     borderRadius: '10px',
     overflow: 'hidden'
@@ -39,12 +39,24 @@ const Carousel = () => {
     objectFit: 'cover'
   };
 
-  const textStyle = {
+  const sloganContainer = {
     position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    textAlign: 'center'
+  };
+
+  const sloganStyle = {
     color: 'white',
+    fontSize: '32px',
+    fontWeight: 'bold',
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-    left: '20px',
-    margin: '0'
+    padding: '10px 20px',
+    background: 'rgba(0, 0, 0, 0.3)', // 가독성을 높이기 위한 반투명 배경
+    display: 'inline-block',
+    borderRadius: '10px'
   };
 
   return (
@@ -56,8 +68,9 @@ const Carousel = () => {
             alt="여행 준비" 
             style={imageStyle}
           />
-          <h3 style={{...textStyle, bottom: '60px'}}>여행 준비 체크리스트</h3>
-          <p style={{...textStyle, bottom: '30px'}}>완벽한 여행을 위한 필수 준비물</p>
+          <div style={sloganContainer}>
+            <div style={sloganStyle}>Have to think deeply about safety for a high flight</div>
+          </div>
         </div>
         <div style={slideStyle}>
           <img 
@@ -65,8 +78,9 @@ const Carousel = () => {
             alt="인기 여행지" 
             style={imageStyle}
           />
-          <h3 style={{...textStyle, bottom: '60px'}}>인기 여행지 추천</h3>
-          <p style={{...textStyle, bottom: '30px'}}>2025년 꼭 가봐야 할 여행지</p>
+          <div style={sloganContainer}>
+            <div style={sloganStyle}>"Safety doesn't happen by accident, it's created by effort." -Mark Twain</div>
+          </div>
         </div>
         <div style={slideStyle}>
           <img 
@@ -74,8 +88,9 @@ const Carousel = () => {
             alt="계절별 아이템" 
             style={imageStyle}
           />
-          <h3 style={{...textStyle, bottom: '60px'}}>계절별 추천 아이템</h3>
-          <p style={{...textStyle, bottom: '30px'}}>날씨에 맞는 완벽한 여행 준비</p>
+          <div style={sloganContainer}>
+            <div style={sloganStyle}>Safety makes flight, we make safety, hope your safe flight!</div>
+          </div>
         </div>
       </Slider>
     </div>

@@ -94,6 +94,7 @@ function AirportDetectionPage() {
             </option>
           ))}
         </select>
+        <h4>제주공항, 청주공항 : 2024/08,  그 외 공항 : 2024/12 기준</h4>
       </div>
 
       <div className="chart-container">
