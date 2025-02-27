@@ -17,7 +17,7 @@ import KUVFeeModal from '../components/parking/Modal/KUVFeeModal';
 import WJUFeeModal from '../components/parking/Modal/WJUFeeModal';
 import CJJFeeModal from '../components/parking/Modal/CJJFeeModal';
 import RatingSection from '../components/rating/RatingSection';
-import AirportLocation from '../components/parking/AirportLocation';
+import AirportLocationModal from '../components/parking/AirportLocationModal';
 
 
 const AirportParkingPage = () => {
@@ -32,16 +32,9 @@ const AirportParkingPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isGmpModalOpen, setIsGmpModalOpen] = useState(false);
-  const [isPusModalOpen, setIsPusModalOpen] = useState(false);
-  const [isCJUModalOpen, setIsCJUModalOpen] = useState(false);
-  const [isTAEModalOpen, setIsTAEModalOpen] = useState(false);
-  const [isCJJModalOpen, setIsCJJModalOpen] = useState(false);
-  const [isKWJModalOpen, setIsKWJModalOpen] = useState(false);
-  const [isRSUModalOpen, setIsRSUModalOpen] = useState(false);
-  const [isUSNModalOpen, setIsUSNModalOpen] = useState(false);
-  const [isKUVModalOpen, setIsKUVModalOpen] = useState(false);
   const [isWJUModalOpen, setIsWJUModalOpen] = useState(false);
+  const [isApModalOpen, setIsApModalOpen] = useState("");
+  const [isApLocModalOpen, setIsApLocModalOpen] = useState(false);
 
   const [ratings, setRatings] = useState({
     satisfaction: 5,
@@ -64,7 +57,8 @@ const AirportParkingPage = () => {
       setIsLoading(true);
       setError(null);
       const data = await fetchAirportParkingData(airportCode);
-      setSelectedAirport(data);
+      const etcData = setEtcData(data);
+      setSelectedAirport(etcData);
       setIncheonData(null); // 인천공항 데이터 초기화
     } catch (err) {
       setError(`${AIRPORT_CODES[airportCode].name} 데이터를 불러오는데 실패했습니다.`);
@@ -124,6 +118,47 @@ const AirportParkingPage = () => {
     }
   };
 
+  const setEtcData = (data) => {
+    if(data.id === "GMP"){
+      data = { ...data , ename:"gimpo", tel:"주차고객 지원실(주차안내) Tel. 02-2660-2515"}
+    }else if(data.id === "PUS"){
+      data = { ...data , ename:"gimhae", tel:"주차 대표번호 1661-2626, 051-974-3718"}
+    }else if(data.id === "CJU"){
+      data = { ...data , ename:"jeju", tel:"주차관리사무실 064-797-2701, 2702"}
+    }else if(data.id === "TAE"){
+      data = { ...data , ename:"daegu", tel:"주차장 이용안내소 Tel. 053-980-5254"}
+    }else if(data.id === "CJJ"){
+      data = { ...data , ename:"cheongju", tel:"주차장 이용안내 tel. 043-210-6755"}
+    }else if(data.id === "KWJ"){
+      data = { ...data , ename:"gwangju", tel:""}
+    }else if(data.id === "RSU"){
+      data = { ...data , ename:"yeosu", tel:""}
+    }else if(data.id === "USN"){
+      data = { ...data , ename:"ulsan", tel:""}
+    }else if(data.id === "KUV"){
+      data = { ...data , ename:"gunsan", tel:""}
+    }else if(data.id === "WJU"){
+      data = { ...data , ename:"wonju", tel:""}
+    }
+    return data;
+  }
+  const GenericFeeModal = ({ airportId, isOpen, onClose }) => {
+    if (!isOpen) return null;
+    const modalComponents = {
+      GMP: <GMPFeeModal isOpen={isOpen} onClose={onClose} />,
+      PUS: <PUSFeeModal isOpen={isOpen} onClose={onClose} />,
+      CJU: <CJUFeeModal isOpen={isOpen} onClose={onClose} />,
+      TAE: <TAEFeeModal isOpen={isOpen} onClose={onClose} />,
+      CJJ: <CJJFeeModal isOpen={isOpen} onClose={onClose} />,
+      KWJ: <KWJFeeModal isOpen={isOpen} onClose={onClose} />,
+      RSU: <RSUFeeModal isOpen={isOpen} onClose={onClose} />,
+      USN: <USNFeeModal isOpen={isOpen} onClose={onClose} />,
+      KUV: <KUVFeeModal isOpen={isOpen} onClose={onClose} />,
+      WJU: <WJUFeeModal isOpen={isOpen} onClose={onClose} />,
+    };
+  
+    return modalComponents[airportId] || null;
+  };
   return (
 
     <div className="airport-parking-container">
@@ -202,210 +237,34 @@ const AirportParkingPage = () => {
         isOpen={isContactModalOpen} 
         onClose={() => setIsContactModalOpen(false)} 
       />
-
-      {selectedAirport?.id === 'GMP' && (
+      {selectedAirport && selectedAirport?.id !== 'ICN' && (
         <div className="info-section">
           <div className="info-buttons">
-            <button className="airport-button fee-info-button" onClick={() => setIsGmpModalOpen(true)}>
-            김포공항 주차요금
+            <button className="airport-button fee-info-button" onClick={() => setIsApModalOpen(selectedAirport.id)}>
+            {selectedAirport.name} 주차요금
             </button>
-            <a href="https://www.airport.co.kr/gimpo/index.do" target="_blank" rel="noopener noreferrer"className="fee-info-button">
-            김포공항 홈페이지
+            <button className="fee-info-button" onClick={() => setIsApLocModalOpen(true)}>
+              오시는길
+            </button>
+            <a href={`https://www.airport.co.kr/${selectedAirport.ename}/index.do`} target="_blank" rel="noopener noreferrer"className="fee-info-button">
+            {selectedAirport.name} 홈페이지
             </a>
           </div>
           <div className="contact-text-container">
-            <p className="contact-info">주차고객 지원실(주차안내) Tel. 02-2660-2515</p>
+            <p className="contact-info">{selectedAirport.tel}</p>
             <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
           </div>
         </div>
       )}
-      <GMPFeeModal 
-        isOpen={isGmpModalOpen} 
-        onClose={() => setIsGmpModalOpen(false)} 
+      <GenericFeeModal 
+        airportId={isApModalOpen} 
+        isOpen={!!isApModalOpen} 
+        onClose={() => setIsApModalOpen("")} 
       />
-
-      {selectedAirport?.id === 'PUS' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsPusModalOpen(true)}>
-            김해공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/gimhae/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            김해공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">주차 대표번호 1661-2626, 051-974-3718</p>
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <PUSFeeModal 
-        isOpen={isPusModalOpen} 
-        onClose={() => setIsPusModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'CJU' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsCJUModalOpen(true)}>
-            제주공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/jeju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            제주공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">주차관리사무실 064-797-2701, 2702</p>
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <CJUFeeModal
-        isOpen={isCJUModalOpen} 
-        onClose={() => setIsCJUModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'TAE' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsTAEModalOpen(true)}>
-            대구공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/daegu/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            대구공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">주차장 이용안내소 Tel. 053-980-5254</p>
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <TAEFeeModal
-        isOpen={isTAEModalOpen} 
-        onClose={() => setIsTAEModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'CJJ' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsCJJModalOpen(true)}>
-            청주공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/cheongju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            청주공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">주차장 이용안내 tel. 043-210-6755</p>
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <CJJFeeModal
-        isOpen={isCJJModalOpen} 
-        onClose={() => setIsCJJModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'KWJ' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsKWJModalOpen(true)}>
-            광주공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/gwangju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            광주공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <KWJFeeModal
-        isOpen={isKWJModalOpen} 
-        onClose={() => setIsKWJModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'RSU' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsRSUModalOpen(true)}>
-            여수공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/yeosu/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            여수공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <RSUFeeModal
-        isOpen={isRSUModalOpen} 
-        onClose={() => setIsRSUModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'USN' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsUSNModalOpen(true)}>
-            울산공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/ulsan/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            울산공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <USNFeeModal
-        isOpen={isUSNModalOpen} 
-        onClose={() => setIsUSNModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'KUV' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsKUVModalOpen(true)}>
-            군산공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/gunsan/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            군산공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <KUVFeeModal
-        isOpen={isKUVModalOpen} 
-        onClose={() => setIsKUVModalOpen(false)} 
-      />
-
-      {selectedAirport?.id === 'WJU' && (
-        <div className="info-section">
-          <div className="info-buttons">
-            <button className="fee-info-button" onClick={() => setIsWJUModalOpen(true)}>
-            원주공항 주차요금
-            </button>
-            <a href="https://www.airport.co.kr/wonju/index.do" target="_blank" rel="noopener noreferrer" className="fee-info-button">
-            원주공항 홈페이지
-            </a>
-          </div>
-          <div className="contact-text-container">
-            <p className="contact-info">한국공항공사 고객센터 1661-2626 (06:00 ~ 23:00, 연중무휴)</p>
-          </div>
-        </div>
-      )}
-      <WJUFeeModal
-        isOpen={isWJUModalOpen} 
-        onClose={() => setIsWJUModalOpen(false)} 
+      <AirportLocationModal
+        airport={selectedAirport}
+        isOpen={isApLocModalOpen}
+        onClose={()=>setIsApLocModalOpen(false)}
       />
 
       {(selectedAirport || incheonData) && (
@@ -415,10 +274,6 @@ const AirportParkingPage = () => {
           onClose={() => setIsWJUModalOpen(false)} 
         />
       )}
-      {(selectedAirport || incheonData) && (
-        <AirportLocation airport={selectedAirport || { id: 'ICN', name: '인천국제공항' }}/>
-      )}
-      
     </div>
   );
 };
