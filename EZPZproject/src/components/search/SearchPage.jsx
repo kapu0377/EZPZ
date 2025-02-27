@@ -122,9 +122,9 @@ const SearchPage = () => {
           </div>
         </div>
 
-        <div className="rankings-container">
+        {/* <div className="rankings-container">
           <Rankings />
-        </div>
+        </div> */}
       </div>
     </div>
   );
