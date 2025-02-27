@@ -49,6 +49,11 @@ const RatingSection = ({ airport }) => {
       console.log('Current airport:', airport);
       if (airport && airport.id) {
         fetchAverageRatings(airport.id);
+        setRatings({  // 공항 변경 시 별점 초기화
+          satisfaction: 0,
+          cleanliness: 0,
+          convenience: 0
+        });
       }
     }, [airport]);
   
