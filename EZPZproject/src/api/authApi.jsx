@@ -103,7 +103,7 @@ const authApi = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        data: { password }, // 현재 비밀번호를 함께 전송
+        data: { password },
       });
       return response.data;
     } catch (error) {
@@ -112,9 +112,25 @@ const authApi = {
     }
   },
 
+  verifyPassword: async (password) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axiosInstance.post("/api/auth/verify-password", 
+        { password },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("비밀번호 검증 실패:", error.response?.data || error);
+      return { valid: false }; 
+    }
+  },
+
 };
-
-
 
 export default authApi;
 

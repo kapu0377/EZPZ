@@ -1,14 +1,4 @@
-/* ✅ 네비게이션 스타일 */
-/* .main-nav {
-    display: flex;
-    justify-content: flex-end;
-    gap: 2rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    align-items: center;
-  } */
-  
-  /* ✅ 드롭다운 기본 스타일 */
+
   .dropdown {
     position: relative;
   }
@@ -30,13 +20,11 @@
     z-index: 1000;
   }
   
-  /* ✅ 드롭다운이 활성화될 때 */
   .dropdown:hover .dropdown-menu {
     opacity: 1;
     visibility: visible;
   }
   
-  /* ✅ 드롭다운 내부 아이템 스타일 */
   .dropdown-item {
     padding: 12px 16px;
     color: white;
@@ -49,7 +37,6 @@
     background: rgba(255, 255, 255, 0.2);
   }
   
-  /* ✅ 네비게이션 링크 스타일 */
   .nav-link {
     color: white;
     text-decoration: none;

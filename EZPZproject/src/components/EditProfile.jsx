@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import authApi from "../api/authApi";
 import "./EditProfile.css";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const { user, updateUser, logout } = useAuth(); // updateUser 가져오기
+    const { user, updateUser, logout } = useAuth(); 
     const [updatedUser, setUpdatedUser] = useState({
         name: "",
         phone: "",
@@ -15,40 +15,77 @@ const EditProfile = () => {
         password: "",
     });
 
-    const [newPasswordConfirm, setNewPasswordConfirm] = useState(""); // 새 비밀번호 확인
-    const [password, setPassword] = useState(""); // 현재 비밀번호 입력 (탈퇴용)
-    const [confirmPassword, setConfirmPassword] = useState(""); // 비밀번호 확인 (탈퇴용)
-    const [passwordError, setPasswordError] = useState(""); // 비밀번호 오류 메시지
+    const [newPasswordConfirm, setNewPasswordConfirm] = useState(""); 
+    const [password, setPassword] = useState(""); 
+    const [confirmPassword, setConfirmPassword] = useState(""); 
+    const [passwordError, setPasswordError] = useState(""); 
+    const [passwordsMatch, setPasswordsMatch] = useState(false); 
+    const [dbPasswordValid, setDbPasswordValid] = useState(false); 
+    const [isVerifying, setIsVerifying] = useState(false); 
+    const [verificationMessage, setVerificationMessage] = useState(""); 
     
-    // 모달 관련 상태
     const [showModal, setShowModal] = useState(false);
-    const [currentPassword, setCurrentPassword] = useState(""); // 현재 비밀번호 (모달용)
+    const [currentPassword, setCurrentPassword] = useState(""); 
 
-     // user 값이 변경될 때 updatedUser 업데이트 (새로고침 없이 반영)
-     useEffect(() => {
+    useEffect(() => {
         if (user) {
             setUpdatedUser({
                 name: user.name || "",
                 phone: user.phone || "",
                 email: user.email || "",
                 address: user.address || "",
-                password: "", // 새 비밀번호는 기본적으로 비움
+                password: "", 
             });
-            setNewPasswordConfirm(""); // 비밀번호 확인 필드 초기화
+            setNewPasswordConfirm(""); 
         }
-    }, [user]); // user 변경 감지
-    
+    }, [user]); 
+
+    // 비밀번호 검증 함수
+    const verifyPassword = useCallback(
+        async (pw) => {
+            if (!pw || pw.length < 4) {
+                setDbPasswordValid(false);
+                setVerificationMessage("");
+                return;
+            }
+            
+            setIsVerifying(true);
+            setVerificationMessage("비밀번호 확인 중...");
+            
+            try {
+                const result = await authApi.verifyPassword(pw);
+                
+                if (result.valid) {
+                    setDbPasswordValid(true);
+                    setVerificationMessage("비밀번호가 확인되었습니다.");
+                } else {
+                    setDbPasswordValid(false);
+                    setVerificationMessage("현재 비밀번호가 일치하지 않습니다.");
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    setDbPasswordValid(false);
+                    setVerificationMessage("현재 비밀번호가 일치하지 않습니다.");
+                } else {
+                    console.error("비밀번호 검증 중 오류:", error);
+                    setDbPasswordValid(false);
+                    setVerificationMessage("비밀번호 확인에 실패했습니다.");
+                }
+            } finally {
+                setIsVerifying(false);
+            }
+        },
+        []
+    );
 
     const handleChange = (e) => {
         setUpdatedUser({ ...updatedUser, [e.target.name]: e.target.value });
         
-        // 비밀번호 변경 시 오류 메시지 초기화
         if (e.target.name === "password") {
             setPasswordError("");
         }
     };
 
-    // 비밀번호 일치 여부 확인
     const validatePasswords = () => {
         if (updatedUser.password && updatedUser.password !== newPasswordConfirm) {
             setPasswordError("새 비밀번호가 일치하지 않습니다.");
@@ -58,7 +95,6 @@ const EditProfile = () => {
         return true;
     };
 
-    // 비밀번호 일치 여부에 따른 클래스 결정
     const getPasswordMatchClass = () => {
         if (!updatedUser.password || !newPasswordConfirm) return "";
         return updatedUser.password === newPasswordConfirm ? "password-match" : "password-mismatch";
@@ -67,19 +103,15 @@ const EditProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // 비밀번호 변경을 시도하는 경우
         if (updatedUser.password) {
-            // 새 비밀번호 확인
             if (!validatePasswords()) {
                 return;
             }
         }
         
-        // 현재 비밀번호 입력 모달 표시
         setShowModal(true);
     };
     
-    // 모달에서 확인 버튼 클릭 시 실행
     const handleConfirmPassword = async () => {
         if (!currentPassword) {
             setPasswordError("현재 비밀번호를 입력해주세요.");
@@ -87,15 +119,13 @@ const EditProfile = () => {
         }
         
         try {
-            // 현재 비밀번호 검증 및 회원 정보 업데이트
             await authApi.updateUser({
                 ...updatedUser,
-                currentPassword: currentPassword // 현재 비밀번호 전달
+                currentPassword: currentPassword 
             });
-            await updateUser(); // 회원 정보 수정 후 TopBar에 즉시 반영
+            await updateUser(); 
             alert("회원 정보가 수정되었습니다.");
             
-            // 상태 초기화
             setShowModal(false);
             setCurrentPassword("");
             setNewPasswordConfirm("");
@@ -112,29 +142,65 @@ const EditProfile = () => {
         }
     };
     
-    // 모달 닫기
     const handleCloseModal = () => {
         setShowModal(false);
         setCurrentPassword("");
         setPasswordError("");
     };
 
-    // updatedUser가 변경될 때 password 필드 초기화
     useEffect(() => {
         setUpdatedUser((prev) => ({ ...prev, password: "" }));
         setNewPasswordConfirm("");
     }, []);
 
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        
+        setPasswordsMatch(newPassword === confirmPassword && newPassword !== "");
+        
+        if (newPassword && newPassword === confirmPassword) {
+            const timeoutId = setTimeout(() => {
+                verifyPassword(newPassword);
+            }, 500);
+            
+            return () => clearTimeout(timeoutId);
+        } else {
+            setDbPasswordValid(false);
+            setVerificationMessage("");
+        }
+    };
+
+    const handleConfirmPasswordChange = (e) => {
+        const newConfirmPassword = e.target.value;
+        setConfirmPassword(newConfirmPassword);
+        
+        setPasswordsMatch(password === newConfirmPassword && password !== "");
+        
+        if (password === newConfirmPassword) {
+            const timeoutId = setTimeout(() => {
+                verifyPassword(password);
+            }, 500);
+            
+            return () => clearTimeout(timeoutId);
+        }
+    };
+
     const handleDeleteAccount = async () => {
         if (!password || !confirmPassword) {
-            alert("비밀번호를 입력해주세요."); // 비밀번호 입력 여부 확인
+            alert("비밀번호를 입력해주세요.");
             return;
         }
 
         if (password !== confirmPassword) {
-            alert("비밀번호가 일치하지 않습니다."); // 비밀번호 불일치 체크
+            alert("비밀번호가 일치하지 않습니다.");
             setPassword("");
             setConfirmPassword("");
+            return;
+        }
+        
+        if (!dbPasswordValid) {
+            alert("현재 비밀번호가 일치하지 않습니다.");
             return;
         }
 
@@ -142,18 +208,25 @@ const EditProfile = () => {
             if (window.confirm("모든 데이터가 삭제됩니다. 정말 탈퇴하시겠습니까?")) {
                 await authApi.deleteUser(password);
                 alert("회원 탈퇴가 완료되었습니다.");
-                logout(); // 로그아웃 후 메인 페이지로 이동
+                logout(); 
                 navigate("/");
             }
         } catch (error) {
-            alert("회원 탈퇴에 실패했습니다. 비밀번호를 확인하세요.");
+            if (error.response && error.response.status === 401) {
+                alert("비밀번호가 일치하지 않습니다.");
+            } else {
+                alert("회원 탈퇴에 실패했습니다: " + (error.response?.data || error.message));
+            }
+            setPassword("");
+            setConfirmPassword("");
+            setPasswordsMatch(false);
+            setDbPasswordValid(false);
         }
     };
 
-
     return (
         <div className="edit-profile-container">
-            {/* 회원 정보 수정 섹션 */}
+            {/* 회원 정보 수정  */}
             <section className="profile-section">
                 <h2>회원 정보 수정</h2>
                 <form onSubmit={handleSubmit}>
@@ -205,15 +278,31 @@ const EditProfile = () => {
                     type="password"
                     placeholder="현재 비밀번호"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handlePasswordChange}
+                    className={password && confirmPassword && passwordsMatch ? (dbPasswordValid ? "password-match" : "password-mismatch") : ""}
                 />
                 <input
                     type="password"
                     placeholder="비밀번호 확인"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={handleConfirmPasswordChange}
+                    className={password && confirmPassword ? (passwordsMatch ? "password-match" : "password-mismatch") : ""}
                 />
-                <button onClick={handleDeleteAccount} className="delete-btn">회원 탈퇴</button>
+                {password && confirmPassword && passwordsMatch && (
+                    <p className={dbPasswordValid ? "password-message-valid" : "password-message-invalid"}>
+                        {isVerifying ? "비밀번호 확인 중..." : verificationMessage}
+                    </p>
+                )}
+                {!passwordsMatch && confirmPassword && (
+                    <p className="password-message-invalid">비밀번호가 일치하지 않습니다.</p>
+                )}
+                <button 
+                    onClick={handleDeleteAccount} 
+                    className={`delete-btn ${!(passwordsMatch && dbPasswordValid) ? "button-disabled" : ""}`}
+                    disabled={!(passwordsMatch && dbPasswordValid)}
+                >
+                    회원 탈퇴
+                </button>
             </section>
             
             {/* 비밀번호 확인 모달 */}
