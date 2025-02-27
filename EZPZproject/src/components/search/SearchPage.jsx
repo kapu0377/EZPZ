@@ -17,15 +17,36 @@ const SearchPage = () => {
   });
   const [resultsPerPage] = useState(10);
   
-  const [searchHistory, setSearchHistory] = useState([]);
-  const [groupedHistory, setGroupedHistory] = useState({});
-  const [activeTab, setActiveTab] = useState("search"); 
+  const [searchHistory, setSearchHistory] = useState(() => {
+    const savedHistory = sessionStorage.getItem('searchHistory');
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
+  const [groupedHistory, setGroupedHistory] = useState(() => {
+    const savedGroupedHistory = sessionStorage.getItem('groupedHistory');
+    return savedGroupedHistory ? JSON.parse(savedGroupedHistory) : {};
+  });
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = sessionStorage.getItem('activeTab');
+    return savedTab || "search";
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [historyDays, setHistoryDays] = useState(7); 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); 
   const [showSearchNotification, setShowSearchNotification] = useState(false);
+ 
+  useEffect(() => {
+    sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  }, [searchHistory]);
+  
+  useEffect(() => {
+    sessionStorage.setItem('groupedHistory', JSON.stringify(groupedHistory));
+  }, [groupedHistory]);
 
+  useEffect(() => {
+    sessionStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
+  
   useEffect(() => {
     sessionStorage.setItem('searchResults', JSON.stringify(searchResults));
   }, [searchResults]);  
@@ -36,6 +57,7 @@ const SearchPage = () => {
   useEffect(() => {
     const username = localStorage.getItem('username');
     setIsLoggedIn(!!username);
+    
 
     const fetchUserHistory = async () => {
       try {
@@ -266,12 +288,6 @@ const SearchPage = () => {
                 {!isLoggedIn ? (
                   <div className="login-required-message">
                     <p>검색 기록을 보려면 로그인이 필요합니다.</p>
-                    <button 
-                      className="login-button"
-                      onClick={handleOpenLoginModal}
-                    >
-                      로그인하기
-                    </button>
                   </div>
                 ) : (
                   <>

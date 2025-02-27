@@ -119,6 +119,13 @@ const EditProfile = () => {
         }
         
         try {
+            const verification = await authApi.verifyPassword(currentPassword);
+            
+            if (!verification.valid) {
+                setPasswordError("현재 비밀번호가 일치하지 않습니다.");
+                return;
+            }
+            
             await authApi.updateUser({
                 ...updatedUser,
                 currentPassword: currentPassword 
