@@ -30,8 +30,8 @@ export default function CategoryAddModal({ isOpen, onClose, onAdd }) {
                     onChange={(e) => setCategoryName(e.target.value)} 
                 />
                 <div className="checklist-modal-buttons">
-                    <button className="cancel-btn" onClick={onClose}>취소</button>
-                    <button className="save-btn" onClick={handleSubmit}>추가</button>
+                    <button className="category-cancel-btn" onClick={onClose}>취소</button>
+                    <button className="category-save-btn" onClick={handleSubmit}>추가</button>
                 </div>
             </div>
         </div>

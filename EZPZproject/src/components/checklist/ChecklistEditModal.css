@@ -41,7 +41,7 @@
 }
 
 /* 저장 버튼 */
-.save-btn {
+.category-save-btn {
     background-color: #4a90e2;
     color: white;
     border: none;
@@ -50,12 +50,12 @@
     cursor: pointer;
 }
 
-.save-btn:hover {
+.category-save-btn:hover {
     background-color: #0056b3;
 }
 
 /* 취소 버튼 */
-.cancel-btn {
+.category-cancel-btn {
     background-color: #fc5e6e;
     color: white;
     border: none;
@@ -64,6 +64,6 @@
     cursor: pointer;
 }
 
-.cancel-btn:hover {
+.category-cancel-btn:hover {
     background-color: #c82333;
 }
