@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom"; // useParams 추가
 import '../components/notice/Notice.css';
+import Login from '../components/Login';
 
 const App = () => {
   const { no } = useParams(); // URL 파라미터에서 게시글 번호 가져오기
@@ -30,6 +31,7 @@ const App = () => {
   const [username, setUsername] = useState(null);
   const [currentCommentPage, setCurrentCommentPage] = useState(1);
   const commentsPerPage = 4; // 페이지당 댓글 수를 4개로 변경
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     if (no) {
@@ -148,12 +150,20 @@ const App = () => {
 
   // 글쓰기 버튼 클릭 핸들러 수정
   const handleAddClick = () => {
-    setTitle("");  // 제목 초기화
-    setContent("");  // 내용 초기화
-    setEditId(null);  // 수정 ID 초기화
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      alert("로그인이 필요한 서비스입니다.\n로그인 후 다시 이용해주세요.");
+      setIsLoginModalOpen(true); // 로그인 모달 열기
+      return; // 여기서 함수 실행 중단
+    }
+
+    // 로그인된 경우에만 실행되는 코드
+    setTitle("");  
+    setContent("");  
+    setEditId(null);  
     setIsWriting(true);
     setIsDetailView(true);
-    setSelectedPost(null);  // 선택된 게시글 초기화
+    setSelectedPost(null);
   };
 
   // 게시글 등록/수정 함수 수정
@@ -812,6 +822,12 @@ const App = () => {
             </div>
           </div>
       )}
+
+      {/* 로그인 모달 컴포넌트 추가 */}
+      <Login 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </div>
   );
 };
