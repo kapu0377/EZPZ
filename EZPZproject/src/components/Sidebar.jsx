@@ -27,7 +27,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
             <Link to="/airport-detections" onClick={() => setMenuOpen(false)}>
               공항 별 적발현황
             </Link>
-            <Link to="/item-search" onClick={() => setMenuOpen(false)}>
+            <Link to="/search" onClick={() => setMenuOpen(false)}>
               항공 물품 검색
             </Link>
           </div>
@@ -45,7 +45,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
               자유게시판
             </Link>
             <Link to="/faq" onClick={() => setMenuOpen(false)}>
-              F&Q
+              FAQ
             </Link>
           </div>
         )}

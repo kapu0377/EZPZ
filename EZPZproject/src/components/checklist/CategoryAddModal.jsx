@@ -21,7 +21,7 @@ export default function CategoryAddModal({ isOpen, onClose, onAdd }) {
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="modal-content2">
                 <h2>새 카테고리 추가</h2>
                 <input 
                     type="text" 

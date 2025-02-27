@@ -29,7 +29,7 @@ export default function ChecklistEditModal({ isOpen, onClose, checklist, onUpdat
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="modal-content2">
                 <h2>체크리스트 수정</h2>
                 <div className="date-input-container">
                     <label htmlFor="tour title">여행 제목</label>

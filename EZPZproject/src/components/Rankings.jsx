@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
 
   getDailyRankings,
@@ -6,6 +7,7 @@ import {
   getMonthlyRankings,
 } from '../api/searchApi';
 import "./Rankings.css";
+import arrow from '../assets/img/arrow.png';  // 화살표 이미지 추가
 
 const Rankings = () => {
   const [rankings, setRankings] = useState({
@@ -86,7 +88,12 @@ const Rankings = () => {
   return (
     <div className="rankings">
       <div className="ranking-section">
-        <h3>카테고리 검색 순위</h3>
+        <div className="ranking-header">
+          <h3>카테고리 검색 순위</h3>
+          <Link to="/rankings" className="view-more-link">
+            <img src={arrow} alt="더 보기" className="arrow-icon" />
+          </Link>
+        </div>
         <div className="tabs">
           <button
             className={`tab-button ${currentType === 'daily' ? 'active' : ''}`}

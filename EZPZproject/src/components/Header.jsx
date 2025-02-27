@@ -31,7 +31,7 @@ const Header = () => {
               <div className="dropdown-menu">
                 <Link to="/prohibited" className="dropdown-item">금지물품 목록</Link>
                 <Link to="/airport-detections" className="dropdown-item">공항 별 적발현황</Link>
-                <Link to="/item-search" className="dropdown-item">항공 물품 검색</Link>
+                <Link to="/search" className="dropdown-item">항공 물품 검색</Link>
               </div>
             )}
           </div>
@@ -44,7 +44,7 @@ const Header = () => {
             {dropdownOpen2 && (
               <div className="dropdown-menu">
                 <Link to="/board" className="dropdown-item">자유게시판</Link>
-                <Link to="/faq" className="dropdown-item">F&Q</Link>
+                <Link to="/faq" className="dropdown-item">FAQ</Link>
               </div>
             )}
           </div>

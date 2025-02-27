@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ProhibitedItems.css";
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -86,11 +85,6 @@ function ProhibitedItems() {
   const [itemsData, setItemsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [airportList, setAirportList] = useState([]);
-  const [selectedAirport, setSelectedAirport] = useState("");
-  const [detectionData, setDetectionData] = useState([]);
-  const [chartData, setChartData] = useState(null);
-  const [isAirportModalOpen, setIsAirportModalOpen] = useState(false);
   const [selectedAllowedCategory, setSelectedAllowedCategory] = useState(null);
   const [isAllowedModalOpen, setIsAllowedModalOpen] = useState(false);
 
@@ -102,88 +96,9 @@ function ProhibitedItems() {
         setItemsData(response.data);
       })
       .catch((error) => console.error("API 요청 오류:", error));
-
-    axios
-      .get("http://localhost:8088/api/airport-detections/distinct")
-      .then((response) => {
-        setAirportList(response.data);
-        if (response.data.length > 0) {
-          setSelectedAirport(response.data[0].airportName);
-        }
-      })
-      .catch((error) => console.error("공항 목록 불러오기 오류:", error));
   }, []);
 
-  // 선택된 공항에 따른 적발 데이터 및 차트 데이터 업데이트
-  useEffect(() => {
-    if (selectedAirport) {
-      axios
-        .get(
-          `http://localhost:8088/api/airport-detections/name/${selectedAirport}`
-        )
-        .then((response) => {
-          setDetectionData(response.data);
-
-          // 카테고리 이름 단축 함수
-          const shortenCategory = (category) => {
-            const replacements = {
-              "날카로운물체(칼 가위 등)": "날붙이",
-              "인화성류(라이터 스프레이 폭죽 등)": "인화성",
-            };
-            return replacements[category] || category;
-          };
-
-          // 화기류 관련 카테고리 그룹
-          const fireArmsCategories = [
-            "권총 등",
-            "총기구성품",
-            "기타발사장치",
-            "탄약류",
-          ];
-
-          // 데이터 그룹화 함수
-          const groupCategoryData = (data) => {
-            const groupedData = {};
-            let totalSum = 0;
-
-            data.forEach((item) => {
-              let category = shortenCategory(item.category);
-              if (fireArmsCategories.includes(item.category)) {
-                category = "화기류";
-              }
-              groupedData[category] =
-                (groupedData[category] || 0) + item.detectionCount;
-              if (!["김해공항", "김포공항"].includes(selectedAirport)) {
-                totalSum += item.detectionCount;
-              }
-            });
-
-            if (!["김해공항", "김포공항"].includes(selectedAirport)) {
-              groupedData["합계"] = totalSum;
-            }
-            return groupedData;
-          };
-
-          const groupedData = groupCategoryData(response.data);
-          const labels = Object.keys(groupedData);
-          const values = Object.values(groupedData);
-
-          setChartData({
-            labels,
-            datasets: [
-              {
-                label: "적발 건수",
-                data: values,
-                backgroundColor: "rgba(75, 192, 192, 0.6)",
-                borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1,
-              },
-            ],
-          });
-        })
-        .catch((error) => console.error("적발 현황 불러오기 오류:", error));
-    }
-  }, [selectedAirport]);
+ 
 
   // 카테고리 모달 오픈/닫기 함수
   const openModal = (category) => {
@@ -216,7 +131,9 @@ function ProhibitedItems() {
     >
       <div className="description-section2">
         <h1>항공기 반입 금지물품</h1>
-        <p className="checklist-alert">항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.</p>
+        <p className="checklist-alert">
+          항공 안전을 위한 기내 반입 가능/금지 물품 목록입니다.
+        </p>
       </div>
 
       <div className="all-categories">
@@ -328,78 +245,6 @@ function ProhibitedItems() {
                 )}
               </tbody>
             </table>
-          </div>
-        </div>
-      )}
-      {/* 공항별 적발 현황 모달 오픈 버튼 */}
-      <button
-        className="open-airport-modal-btn"
-        onClick={() => setIsAirportModalOpen(true)}
-      >
-        공항 별 적발 현황 보기
-      </button>
-
-      {/* 공항별 적발 현황 모달 */}
-      {isAirportModalOpen && (
-        <div
-          className="modal-overlay"
-          onClick={() => setIsAirportModalOpen(false)}
-        >
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="close-btn"
-              onClick={() => setIsAirportModalOpen(false)}
-            >
-              ✖
-            </button>
-            <h2>공항 별 적발 현황</h2>
-            <div className="airport-select-box">
-              <label>공항 선택: </label>
-              <select
-                value={selectedAirport}
-                onChange={(e) => setSelectedAirport(e.target.value)}
-              >
-                {airportList.map((airport, index) => (
-                  <option key={index} value={airport.airportName}>
-                    {airport.airportName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="chart-container">
-              {chartData ? (
-                <Bar
-                  data={chartData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: { display: false },
-                      title: {
-                        display: true,
-                        text: "공항 별 적발 현황",
-                        font: { size: 20 },
-                        padding: 20,
-                      },
-                    },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        grid: { display: true, color: "rgba(0, 0, 0, 0.1)" },
-                        ticks: { font: { size: 14 } },
-                      },
-                      x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 14 } },
-                      },
-                    },
-                  }}
-                  style={{ height: "500px" }}
-                />
-              ) : (
-                <p>데이터를 불러오는 중...</p>
-              )}
-            </div>
           </div>
         </div>
       )}
