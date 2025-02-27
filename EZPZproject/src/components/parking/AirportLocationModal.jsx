@@ -1,5 +1,4 @@
-const AirportLocation = ({airport}) =>{
-  console.log(airport.id);
+const AirportLocationModal = ({airport,isOpen, onClose}) =>{
   const airportSrc = {
     ICN:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3167.086894152479!2d126.43939297642672!3d37.458670230304996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b9a833a5efa59%3A0x8d4ba096cb5cbed4!2z7J247LKc6rWt7KCc6rO17ZWt!5e0!3m2!1sko!2skr!4v1740539302734!5m2!1sko!2skr",
     GMP:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3162.5551827160793!2d126.7987532764304!3d37.56554252418423!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c9cd0f9acaa17%3A0xac77903f2239cc54!2z6rmA7Y-s6rWt7KCc6rO17ZWt!5e0!3m2!1sko!2skr!4v1740537222061!5m2!1sko!2skr",
@@ -13,19 +12,27 @@ const AirportLocation = ({airport}) =>{
     WJU:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3167.062906095857!2d127.97457877642677!3d37.45923663027279!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356309e1f0030313%3A0x66cef72f71c0585d!2z7JuQ7KO86rO17ZWt!5e0!3m2!1sko!2skr!4v1740537539196!5m2!1sko!2skr",
     CJJ:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3198.024514675123!2d127.49330927640214!3d36.72197247210449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3564d99683ecf835%3A0x5cd2670244983dae!2z7LKt7KO86rWt7KCc6rO17ZWt!5e0!3m2!1sko!2skr!4v1740537595997!5m2!1sko!2skr"
   }
+  if (!isOpen) return null;
   return(
-    <div className="airport-rating-section">
-      <h2>{airport ? (airport.name || '인천국제공항') : ''} 오시는 길</h2>
-      <iframe
-        src={airportSrc[airport.id]}
-        width="100%"
-        height="450"
-        style={{border:0}}
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>{airport ? (airport.name || '인천국제공항') : ''} 오시는 길</h2>
+          <button className="close-button" onClick={onClose}>×</button>
+        </div>
+        <div className="modal-body">
+          <iframe
+            src={airportSrc[airport.id]}
+            width="100%"
+            height="450"
+            style={{border:0}}
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
     </div>
   );
 }
-export default AirportLocation;
+export default AirportLocationModal;
