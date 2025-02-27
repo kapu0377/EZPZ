@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ProhibitedItems.css";
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -86,11 +85,6 @@ function ProhibitedItems() {
   const [itemsData, setItemsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [airportList, setAirportList] = useState([]);
-  const [selectedAirport, setSelectedAirport] = useState("");
-  const [detectionData, setDetectionData] = useState([]);
-  const [chartData, setChartData] = useState(null);
-  const [isAirportModalOpen, setIsAirportModalOpen] = useState(false);
   const [selectedAllowedCategory, setSelectedAllowedCategory] = useState(null);
   const [isAllowedModalOpen, setIsAllowedModalOpen] = useState(false);
 
@@ -102,88 +96,9 @@ function ProhibitedItems() {
         setItemsData(response.data);
       })
       .catch((error) => console.error("API 요청 오류:", error));
-
-    axios
-      .get("http://localhost:8088/api/airport-detections/distinct")
-      .then((response) => {
-        setAirportList(response.data);
-        if (response.data.length > 0) {
-          setSelectedAirport(response.data[0].airportName);
-        }
-      })
-      .catch((error) => console.error("공항 목록 불러오기 오류:", error));
   }, []);
 
-  // 선택된 공항에 따른 적발 데이터 및 차트 데이터 업데이트
-  useEffect(() => {
-    if (selectedAirport) {
-      axios
-        .get(
-          `http://localhost:8088/api/airport-detections/name/${selectedAirport}`
-        )
-        .then((response) => {
-          setDetectionData(response.data);
-
-          // 카테고리 이름 단축 함수
-          const shortenCategory = (category) => {
-            const replacements = {
-              "날카로운물체(칼 가위 등)": "날붙이",
-              "인화성류(라이터 스프레이 폭죽 등)": "인화성",
-            };
-            return replacements[category] || category;
-          };
-
-          // 화기류 관련 카테고리 그룹
-          const fireArmsCategories = [
-            "권총 등",
-            "총기구성품",
-            "기타발사장치",
-            "탄약류",
-          ];
-
-          // 데이터 그룹화 함수
-          const groupCategoryData = (data) => {
-            const groupedData = {};
-            let totalSum = 0;
-
-            data.forEach((item) => {
-              let category = shortenCategory(item.category);
-              if (fireArmsCategories.includes(item.category)) {
-                category = "화기류";
-              }
-              groupedData[category] =
-                (groupedData[category] || 0) + item.detectionCount;
-              if (!["김해공항", "김포공항"].includes(selectedAirport)) {
-                totalSum += item.detectionCount;
-              }
-            });
-
-            if (!["김해공항", "김포공항"].includes(selectedAirport)) {
-              groupedData["합계"] = totalSum;
-            }
-            return groupedData;
-          };
-
-          const groupedData = groupCategoryData(response.data);
-          const labels = Object.keys(groupedData);
-          const values = Object.values(groupedData);
-
-          setChartData({
-            labels,
-            datasets: [
-              {
-                label: "적발 건수",
-                data: values,
-                backgroundColor: "rgba(75, 192, 192, 0.6)",
-                borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1,
-              },
-            ],
-          });
-        })
-        .catch((error) => console.error("적발 현황 불러오기 오류:", error));
-    }
-  }, [selectedAirport]);
+ 
 
   // 카테고리 모달 오픈/닫기 함수
   const openModal = (category) => {
