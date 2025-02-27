@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import authApi from "../api/authApi";
 import "./Register.css";
@@ -21,6 +21,34 @@ const Register = ({ isOpen, onClose }) => {
   });
   
   const navigate = useNavigate();
+
+  const resetFormData = () => {
+    setFormData({
+      username: "",
+      password: "",
+      passwordConfirm: "",
+      name: "",
+      phone: "",
+      email: "",
+      gender: "",
+      address: ""
+    });
+    setPasswordMatch({
+      isValid: false,
+      message: ""
+    });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      resetFormData();
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    resetFormData();
+    onClose();
+  };
 
   const validatePassword = (password, passwordConfirm) => {
     if (passwordConfirm === "") {
@@ -74,7 +102,7 @@ const Register = ({ isOpen, onClose }) => {
     try {
       const response = await authApi.signup(signUpRequest);
       alert("회원가입이 완료되었습니다. 로그인해주세요.");
-      onClose();
+      handleClose();
     } catch (error) {
       if (error.response?.data) {
         alert(error.response.data);
@@ -92,7 +120,7 @@ const Register = ({ isOpen, onClose }) => {
         <form onSubmit={handleSubmit} className="register-form" autoComplete="off">
           <div className="form-header">
             <h2>회원가입</h2>
-            <button type="button" className="close-button" onClick={onClose}>×</button>
+            <button type="button" className="close-button" onClick={handleClose}>×</button>
           </div>
           <input
             type="text"

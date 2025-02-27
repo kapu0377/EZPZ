@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../logo/Logo";
 import TopBar from "./TopBar";
-import Sidebar from "./Sidebar"; // ✅ 사이드바 분리
-import "./Header.css"; // ✅ 새로운 스타일 추가
+import Sidebar from "./Sidebar"; 
+import "./Header.css"; 
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen1, setDropdownOpen1] = useState(false); // ✅ 금지물품 드롭다운 상태 추가
-  const [dropdownOpen2, setDropdownOpen2] = useState(false); // ✅ 게시판판 드롭다운 상태 추가
+  const [dropdownOpen1, setDropdownOpen1] = useState(false); 
+  const [dropdownOpen2, setDropdownOpen2] = useState(false); 
   
   return (
     <header className="header">
