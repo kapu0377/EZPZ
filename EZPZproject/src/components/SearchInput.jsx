@@ -1,5 +1,6 @@
 import { useState } from "react"
 import itemApi from "../api/itemApi"
+import { saveSearchHistory } from "../api/searchApi"
 import "./SearchInput.css"
 
 const SearchInput = ({ onSearchResult }) => {
@@ -47,6 +48,12 @@ const SearchInput = ({ onSearchResult }) => {
     };
     
     onSearchResult(newResult);
+    
+    const username = localStorage.getItem('username');
+    if (username) {
+      saveSearchHistory(username, inputValue.trim());
+    }
+    
     setShowBatteryModal(false);
     setBatteryVoltage("");
     setBatteryCapacity("");
@@ -100,6 +107,12 @@ const SearchInput = ({ onSearchResult }) => {
         
         onSearchResult(newResult);
         setInputValue("");
+        
+        // 검색 결과 저장 (사용자별 검색 기록)
+        const username = localStorage.getItem('username');
+        if (username) {
+          await saveSearchHistory(username, inputValue.trim());
+        }
         
         try {
           const updatedRankings = await itemApi.getSearchRankings();

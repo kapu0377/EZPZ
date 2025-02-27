@@ -39,6 +39,20 @@ const itemApi = {
     }
   },
 
+  saveSearchHistory: async (username, keyword, searchDate) => {
+    try {
+      const response = await axiosInstance.post('/api/search/history/save', {
+        username,
+        keyword,
+        searchDate: searchDate || new Date().toISOString()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('검색 기록 저장 실패:', error);
+      return false;
+    }
+  },
+
   getUserSearchHistory: async (username) => {
     try {
       const response = await axiosInstance.get(`/api/search/history`, {
@@ -47,6 +61,19 @@ const itemApi = {
       return response.data;
     } catch (error) {
       console.error('검색 기록 조회 실패:', error);
+      throw error;
+    }
+  },
+
+  // 최근 N일간의 검색 기록 조회 함수 추가
+  getUserSearchHistoryByDays: async (username, days) => {
+    try {
+      const response = await axiosInstance.get(`/api/search/history/days`, {
+        params: { username, days }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`최근 ${days}일간 검색 기록 조회 실패:`, error);
       throw error;
     }
   },

@@ -53,6 +53,14 @@ export const getUserSearchHistory = async (username) => {
   return itemApi.getUserSearchHistory(username);
 };
 
+export const saveSearchHistory = async (username, keyword, searchDate) => {
+  return itemApi.saveSearchHistory(username, keyword, searchDate);
+};
+
+export const getUserSearchHistoryByDays = async (username, days) => {
+  return itemApi.getUserSearchHistoryByDays(username, days);
+};
+
 export const getDetectionRankings = async () => {
   return itemApi.getDetectionRankings();
 };

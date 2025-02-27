@@ -19,6 +19,7 @@ const Login = ({ isOpen, onClose }) => {
     try {
       const success = await login(credentials);
       if (success) {
+        window.dispatchEvent(new CustomEvent('login-success'));
         onClose();
       }
     } catch (error) {
