@@ -26,6 +26,10 @@ const AirportParkingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // 추가된 상태: 모든 공항에서 모달 사용 가능
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isGmpModalOpen, setIsGmpModalOpen] = useState(false);
@@ -407,6 +411,8 @@ const AirportParkingPage = () => {
       {(selectedAirport || incheonData) && (
         <RatingSection 
           airport={selectedAirport || { id: 'ICN', name: '인천국제공항' }}
+          isOpen={isWJUModalOpen} 
+          onClose={() => setIsWJUModalOpen(false)} 
         />
       )}
       {(selectedAirport || incheonData) && (

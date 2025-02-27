@@ -77,6 +77,39 @@ body {
   padding-top: 5px; /* 아래로 조정 */
 }
 
+.news-box {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-top: 16px;
+  width: 292px;
+}
+
+.news-box h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.news-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.news-box li {
+  margin-bottom: 8px;
+}
+
+.news-box a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.news-box a:hover {
+  text-decoration: underline;
+}
+
 /* ✅ 네비게이션 바 스타일 - 살짝 아래로 조정 */
 .main-nav {
   display: flex;
@@ -265,6 +298,7 @@ body {
 
 .search-input-area {
   width: 100%;
+  margin-top: 30px;
 }
 
 .search-input {

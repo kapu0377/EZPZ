@@ -38,7 +38,6 @@ const SearchSection = () => {
           onSearchResult={handleSearchResult} 
           onReset={handleReset}
         />
-        {/* <p>뉴스박스를 넣을 위치</p> */}
       </div>
       <div className="search-results-and-rankings">
         <SearchResults 
