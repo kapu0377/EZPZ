@@ -325,9 +325,9 @@ const EditProfile = () => {
                             onChange={(e) => setCurrentPassword(e.target.value)}
                         />
                         {passwordError && <p className="error-message">{passwordError}</p>}
-                        <div className="modal-buttons">
-                            <button onClick={handleConfirmPassword} className="confirm-btn">확인</button>
-                            <button onClick={handleCloseModal} className="cancel-btn">취소</button>
+                        <div className="modal-buttons2">
+                            <button onClick={handleCloseModal} className="password-cancel-btn">취소</button>
+                            <button onClick={handleConfirmPassword} className="password-confirm-btn">확인</button>
                         </div>
                     </div>
                 </div>

@@ -139,16 +139,16 @@ input {
     border-radius: 5px;
 }
 
-.modal-buttons {
+.modal-buttons2 {
     display: flex;
     justify-content: center;
     margin-top: 20px;
     gap: 10px; 
 }
 
-.confirm-btn, .cancel-btn {
+.password-confirm-btn, .password-cancel-btn {
     padding: 8px 16px;
-    width: 120px; 
+    width: 50%; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -156,20 +156,20 @@ input {
     text-align: center; 
 }
 
-.confirm-btn {
+.password-confirm-btn {
     background-color: #4a90e2;
     color: white;
 }
 
-.confirm-btn:hover {
+.password-confirm-btn:hover {
     background-color: #0056b3;
 }
 
-.cancel-btn {
+.password-cancel-btn {
     background-color: #fc5e6e;
     color: white;
 }
 
-.cancel-btn:hover {
+.password-cancel-btn:hover {
     background-color: #a71d2a;
 }
