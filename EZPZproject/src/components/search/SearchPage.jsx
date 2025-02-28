@@ -151,7 +151,7 @@ const SearchPage = () => {
   const handleSearchResult = (result) => {
     setSearchResults(prev => {
       let newResults = [...prev, result];
-      if (newResults.length > 4) {
+      if (newResults.length > 3) {
         newResults = newResults.slice(1);
       }
       return newResults;

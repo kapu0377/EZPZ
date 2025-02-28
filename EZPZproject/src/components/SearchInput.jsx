@@ -238,7 +238,7 @@ const SearchInput = ({ onSearchResult }) => {
                   type="number"
                   value={batteryVoltage}
                   onChange={(e) => setBatteryVoltage(e.target.value)}
-                  placeholder="예: 3.7, 5, 7.4"
+                  placeholder="예: 3.8, 5, 7.4"
                 />
               </div>
               <div className="input-field">

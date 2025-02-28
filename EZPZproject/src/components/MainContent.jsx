@@ -11,7 +11,7 @@ const MainContent = () => {
   
   const handleSearchResult = (newResult) => {
     setSearchResults(prevResults => {
-      const updatedResults = prevResults.length >= 4 
+      const updatedResults = prevResults.length >= 3
         ? [...prevResults.slice(1), newResult]
         : [...prevResults, newResult];
       sessionStorage.setItem('searchResults', JSON.stringify(updatedResults));
