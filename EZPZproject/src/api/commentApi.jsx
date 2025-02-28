@@ -6,33 +6,59 @@ export const getComments = async (postId) => {
   return response.json();
 };
 
-export const createComment = async (postId, content, writer) => {
+export const createComment = async (postId, content) => {
+  const token = localStorage.getItem("accessToken");
+  const username = localStorage.getItem("username");
+  
+  if (!token || !username) {
+    throw new Error('로그인이 필요합니다.');
+  }
+  
   const response = await fetch(`${API_BASE_URL}/comments/post/${postId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ content, writer }),
+    body: JSON.stringify({ content, writer: username }),
   });
   if (!response.ok) throw new Error('Failed to create comment');
   return response.json();
 };
 
-export const updateComment = async (commentId, content, writer) => {
+export const updateComment = async (commentId, content) => {
+  const token = localStorage.getItem("accessToken");
+  const username = localStorage.getItem("username");
+  
+  if (!token || !username) {
+    throw new Error('로그인이 필요합니다.');
+  }
+  
   const response = await fetch(`${API_BASE_URL}/comments/${commentId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ content, writer }),
+    body: JSON.stringify({ content, writer: username }),
   });
   if (!response.ok) throw new Error('Failed to update comment');
   return response.json();
 };
 
-export const deleteComment = async (commentId, writer) => {
-  const response = await fetch(`${API_BASE_URL}/comments/${commentId}?writer=${writer}`, {
+export const deleteComment = async (commentId) => {
+  const token = localStorage.getItem("accessToken");
+  const username = localStorage.getItem("username");
+  
+  if (!token || !username) {
+    throw new Error('로그인이 필요합니다.');
+  }
+  
+  const response = await fetch(`${API_BASE_URL}/comments/${commentId}?writer=${username}`, {
     method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
   });
   if (!response.ok) throw new Error('Failed to delete comment');
-}; 
+};
