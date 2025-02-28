@@ -116,6 +116,7 @@ body {
 .airport-select {
   width: 100%;
   padding: 8px;
+  margin-top: 15px;
   margin-bottom: 0px;
   border-radius: 5px;
   border: 1px solid var(--accent-gray);
@@ -179,7 +180,6 @@ body {
   color: var(--text-gray);
   margin-top: 5px;
 }
-
 
 /* ✅ 네비게이션 바 스타일 - 살짝 아래로 조정 */
 .main-nav {
@@ -465,18 +465,19 @@ body {
   gap: 2rem;
 }
 
-.search-results{
+.search-results {
   background-color: var(--primary-white);
   border-radius: 12px;
   margin-bottom: 20px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
-.rankings{
+.rankings {
   background-color: var(--primary-white);
   margin-top: 30px;
   margin-bottom: 20px;
   border-radius: 12px;
+  height: 425px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
@@ -703,10 +704,11 @@ body {
   .footer {
     display: flex;
     flex-direction: column; /* 탑바와 컨텐츠를 세로 정렬 */
+    margin-left: 20px;
     align-items: center;
     justify-content: center;
     height: auto;
-    max-width: 550px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 }

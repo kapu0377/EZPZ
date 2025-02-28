@@ -35,7 +35,7 @@
 .logout-button,
 .register-button {
   padding: 2px 8px;
-  background-color: #f8f9fa;
+  background-color: var(--secondary-white);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -50,7 +50,7 @@
 /* 회원수정 버튼 스타일 추가 */
 .edit-profile-link {
   padding: 2px 8px;
-  background-color: #f8f9fa;
+  background-color: var(--secondary-white);
   border: none;
   border-radius: 4px;
   cursor: pointer;
