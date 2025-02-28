@@ -29,11 +29,9 @@
   position: absolute;
   top: 50%;
   right: 5%;
-  /* 오른쪽 정렬 */
   transform: translateY(-50%);
   width: auto;
   text-align: right;
-  /* 텍스트 오른쪽 정렬 */
   z-index: 10;
   padding: 12px 24px;
   border-radius: 12px;

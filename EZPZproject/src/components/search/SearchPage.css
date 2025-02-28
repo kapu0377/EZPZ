@@ -272,6 +272,34 @@
     font-size: 14px;
   }
 
+  /* 더보기 버튼 스타일 */
+  .load-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px 0;
+  }
+  
+  .load-more-button {
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+  
+  .load-more-button:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+  }
+  
+  .load-more-button:active {
+    background-color: #dae0e5;
+    transform: translateY(1px);
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }

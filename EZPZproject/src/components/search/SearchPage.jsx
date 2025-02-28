@@ -11,12 +11,6 @@ const SearchPage = () => {
     return savedResults ? JSON.parse(savedResults) : [];
   });
   
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = sessionStorage.getItem('currentSearchPage');
-    return savedPage ? parseInt(savedPage) : 1;
-  });
-  const [resultsPerPage] = useState(10);
-  
   const [searchHistory, setSearchHistory] = useState(() => {
     const savedHistory = sessionStorage.getItem('searchHistory');
     return savedHistory ? JSON.parse(savedHistory) : [];
@@ -34,6 +28,7 @@ const SearchPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); 
   const [showSearchNotification, setShowSearchNotification] = useState(false);
+  const [visibleItemsCount, setVisibleItemsCount] = useState({}); 
  
   useEffect(() => {
     sessionStorage.setItem('searchHistory', JSON.stringify(searchHistory));
@@ -50,9 +45,6 @@ const SearchPage = () => {
   useEffect(() => {
     sessionStorage.setItem('searchResults', JSON.stringify(searchResults));
   }, [searchResults]);  
-  useEffect(() => {
-    sessionStorage.setItem('currentSearchPage', currentPage);
-  }, [currentPage]);
 
   useEffect(() => {
     const username = localStorage.getItem('username');
@@ -157,15 +149,16 @@ const SearchPage = () => {
   }, [historyDays]);
 
   const handleSearchResult = (result) => {
-    setSearchResults(prev => [...prev, result]);
+    setSearchResults(prev => {
+      let newResults = [...prev, result];
+      if (newResults.length > 4) {
+        newResults = newResults.slice(1);
+      }
+      return newResults;
+    });
     
-    // 새 결과가 추가되면 해당 페이지로 이동
-    setCurrentPage(Math.ceil((searchResults.length + 1) / resultsPerPage));
-    
-    // 현재 탭이 history일 경우 알림 표시
     if (activeTab === "history") {
       setShowSearchNotification(true);
-      // 3초 후 알림 자동 제거
       setTimeout(() => {
         setShowSearchNotification(false);
       }, 3000);
@@ -173,20 +166,11 @@ const SearchPage = () => {
   };
 
   const handleRemoveItem = (index) => {
-    // 현재 페이지에 표시된 결과의 실제 인덱스 계산
-    const actualIndex = indexOfFirstResult + index;
-    setSearchResults(prev => prev.filter((_, i) => i !== actualIndex));
-    
-    // 현재 페이지에 결과가 없게 되면 이전 페이지로 이동
-    const newTotalPages = Math.ceil((searchResults.length - 1) / resultsPerPage);
-    if (currentPage > newTotalPages && newTotalPages > 0) {
-      setCurrentPage(newTotalPages);
-    }
+    setSearchResults(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleReset = () => {
     setSearchResults([]);
-    setCurrentPage(1);
     sessionStorage.removeItem('searchResults');
   };
 
@@ -196,6 +180,7 @@ const SearchPage = () => {
 
   const handleDaysChange = (days) => {
     setHistoryDays(days);
+    setVisibleItemsCount({}); 
   };
 
   const handleOpenLoginModal = () => {
@@ -206,18 +191,12 @@ const SearchPage = () => {
     setIsLoginModalOpen(false);
   };
   
-  // 페이지 변경 핸들러
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handleLoadMore = (date) => {
+    setVisibleItemsCount(prev => ({
+      ...prev,
+      [date]: (prev[date] || 10) + 10
+    }));
   };
-
-  // 현재 페이지에 표시할 검색 결과 계산
-  const indexOfLastResult = currentPage * resultsPerPage;
-  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-  const currentResults = searchResults.slice(indexOfFirstResult, indexOfLastResult);
-  
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(searchResults.length / resultsPerPage);
 
   return (
     <div className="search-page">
@@ -254,32 +233,9 @@ const SearchPage = () => {
             {activeTab === "search" ? (
               <div className="search-results-container">
                 <SearchResults 
-                  results={currentResults} 
+                  results={searchResults} 
                   onRemoveItem={handleRemoveItem}
                 />
-                
-                {/* 페이지네이션 컨트롤 추가 */}
-                {searchResults.length > 0 && (
-                  <div className="pagination">
-                    <button 
-                      onClick={() => handlePageChange(currentPage - 1)} 
-                      disabled={currentPage === 1}
-                      className="pagination-button"
-                    >
-                      이전
-                    </button>
-                    
-                    <span className="page-info">{currentPage} / {totalPages || 1}</span>
-                    
-                    <button 
-                      onClick={() => handlePageChange(currentPage + 1)} 
-                      disabled={currentPage === totalPages || totalPages === 0}
-                      className="pagination-button"
-                    >
-                      다음
-                    </button>
-                  </div>
-                )}
               </div>
             ) : (
               <div className="search-history-container">
@@ -308,19 +264,34 @@ const SearchPage = () => {
                       <div className="grouped-history-list">
                         {Object.entries(groupedHistory)
                           .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA))
-                          .map(([date, items]) => (
-                            <div key={date} className="history-date-group">
-                              <h4 className="history-date-header">{date}</h4>
-                              <div className="history-date-items">
-                                {items.map((item, idx) => (
-                                  <div key={idx} className="history-item">
-                                    <span className="history-keyword">{item.keyword}</span>
-                                    <span className="history-time">{new Date(item.searchDate).toLocaleTimeString()}</span>
-                                  </div>
-                                ))}
+                          .map(([date, items]) => {
+                            const itemsToShow = Math.min(visibleItemsCount[date] || 10, items.length);
+                            
+                            return (
+                              <div key={date} className="history-date-group">
+                                <h4 className="history-date-header">{date}</h4>
+                                <div className="history-date-items">
+                                  {items.slice(0, itemsToShow).map((item, idx) => (
+                                    <div key={idx} className="history-item">
+                                      <span className="history-keyword">{item.keyword}</span>
+                                      <span className="history-time">{new Date(item.searchDate).toLocaleTimeString()}</span>
+                                    </div>
+                                  ))}
+                                  
+                                  {items.length > itemsToShow && (
+                                    <div className="history-item load-more-link">
+                                      <span 
+                                        className="load-more-text" 
+                                        onClick={() => handleLoadMore(date)}
+                                      >
+                                        더보기
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                       </div>
                     ) : (
                       <p className="no-history">검색 기록이 없습니다.</p>

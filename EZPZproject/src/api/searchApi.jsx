@@ -61,6 +61,10 @@ export const getUserSearchHistoryByDays = async (username, days) => {
   return itemApi.getUserSearchHistoryByDays(username, days);
 };
 
+export const getUserSearchHistoryPaginated = async (username, days, page = 1, pageSize = 10) => {
+  return itemApi.getUserSearchHistoryPaginated(username, days, page, pageSize);
+};
+
 export const getDetectionRankings = async () => {
   return itemApi.getDetectionRankings();
 };

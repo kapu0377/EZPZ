@@ -78,6 +78,18 @@ const itemApi = {
     }
   },
 
+  getUserSearchHistoryPaginated: async (username, days, page = 1, pageSize = 10) => {
+    try {
+      const response = await axiosInstance.get(`/api/search/history/paginated`, {
+        params: { username, days, page, pageSize }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`검색 기록 페이지네이션 조회 실패:`, error);
+      throw error;
+    }
+  },
+
   getWeeklyRankings: async () => {
     try {
       const response = await axiosInstance.get('/api/search/weekly-ranking');

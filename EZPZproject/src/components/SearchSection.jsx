@@ -49,7 +49,7 @@ const SearchSection = () => {
 
   const handleSearchResult = (result) => {
     setSearchResults((prev) => {
-      if (prev.length >= 2) {
+      if (prev.length >= 4) {
         return [...prev.slice(1), result];
       }
       return [...prev, result];
@@ -59,6 +59,13 @@ const SearchSection = () => {
   const handleReset = () => {
     setSearchResults([]);
     sessionStorage.removeItem("searchResults");
+  };
+
+  const handleRemoveItem = (index) => {
+    setSearchResults(prev => {
+      const updatedResults = prev.filter((_, i) => i !== index);
+      return updatedResults;
+    });
   };
 
   // 공항 리스트 가져오기
@@ -116,7 +123,7 @@ const SearchSection = () => {
         </div>
       </div>
       <div className="search-results-and-rankings">
-        <SearchResults results={searchResults} onRemoveItem={() => {}} />
+        <SearchResults results={searchResults} onRemoveItem={handleRemoveItem} />
         <Rankings />
       </div>
     </div>
