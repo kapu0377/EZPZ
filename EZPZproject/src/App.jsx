@@ -19,6 +19,7 @@ import EditProfile from "./components/EditProfile";
 import RankingPage from "./components/ranking/RankingPage";
 import ObjectDetection from "./pages/ObjectDetection";
 import { HelmetProvider } from 'react-helmet-async';
+import BoardPage from "./pages/BoardPage";
 function App() {
   return (
     <HelmetProvider>
@@ -27,8 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<EZPackingLayout />} />
             <Route path="/prohibited" element={<ProhibitedItems />} />
-            <Route path="/board" element={<Notice />} />
-            <Route path="/board/:no" element={<Notice />} />
+            <Route path="/board/*" element={<BoardPage/>} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/checklist" element={<CheckList />} />
             <Route path="/parking" element={<AirportParkingPage />} />
