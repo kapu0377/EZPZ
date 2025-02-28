@@ -31,7 +31,7 @@ const SearchResults = ({ results, onRemoveItem }) => {
 
   return (
     <div className="search-results">
-      <h3>반입가능여부 결과</h3>
+      <h2>반입가능여부 결과</h2>
       <div className="results-list">
         {results.map((result, index) => (
           <div 

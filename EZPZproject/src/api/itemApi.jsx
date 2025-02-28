@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8088',
+  baseURL: '/api',
   headers: {
     'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
@@ -13,7 +13,7 @@ const itemApi = {
   searchItems: async (query) => {
     try {
       const username = localStorage.getItem('username');
-      const response = await axiosInstance.get(`/api/items/search`, {
+      const response = await axiosInstance.get(`/items/search`, {
         params: {
           keyword: query,
           username: username
@@ -28,7 +28,7 @@ const itemApi = {
 
   getSearchRankings: async () => {
     try {
-      const response = await axiosInstance.get('/api/search/top-categories');
+      const response = await axiosInstance.get('/search/top-categories');
       return response.data.map(item => ({
         name: item.category,
         count: item.searchCount
@@ -41,7 +41,7 @@ const itemApi = {
 
   saveSearchHistory: async (username, keyword, searchDate) => {
     try {
-      const response = await axiosInstance.post('/api/search/history/save', {
+      const response = await axiosInstance.post('/search/history/save', {
         username,
         keyword,
         searchDate: searchDate || new Date().toISOString()
@@ -55,7 +55,7 @@ const itemApi = {
 
   getUserSearchHistory: async (username) => {
     try {
-      const response = await axiosInstance.get(`/api/search/history`, {
+      const response = await axiosInstance.get(`/search/history`, {
         params: { username }
       });
       return response.data;
@@ -68,7 +68,7 @@ const itemApi = {
   // 최근 N일간의 검색 기록 조회 함수 추가
   getUserSearchHistoryByDays: async (username, days) => {
     try {
-      const response = await axiosInstance.get(`/api/search/history/days`, {
+      const response = await axiosInstance.get(`/search/history/days`, {
         params: { username, days }
       });
       return response.data;
@@ -80,7 +80,7 @@ const itemApi = {
 
   getUserSearchHistoryPaginated: async (username, days, page = 1, pageSize = 10) => {
     try {
-      const response = await axiosInstance.get(`/api/search/history/paginated`, {
+      const response = await axiosInstance.get(`/search/history/paginated`, {
         params: { username, days, page, pageSize }
       });
       return response.data;
@@ -92,7 +92,7 @@ const itemApi = {
 
   getWeeklyRankings: async () => {
     try {
-      const response = await axiosInstance.get('/api/search/weekly-ranking');
+      const response = await axiosInstance.get('/search/weekly-ranking');
       return response.data.map(item => ({
         name: item.category,
         count: item.searchCount
@@ -105,7 +105,7 @@ const itemApi = {
 
   getMonthlyRankings: async () => {
     try {
-      const response = await axiosInstance.get('/api/search/monthly-ranking');
+      const response = await axiosInstance.get('/search/monthly-ranking');
       return response.data.map(item => ({
         name: item.category,
         count: item.searchCount

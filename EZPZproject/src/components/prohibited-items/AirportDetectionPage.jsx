@@ -24,7 +24,7 @@ function AirportDetectionPage() {
   // 공항 목록 가져오기
   useEffect(() => {
     axios
-      .get("http://localhost:8088/api/airport-detections/distinct")
+      .get("/api/airport-detections/distinct")
       .then((response) => {
         setAirportList(response.data);
         if (response.data.length > 0) {
@@ -38,7 +38,7 @@ function AirportDetectionPage() {
   useEffect(() => {
     if (selectedAirport) {
       axios
-        .get(`http://localhost:8088/api/airport-detections/name/${selectedAirport}`)
+        .get(`/api/airport-detections/name/${selectedAirport}`)
         .then((response) => {
           setDetectionData(response.data);
 

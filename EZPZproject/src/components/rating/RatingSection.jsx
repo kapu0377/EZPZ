@@ -35,7 +35,7 @@ const StarRating = ({ rating, setRating, label }) => {
   );
 };
 
-const BASE_URL = 'http://localhost:8088';
+const BASE_URL = '/api';
 
 const RatingSection = ({ airport }) => {
     const [ratings, setRatings] = useState({

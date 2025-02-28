@@ -6,7 +6,6 @@ import EZPackingLayout from "./components/EZPackingLayout";
 import CheckList from "./components/checklist/Main";
 import "./App.css";
 import "./components/notice/Notice.css";
-import Notice from "./pages/Notice";
 import ProhibitedItems from "./components/prohibited-items/ProhibitedItems";
 import AirportDetectionPage from "./components/prohibited-items/AirportDetectionPage"
 import AirportParkingPage from "./pages/AirportParkingPage";

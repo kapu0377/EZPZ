@@ -16,7 +16,6 @@ export const fetchIncheonParkingData = async () => {
 
     const items = response.data.response.body.items;
     
-    // T1, T2 터미널로 데이터 그룹화
     const groupedData = items.reduce((acc, item) => {
       const isT1 = item.floor.includes('T1');
       const terminalKey = isT1 ? 'T1' : 'T2';

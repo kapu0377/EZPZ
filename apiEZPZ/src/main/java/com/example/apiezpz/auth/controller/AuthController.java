@@ -73,13 +73,11 @@ public class AuthController {
         }
     }
 
-    // 토큰 재발급
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@RequestBody TokenRequest tokenRequest) {
         try {
             log.info("토큰 재발급 요청 - accessToken: {}", tokenRequest.getAccessToken());
             
-            // 1. AccessToken에서 username 추출
             String username = jwtTokenProvider.getUsernameFromToken(tokenRequest.getAccessToken());
             if (username == null) {
                 log.error("토큰에서 username 추출 실패");
@@ -88,17 +86,14 @@ public class AuthController {
             
             log.info("토큰에서 추출한 username: {}", username);
             
-            // 2. 저장소에서 username으로 RefreshToken 조회
             RefreshToken refreshToken = refreshTokenRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
                 
-            // 3. RefreshToken 검증
             if (!jwtTokenProvider.validateToken(refreshToken.getToken())) {
                 log.error("유효하지 않은 리프레시 토큰");
                 return ResponseEntity.badRequest().body("리프레시 토큰이 만료되었습니다. 다시 로그인해주세요.");
             }
             
-            // 4. 새로운 토큰 발급
             Token tokenDto = authService.reissue(username);
             log.info("새로운 토큰 발급 완료 - accessToken: {}", tokenDto.getAccessToken());
             
@@ -126,7 +121,6 @@ public class AuthController {
     }
 
     // 회원수정
-    // 회원 정보 수정 엔드포인트 추가
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String token, @RequestBody SignUpRequest updatedUserInfo) {
         try {

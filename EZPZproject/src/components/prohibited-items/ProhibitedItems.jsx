@@ -88,10 +88,9 @@ function ProhibitedItems() {
   const [selectedAllowedCategory, setSelectedAllowedCategory] = useState(null);
   const [isAllowedModalOpen, setIsAllowedModalOpen] = useState(false);
 
-  // API 호출: 금지 물품 데이터, 공항 목록
   useEffect(() => {
     axios
-      .get("http://localhost:8088/api/prohibit-items")
+      .get("/api/prohibit-items")
       .then((response) => {
         setItemsData(response.data);
       })
@@ -100,7 +99,6 @@ function ProhibitedItems() {
 
  
 
-  // 카테고리 모달 오픈/닫기 함수
   const openModal = (category) => {
     setSelectedCategory(category);
     setIsModalOpen(true);
@@ -119,7 +117,6 @@ function ProhibitedItems() {
     setIsAllowedModalOpen(false);
   };
 
-  // 선택된 카테고리에 해당하는 금지 물품 필터링
   const filteredItems = itemsData.filter(
     (item) => item.gubun === selectedCategory
   );

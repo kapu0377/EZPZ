@@ -39,17 +39,16 @@ const SearchSection = () => {
 
     fetchFlightData();
 
-    // 10초마다 자동으로 슬라이드 변경
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % flights.length);
     }, 10000);
 
-    return () => clearInterval(interval); // 컴포넌트 언마운트 시 정리
+    return () => clearInterval(interval);
   }, [flights.length]);
 
   const handleSearchResult = (result) => {
     setSearchResults((prev) => {
-      if (prev.length >= 4) {
+      if (prev.length >= 3) {
         return [...prev.slice(1), result];
       }
       return [...prev, result];

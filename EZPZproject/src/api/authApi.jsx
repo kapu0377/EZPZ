@@ -3,7 +3,7 @@ import axiosInstance from '../utils/axios';
 const authApi = {
   login: async (credentials) => {
     try {
-      const response = await axiosInstance.post('/api/auth/login', credentials);
+      const response = await axiosInstance.post('/auth/login', credentials);
       return response.data;
     } catch (error) {
       console.error('로그인 실패:', error);
@@ -14,7 +14,7 @@ const authApi = {
   signup: async (userData) => {
     try {
       console.log('회원가입 요청 데이터:', userData);
-      const response = await axiosInstance.post('/api/auth/signup', userData);
+      const response = await axiosInstance.post('/auth/signup', userData);
       console.log('회원가입 응답:', response.data);
       return response.data;
     } catch (error) {
@@ -26,7 +26,7 @@ const authApi = {
   logout: async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await axiosInstance.post('/api/auth/logout', {
+      const response = await axiosInstance.post('/auth/logout', {
         accessToken: accessToken
       });
 
@@ -46,7 +46,7 @@ const authApi = {
     try {
       const accessToken = localStorage.getItem('accessToken');
       const username = localStorage.getItem('username');
-      const response = await axiosInstance.post('/api/auth/reissue', {
+      const response = await axiosInstance.post('/auth/reissue', {
         accessToken: accessToken,
         username: username
       });
@@ -67,7 +67,7 @@ const authApi = {
   updateUser: async (userData) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axiosInstance.put('/api/auth/update', userData, {
+      const response = await axiosInstance.put('/auth/update', userData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -83,7 +83,7 @@ const authApi = {
   getUserProfile: async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axiosInstance.get('/api/auth/me', {
+      const response = await axiosInstance.get('/auth/me', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -99,7 +99,7 @@ const authApi = {
   deleteUser: async (password) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axiosInstance.delete("/api/auth/delete", {
+      const response = await axiosInstance.delete('/auth/delete', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -114,8 +114,8 @@ const authApi = {
 
   verifyPassword: async (password) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const response = await axiosInstance.post("/api/auth/verify-password", 
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axiosInstance.post('/auth/verify-password', 
         { password },
         {
           headers: {
@@ -151,18 +151,45 @@ axiosInstance.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      try {
-        const response = await axiosInstance.post('/api/auth/reissue');
-        const { accessToken } = response.data;
+      
+      const expiredAccessToken = localStorage.getItem('accessToken');
+      
+      const refreshToken = localStorage.getItem('refreshToken');
 
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+      if (!expiredAccessToken || !refreshToken) {
+        console.error('Access token or refresh token not found.');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('name');
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
+
+      try {
+        const response = await axiosInstance.post('/auth/reissue', { 
+          accessToken: expiredAccessToken
+        });
+        
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+
+        if (newAccessToken) {
+          localStorage.setItem('accessToken', newAccessToken);
+          if (newRefreshToken) { 
+            localStorage.setItem('refreshToken', newRefreshToken); 
+          }
+
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axiosInstance(originalRequest);
+        } else {
+           throw new Error('Failed to receive new access token');
         }
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('name');
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
