@@ -1,0 +1,204 @@
+/* 카테고리 컨테이너 */
+/* 카테고리 컨테이너 */
+.category-container {
+    width: 100%;
+    max-width: 800px; /* 체크리스트 옆에 맞게 적절한 크기 설정 */
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    box-sizing: border-box;
+}
+
+/* 모바일에서는 100% 너비 */
+@media (max-width: 768px) {
+    .category-container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+.category-list-title {
+    margin-bottom: 10px;
+}
+
+/* 버튼 정렬 */
+.category-buttons {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 15px;
+}
+
+.category-buttons button {
+    margin-left: 5px;
+}
+/* 카테고리 목록을 2줄로 나누기 */
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 기본 2열 이상 */
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .category-grid {
+        grid-template-columns: 1fr; /* 화면이 작아지면 1열 */
+    }
+}
+
+
+/* 카테고리 블록 */
+.category-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 카테고리 제목 */
+.checklist-category-title {
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+    color: black;
+}
+
+/* 카테고리명 왼쪽 정렬 */
+.checklist-category-title span {
+    flex-grow: 1; /* 버튼을 오른쪽으로 밀어줌 */
+    display: flex;
+    align-items: center;
+}
+
+/* 수정 및 삭제 버튼을 오른쪽 정렬 */
+.checklist-category-title button {
+    margin-left: 8px; /* 버튼 간격 추가 */
+}
+
+/* 카테고리 버튼 */
+.category-add-btn, .category-reset-btn {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.category-add-btn {
+    background-color: #4a90e2;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.category-add-btn:hover {
+    background-color: #0056b3; /* 진한 파란색 */
+}
+
+.category-reset-btn {
+    background-color: #fc5e6e;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.category-reset-btn:hover {
+    background-color: #bd2130; /* 진한 빨간색 */
+}
+
+/* 아이템 리스트 */
+
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 기본 2열 이상 */
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .item-list {
+        grid-template-columns: 1fr; /* 화면이 작아지면 1열 */
+    }
+}
+
+
+/* 기본 카테고리 추가 버튼 스타일 */
+.category-default-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.category-default-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.category-default-btn:hover {
+    background-color: #218838;
+}
+
+/* 편집 모드 버튼 */
+.edit-mode-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.edit-mode-btn.active {
+    background-color: #28a745;
+}
+
+.edit-mode-btn:hover {
+    background-color: #218538;
+}
+
+.category-edit-input {
+    width: 70%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .category-container {
+        font-size: 12px;
+    }
+
+    .category-container h3 {
+        font-size: 14px;
+    }
+
+    .category-buttons button {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .item-list {
+        font-size: 12px;
+    }
+}

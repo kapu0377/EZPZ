@@ -1,0 +1,64 @@
+.top-bar {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.top-bar-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2px 2rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 24px;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.welcome-message {
+  font-size: 11px;
+  margin-right: 8px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-button,
+.logout-button,
+.register-button {
+  padding: 2px 8px;
+  background-color: var(--secondary-white);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  outline: none;
+}
+
+.register-button:focus {
+  outline: none;
+}
+
+/* 회원수정 버튼 스타일 추가 */
+.edit-profile-link {
+  padding: 2px 8px;
+  background-color: var(--secondary-white);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  text-decoration: none;
+  color: black;
+}
+
+.edit-profile-link:hover {
+  color: #4a90e2;
+}

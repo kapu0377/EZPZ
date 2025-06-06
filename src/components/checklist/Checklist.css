@@ -1,0 +1,125 @@
+/* 체크리스트 컨테이너 */
+.checklist-container {
+    width: 100%;
+    max-width: 400px; /* 기본 크기 */
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    box-sizing: border-box;
+}
+
+/* 모바일에서는 100% 너비 */
+@media (max-width: 768px) {
+    .checklist-container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+.checklist-container h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.checklist-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.checklist-header .add-btn {
+    flex: 1;
+}
+
+.checklist-header .refresh-btn {
+    background-color: #28a745;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.checklist-header .refresh-btn:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.checklist-header .refresh-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.add-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 입력 필드 스타일 */
+.checklist-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 버튼 스타일 */
+.add-btn, .edit-btn, .delete-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #4a90e2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.checklist-container .add-btn:hover, .edit-btn:hover, .delete-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 체크리스트 목록 스타일 */
+.checklist-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+/* 체크리스트 아이템 스타일 */
+.checklist-container li {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.checklist-container span:hover {
+    background-color: #ececec;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .checklist-container {
+        width: 100%; 
+        max-width: 400px; /* 적절한 최대 너비 유지 */
+    }
+
+    .category-container {
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px; /* 간격 추가 */
+    }
+}
+

@@ -1,0 +1,126 @@
+import axios from 'axios';
+import { getUsernameFromRefreshToken } from '../utils/authUtils';
+
+const axiosInstance = axios.create({
+  baseURL: '/api',
+  headers: {
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  }
+});
+
+const itemApi = {
+  searchItems: async (query) => {
+    try {
+      const username = getUsernameFromRefreshToken();
+      const response = await axiosInstance.get(`/items/search`, {
+        params: {
+          keyword: query,
+          username: username
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('물품 검색 실패:', error);
+      throw error;
+    }
+  },
+
+  getSearchRankings: async () => {
+    try {
+      const response = await axiosInstance.get('/search/top-categories');
+      
+      if (!Array.isArray(response.data)) {
+        console.warn('검색 랭킹 데이터가 배열이 아닙니다:', response.data);
+        return [];
+      }
+      
+      return response.data.map(item => ({
+        name: item.category,
+        count: item.searchCount
+      }));
+    } catch (error) {
+      console.error('검색 랭킹 조회 실패:', error);
+      return []; 
+    }
+  },
+
+  saveSearchHistory: async (username, keyword, searchDate) => {
+    try {
+      const response = await axiosInstance.post('/search/history/save', {
+        username,
+        keyword,
+        searchDate: searchDate || new Date().toISOString()
+      });
+      return response.data;
+    } catch (error) {
+      console.error('검색 기록 저장 실패:', error);
+      return false;
+    }
+  },
+
+  getUserSearchHistory: async (username) => {
+    try {
+      const response = await axiosInstance.get(`/search/history`, {
+        params: { username }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('검색 기록 조회 실패:', error);
+      throw error;
+    }
+  },
+
+  getUserSearchHistoryByDays: async (username, days) => {
+    try {
+      const response = await axiosInstance.get(`/search/history/days`, {
+        params: { username, days }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`최근 ${days}일간 검색 기록 조회 실패:`, error);
+      throw error;
+    }
+  },
+
+  getUserSearchHistoryPaginated: async (username, days, page = 1, pageSize = 10) => {
+    try {
+      const response = await axiosInstance.get(`/search/history/paginated`, {
+        params: { username, days, page, pageSize }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`검색 기록 페이지네이션 조회 실패:`, error);
+      throw error;
+    }
+  },
+
+  getWeeklyRankings: async () => {
+    try {
+      const response = await axiosInstance.get('/search/weekly-ranking');
+      return response.data.map(item => ({
+        name: item.category,
+        count: item.searchCount
+      }));
+    } catch (error) {
+      console.error('주간 랭킹 조회 실패:', error);
+      return [];
+    }
+  },
+
+  getMonthlyRankings: async () => {
+    try {
+      const response = await axiosInstance.get('/search/monthly-ranking');
+      return response.data.map(item => ({
+        name: item.category,
+        count: item.searchCount
+      }));
+    } catch (error) {
+      console.error('월간 랭킹 조회 실패:', error);
+      return [];
+    }
+  },
+};
+
+export default itemApi;

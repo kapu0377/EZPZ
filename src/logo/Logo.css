@@ -1,0 +1,14 @@
+.logo {
+  position: relative;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+  height: 60px; 
+}
+
+.logo-text {
+  font-size: 48px;
+  font-weight: bold;
+  display: inline-block;
+} 

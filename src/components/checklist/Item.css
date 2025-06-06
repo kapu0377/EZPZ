@@ -1,0 +1,166 @@
+/* 아이템 입력 및 리스트 전체 컨테이너 */
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 기본 2열 */
+    gap: 10px;
+    width: 100%;
+}
+
+/* 화면이 작아질 때 1열로 정렬 */
+@media (max-width: 768px) {
+    .item-list {
+        grid-template-columns: 1fr; /* 1열 */
+    }
+}
+
+/* 아이템 입력 필드 */
+.item-container input[type="text"] {
+    width: 60%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 추가 버튼 스타일 */
+.item-container button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* 추가 버튼 - 파란색 */
+.item-container button:first-of-type {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.item-container button:first-of-type:hover {
+    background-color: #0056b3;
+}
+
+/* 아이템 리스트 스타일 */
+.item-container ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+/* 개별 아이템 항목 */
+.item-container li {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+/* 체크박스 스타일 */
+.item-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* 아이템 텍스트 스타일 */
+.item-container span {
+    font-size: 16px;
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+/* 수정 및 삭제 버튼 */
+.item-container li button {
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* 수정 버튼 - 파란색 */
+.item-container li button:nth-of-type(1) {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.item-container li button:nth-of-type(1):hover {
+    background-color: #4a90e2;
+}
+
+/* 삭제 버튼 - 빨간색 */
+.item-container li button:nth-of-type(2) {
+    background-color: #fc5e6e;
+    color: white;
+}
+
+.item-container li button:nth-of-type(2):hover {
+    background-color: #c82333;
+}
+
+
+/* 아이템 입력 창 정렬 */
+.item-add-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 아이템 입력 필드 */
+.item-add-container input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 아이템 추가 버튼 */
+.item-add-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.item-add-container button:hover {
+    background-color: #0056b3;
+}
+
+
+.item-add-container button {
+    width: 40px; 
+    height: 40px;
+    border: none;
+    border-radius: 50%; /* 완전한 원 모양 */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .item-list {
+        font-size: 10px;
+    }
+
+    .item-list label {
+        font-size: 10px;
+    }
+}
