@@ -4,6 +4,7 @@ import PostList from "../components/PostList";
 import PostDetail from "../components/PostDetail";
 import Login from "../components/Login";
 import { getPostDetail } from "../services/postService";
+import { checkAuthStatus } from "../../utils/authUtils";
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -42,8 +43,7 @@ const BoardPage = () => {
   };
 
   const handleAddClick = () => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
+    if (!checkAuthStatus().isAuthenticated) {
       alert("로그인이 필요한 서비스입니다.\n로그인 후 다시 이용해주세요.");
       setIsLoginModalOpen(true);
       return;

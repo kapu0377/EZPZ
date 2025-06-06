@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const INCHEON_API_KEY = process.env.REACT_APP_INCHEON_API_KEY;
-const BASE_URL = "http://apis.data.go.kr";
+const INCHEON_API_KEY = import.meta.env.VITE_INCHEON_API_KEY;
+const BASE_URL = "https://apis.data.go.kr";
 
 export const fetchIncheonParkingData = async () => {
   const param = {

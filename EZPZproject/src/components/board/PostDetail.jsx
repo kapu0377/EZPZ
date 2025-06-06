@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { addOrUpdatePost, deletePost } from "../../api/postService";
 import CommentSection from "./CommentSection";
+import { checkAuthStatus, getUsernameFromRefreshToken } from "../../utils/authUtils";
 
 const PostDetail = ({ post, isWriting, onGoToList, openLoginModal }) => {
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ const PostDetail = ({ post, isWriting, onGoToList, openLoginModal }) => {
       alert("제목과 내용을 모두 입력해주세요.");
       return;
     }
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
+    
+    if (!checkAuthStatus().isAuthenticated) {
       alert("로그인이 필요합니다.");
       openLoginModal();
       return;
@@ -141,7 +142,7 @@ const PostDetail = ({ post, isWriting, onGoToList, openLoginModal }) => {
             목록으로
           </button>
         </div>
-        {post.writer === localStorage.getItem("username") && localStorage.getItem("accessToken") && (
+        {post.writer === getUsernameFromRefreshToken() && checkAuthStatus().isAuthenticated && (
           <div className="right-buttons">
             <button
               onClick={() => {

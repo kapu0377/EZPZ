@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getUsernameFromRefreshToken } from '../utils/authUtils';
 
 const axiosInstance = axios.create({
   baseURL: '/api',
@@ -12,7 +13,7 @@ const axiosInstance = axios.create({
 const itemApi = {
   searchItems: async (query) => {
     try {
-      const username = localStorage.getItem('username');
+      const username = getUsernameFromRefreshToken();
       const response = await axiosInstance.get(`/items/search`, {
         params: {
           keyword: query,
@@ -29,6 +30,12 @@ const itemApi = {
   getSearchRankings: async () => {
     try {
       const response = await axiosInstance.get('/search/top-categories');
+      
+      if (!Array.isArray(response.data)) {
+        console.warn('검색 랭킹 데이터가 배열이 아닙니다:', response.data);
+        return [];
+      }
+      
       return response.data.map(item => ({
         name: item.category,
         count: item.searchCount
@@ -65,7 +72,6 @@ const itemApi = {
     }
   },
 
-  // 최근 N일간의 검색 기록 조회 함수 추가
   getUserSearchHistoryByDays: async (username, days) => {
     try {
       const response = await axiosInstance.get(`/search/history/days`, {

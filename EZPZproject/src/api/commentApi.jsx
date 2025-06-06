@@ -1,3 +1,5 @@
+import { checkAuthStatus, getCookie, getUsernameFromRefreshToken } from '../utils/authUtils';
+
 const API_BASE_URL = '/api';
 
 export const getComments = async (postId) => {
@@ -7,10 +9,11 @@ export const getComments = async (postId) => {
 };
 
 export const createComment = async (postId, content) => {
-  const token = localStorage.getItem("accessToken");
-  const username = localStorage.getItem("username");
+  const authStatus = checkAuthStatus();
+  const token = getCookie('accessToken');
+  const username = getUsernameFromRefreshToken();
   
-  if (!token || !username) {
+  if (!authStatus.isAuthenticated || !username) {
     throw new Error('로그인이 필요합니다.');
   }
   
@@ -20,6 +23,7 @@ export const createComment = async (postId, content) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
+    credentials: 'include',
     body: JSON.stringify({ content, writer: username }),
   });
   if (!response.ok) throw new Error('Failed to create comment');
@@ -27,10 +31,11 @@ export const createComment = async (postId, content) => {
 };
 
 export const updateComment = async (commentId, content) => {
-  const token = localStorage.getItem("accessToken");
-  const username = localStorage.getItem("username");
+  const authStatus = checkAuthStatus();
+  const token = getCookie('accessToken');
+  const username = getUsernameFromRefreshToken();
   
-  if (!token || !username) {
+  if (!authStatus.isAuthenticated || !username) {
     throw new Error('로그인이 필요합니다.');
   }
   
@@ -40,6 +45,7 @@ export const updateComment = async (commentId, content) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
+    credentials: 'include',
     body: JSON.stringify({ content, writer: username }),
   });
   if (!response.ok) throw new Error('Failed to update comment');
@@ -47,10 +53,11 @@ export const updateComment = async (commentId, content) => {
 };
 
 export const deleteComment = async (commentId) => {
-  const token = localStorage.getItem("accessToken");
-  const username = localStorage.getItem("username");
+  const authStatus = checkAuthStatus();
+  const token = getCookie('accessToken');
+  const username = getUsernameFromRefreshToken();
   
-  if (!token || !username) {
+  if (!authStatus.isAuthenticated || !username) {
     throw new Error('로그인이 필요합니다.');
   }
   
@@ -58,7 +65,8 @@ export const deleteComment = async (commentId) => {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`
-    }
+    },
+    credentials: 'include'
   });
   if (!response.ok) throw new Error('Failed to delete comment');
 };

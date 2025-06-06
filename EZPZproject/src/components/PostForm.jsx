@@ -14,7 +14,7 @@ const PostForm = ({ onPostAdded }) => {
       alert("게시글이 추가되었습니다!");
       setTitle("");
       setContent("");
-      onPostAdded(); // 부모 컴포넌트에 알림
+      onPostAdded(); 
     } catch (error) {
       alert("게시글 추가 실패!");
     }

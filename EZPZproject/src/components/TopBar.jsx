@@ -5,10 +5,12 @@ import Register from "./Register";
 import "./TopBar.css";
 import { Link } from "react-router-dom";
 
-const TopBar = () => {
-  const { user, logout } = useAuth();
+const TopBar = React.memo(() => {
+  const { user, logout, getDisplayName } = useAuth();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+  const displayName = getDisplayName() || '사용자';
 
   return (
     <div className="top-bar">
@@ -16,7 +18,7 @@ const TopBar = () => {
         <div className="auth-buttons">
           {user ? (
             <div className="user-menu">
-              <span className="welcome-message">환영합니다, {user.name}님!</span>
+              <span className="welcome-message">환영합니다, {displayName}님!</span>
               <Link to="/edit-profile" className="edit-profile-link">회원수정</Link>
               <button onClick={logout} className="logout-button">로그아웃</button>
             </div>
@@ -36,6 +38,6 @@ const TopBar = () => {
       <Register isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
     </div>
   );
-};
+});
 
 export default TopBar; 

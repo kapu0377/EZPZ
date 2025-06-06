@@ -21,7 +21,7 @@ const SearchSection = () => {
     const fetchFlightData = async () => {
       try {
         const response = await fetch(
-          `https://api.odcloud.kr/api/FlightStatusListDTL/v1/getFlightStatusListDetail?page=1&perPage=10&returnType=JSON&serviceKey=${process.env.REACT_APP_FLIGHTSTATUSLIST_API_KEY}`
+          `https://api.odcloud.kr/api/FlightStatusListDTL/v1/getFlightStatusListDetail?page=1&perPage=10&returnType=JSON&serviceKey=${import.meta.env.VITE_FLIGHTSTATUSLIST_API_KEY}`
         );
         const data = await response.json();
 

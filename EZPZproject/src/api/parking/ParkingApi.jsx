@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PARKING_API_KEY = process.env.REACT_APP_AIRPORTAPI_KEY;
+const PARKING_API_KEY = import.meta.env.VITE_AIRPORTAPI_KEY;
 
 // 공항 코드 상수 정의
 export const AIRPORT_CODES = {

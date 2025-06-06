@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ChecklistAddModal.css";
 
-export default function ChecklistAddModal({ isOpen, onClose, onAdd, onRequireLogin }) {
+export default function ChecklistAddModal({ isOpen, onClose, onAdd, onRequireLogin, isAuthenticated }) {
     const [title, setTitle] = useState("");
     const [departureDate, setDepartureDate] = useState("");
     const [returnDate, setReturnDate] = useState("");
@@ -9,9 +9,7 @@ export default function ChecklistAddModal({ isOpen, onClose, onAdd, onRequireLog
     if (!isOpen) return null; // 모달이 열려 있을 때만 표시
 
     const handleSubmit = async () => {
-        const token = localStorage.getItem("accessToken");
-
-        if (!token) {
+        if (!isAuthenticated) {
             onRequireLogin(); // 로그인 필요 시 로그인 모달 호출
             return;
         }

@@ -4,8 +4,8 @@ import ad1 from '../../assets/img/ad1.jpg';
 
 const AdBanner = () => {
   const banner = {
-    imageUrl: '/ad1.jpg', // 실제 광고 이미지 경로로 변경
-    link: '#',  // 실제 광고 링크로 변경
+    imageUrl: '/ad1.jpg', 
+    link: '#',  
     alt: '광고 배너'
   };
 

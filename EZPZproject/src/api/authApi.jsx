@@ -1,4 +1,6 @@
 import axiosInstance from '../utils/axios';
+import { getUsernameFromRefreshToken } from '../utils/authUtils';
+import { getSecureItem } from '../utils/cryptoUtils';
 
 const authApi = {
   login: async (credentials) => {
@@ -25,17 +27,19 @@ const authApi = {
 
   logout: async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axiosInstance.post('/auth/logout', {
-        accessToken: accessToken
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
       });
 
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('username');
-      localStorage.removeItem('name');
+      if (!response.ok) {
+        throw new Error('로그아웃 요청 실패');
+      }
 
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('로그아웃 실패:', error);
       throw error;
@@ -44,20 +48,42 @@ const authApi = {
 
   reissue: async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const username = localStorage.getItem('username');
-      const response = await axiosInstance.post('/auth/reissue', {
-        accessToken: accessToken,
-        username: username
+      console.log('토큰 재발급 요청 중...');
+      
+      const refreshToken = getSecureItem('refreshToken');
+      
+      if (!refreshToken) {
+        console.log('저장된 리프레시 토큰이 없음');
+        throw new Error('RefreshToken이 없습니다.');
+      }
+      
+      const username = getUsernameFromRefreshToken() || "";
+      console.log('RefreshToken에서 추출한 username:', username);
+      
+      const requestBody = { 
+        refreshToken,
+        username
+      };
+      console.log('저장된 리프레시 토큰으로 재발급 요청');
+      
+      const response = await fetch('/api/auth/reissue', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(requestBody)
       });
 
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-      if (newAccessToken) {
-        localStorage.setItem('accessToken', newAccessToken);
-        localStorage.setItem('refreshToken', newRefreshToken);
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('토큰 재발급 HTTP 에러:', response.status, errorData);
+        throw new Error(`토큰 재발급 실패: ${response.status} ${errorData}`);
       }
 
-      return response.data;
+      const data = await response.json();
+      console.log('토큰 재발급 성공');
+      return data;
     } catch (error) {
       console.error('토큰 재발급 실패:', error);
       throw error;
@@ -66,13 +92,7 @@ const authApi = {
 
   updateUser: async (userData) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const response = await axiosInstance.put('/auth/update', userData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
+      const response = await axiosInstance.put('/auth/update', userData);
       return response.data;
     } catch (error) {
       console.error("회원 정보 수정 실패:", error);
@@ -82,13 +102,7 @@ const authApi = {
 
   getUserProfile: async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const response = await axiosInstance.get('/auth/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
+      const response = await axiosInstance.get('/auth/me');
       return response.data;
     } catch (error) {
       console.error("사용자 정보 불러오기 실패:", error);
@@ -98,11 +112,7 @@ const authApi = {
 
   deleteUser: async (password) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
       const response = await axiosInstance.delete('/auth/delete', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
         data: { password },
       });
       return response.data;
@@ -114,15 +124,7 @@ const authApi = {
 
   verifyPassword: async (password) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axiosInstance.post('/auth/verify-password', 
-        { password },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          }
-        }
-      );
+      const response = await axiosInstance.post('/auth/verify-password', { password });
       return response.data;
     } catch (error) {
       console.error("비밀번호 검증 실패:", error.response?.data || error);
@@ -140,60 +142,6 @@ export const checkAuth = async () => {
 };
 
 export const authHeader = () => {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  return {};
 };
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      
-      const expiredAccessToken = localStorage.getItem('accessToken');
-      
-      const refreshToken = localStorage.getItem('refreshToken');
-
-      if (!expiredAccessToken || !refreshToken) {
-        console.error('Access token or refresh token not found.');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('username');
-        localStorage.removeItem('name');
-        window.location.href = '/login';
-        return Promise.reject(error);
-      }
-
-      try {
-        const response = await axiosInstance.post('/auth/reissue', { 
-          accessToken: expiredAccessToken
-        });
-        
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-
-        if (newAccessToken) {
-          localStorage.setItem('accessToken', newAccessToken);
-          if (newRefreshToken) { 
-            localStorage.setItem('refreshToken', newRefreshToken); 
-          }
-
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axiosInstance(originalRequest);
-        } else {
-           throw new Error('Failed to receive new access token');
-        }
-      } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('username');
-        localStorage.removeItem('name');
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-    return Promise.reject(error);
-  }
-);

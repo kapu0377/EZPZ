@@ -7,7 +7,7 @@ import {
   getMonthlyRankings,
 } from '../api/searchApi';
 import "./Rankings.css";
-import arrow from '../assets/img/arrow.png';  // 화살표 이미지 추가
+import arrow from '../assets/img/arrow.png';  
 
 const Rankings = () => {
   const [rankings, setRankings] = useState({
@@ -28,13 +28,19 @@ const Rankings = () => {
         getMonthlyRankings()
       ]);
 
+
       setRankings({
-        daily: dailyData.sort((a, b) => b.count - a.count),
-        weekly: weeklyData.sort((a, b) => b.count - a.count),
-        monthly: monthlyData.sort((a, b) => b.count - a.count)
+        daily: Array.isArray(dailyData) ? dailyData.sort((a, b) => b.count - a.count) : [],
+        weekly: Array.isArray(weeklyData) ? weeklyData.sort((a, b) => b.count - a.count) : [],
+        monthly: Array.isArray(monthlyData) ? monthlyData.sort((a, b) => b.count - a.count) : []
       });
     } catch (error) {
       console.error('랭킹 데이터 로딩 실패:', error);
+      setRankings({
+        daily: [],
+        weekly: [],
+        monthly: []
+      });
     } finally {
       setLoading(false);
     }

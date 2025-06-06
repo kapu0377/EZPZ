@@ -12,6 +12,11 @@ const Login = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const { login } = useAuth();
 
+  // 디버깅을 위한 클릭 핸들러
+  const handleInputClick = (fieldName) => {
+    console.log(`${fieldName} 입력 필드 클릭됨`);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -40,7 +45,7 @@ const Login = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleLoginClose}>
+    <div className="modal-overlay" onClick={handleLoginClose} style={{ zIndex: isRegisterOpen ? 999 : 1000 }}>
       <div className="login-container" onClick={e => e.stopPropagation()}>
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-header">
@@ -55,8 +60,12 @@ const Login = ({ isOpen, onClose }) => {
             onChange={(e) =>
               setCredentials({ ...credentials, username: e.target.value })
             }
+            onClick={() => handleInputClick('아이디')}
+            onFocus={() => console.log('아이디 필드 포커스됨')}
             required
             autoComplete="off"
+            disabled={isRegisterOpen}
+            style={{ pointerEvents: isRegisterOpen ? 'none' : 'auto' }}
           />
           <input
             type="password"
@@ -65,15 +74,20 @@ const Login = ({ isOpen, onClose }) => {
             onChange={(e) =>
               setCredentials({ ...credentials, password: e.target.value })
             }
+            onClick={() => handleInputClick('비밀번호')}
+            onFocus={() => console.log('비밀번호 필드 포커스됨')}
             required
-             autoComplete="off"
+            autoComplete="off"
+            disabled={isRegisterOpen}
+            style={{ pointerEvents: isRegisterOpen ? 'none' : 'auto' }}
           />
-          <button type="submit">로그인</button>
+          <button type="submit" disabled={isRegisterOpen}>로그인</button>
           <div className="login-links">
             <button 
               type="button" 
               onClick={() => setIsRegisterOpen(true)}
               className="register-link"
+              disabled={isRegisterOpen}
             >
               회원가입
             </button>
@@ -81,12 +95,10 @@ const Login = ({ isOpen, onClose }) => {
         </form>
       </div>
       {isRegisterOpen && (
-        <div onClick={(e) => e.stopPropagation()}>
-          <Register 
-            isOpen={isRegisterOpen} 
-            onClose={() => setIsRegisterOpen(false)}
-          />
-        </div>
+        <Register 
+          isOpen={isRegisterOpen} 
+          onClose={() => setIsRegisterOpen(false)}
+        />
       )}
     </div>
   );

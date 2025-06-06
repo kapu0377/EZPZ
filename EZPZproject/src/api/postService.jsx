@@ -1,3 +1,5 @@
+import { checkAuthStatus, getCookie, getUsernameFromRefreshToken } from '../utils/authUtils';
+
 const BASE_URL = "/api";
 
 export async function getPosts() {
@@ -17,8 +19,14 @@ export async function getPostDetail(postId) {
 }
 
 export async function addOrUpdatePost({ editId, title, content }) {
-  const token = localStorage.getItem("accessToken");
-  const writer = localStorage.getItem("username") || "작성자";
+  const authStatus = checkAuthStatus();
+  const token = getCookie('accessToken');
+  const writer = getUsernameFromRefreshToken() || "작성자";
+  
+  if (!authStatus.isAuthenticated) {
+    throw new Error('로그인이 필요합니다.');
+  }
+  
   const url = editId
     ? `${BASE_URL}/posts/${editId}`
     : `${BASE_URL}/posts`;
@@ -37,6 +45,7 @@ export async function addOrUpdatePost({ editId, title, content }) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    credentials: 'include',
     body: JSON.stringify(postData),
   });
 
@@ -48,11 +57,14 @@ export async function addOrUpdatePost({ editId, title, content }) {
 }
 
 export async function deletePost(postId) {
-  const token = localStorage.getItem("accessToken");
-  if (!token) {
+  const authStatus = checkAuthStatus();
+  const token = getCookie('accessToken');
+  
+  if (!authStatus.isAuthenticated) {
     throw new Error("로그인이 필요합니다.");
   }
-  const writer = localStorage.getItem("username");
+  
+  const writer = getUsernameFromRefreshToken();
   const response = await fetch(
     `${BASE_URL}/posts/${postId}?writer=${encodeURIComponent(writer)}`,
     {
@@ -60,6 +72,7 @@ export async function deletePost(postId) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      credentials: 'include'
     }
   );
   if (!response.ok) {

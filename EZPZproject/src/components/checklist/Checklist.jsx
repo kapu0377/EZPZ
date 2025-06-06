@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
-    getChecklists,
     addChecklist,
     deleteChecklist,
     updateChecklist
@@ -11,62 +10,89 @@ import ChecklistAddModal from "./ChecklistAddModal";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateChecklist  }) {
-    const { checklists, fetchChecklists } = useAuth();
-    // const [checklists, setChecklists] = useState([]);
-    const [selectedChecklist, setSelectedChecklist] = useState(null); // 현재 선택된 체크리스트
+    const { checklists, fetchChecklists, isAuthenticated } = useAuth();
+    const [selectedChecklist, setSelectedChecklist] = useState(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editChecklist, setEditChecklist] = useState(null);
-
-    useEffect(() => {
-        loadChecklists();
-    }, []);
+    const [isLoading, setIsLoading] = useState(false);
 
     const loadChecklists = async () => {
-        const data = await getChecklists();
-        fetchChecklists(data);
-    };
-
-    // 체크리스트 추가
-    const handleAddChecklist = async (title, departureDate, returnDate) => {
-        const success = await addChecklist({ title, departureDate, returnDate });
-        if (success) {
-            loadChecklists(); // 목록 갱신
-            setIsAddModalOpen(false); // 모달 닫기
-        }
-    };
-    // 체크리스트 추가 버튼 클릭시 로그인 여부 확인
-    const handleAddChecklistClick = () => {
-        const token = localStorage.getItem("accessToken");
-
-        if (!token) {
-            onRequireLogin(); // 로그인 필요 시 부모(Main.jsx)의 로그인 모달 호출
+        if (!isAuthenticated) {
+            console.log('인증되지 않은 사용자 - 체크리스트 로드 건너뜀');
             return;
         }
-        setIsAddModalOpen(true); // 토큰이 있으면 체크리스트 추가 모달 열기
+
+        if (isLoading) {
+            console.log('이미 체크리스트 로딩 중입니다.');
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            console.log('체크리스트 수동 로딩 시작');
+            await fetchChecklists();
+            console.log('체크리스트 로드 완료');
+        } catch (error) {
+            console.error('체크리스트 로드 실패:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    // 체크리스트 수정
+    const handleAddChecklist = async (title, departureDate, returnDate) => {
+        if (!isAuthenticated) {
+            onRequireLogin();
+            return;
+        }
+
+        const success = await addChecklist({ title, departureDate, returnDate });
+        if (success) {
+            loadChecklists(); 
+            setIsAddModalOpen(false); 
+        }
+    };
+    
+    const handleAddChecklistClick = () => {
+        console.log('체크리스트 추가 버튼 클릭 - 인증 상태 확인');
+        
+        if (!isAuthenticated) {
+            console.log('인증되지 않음 - 로그인 모달 호출');
+            onRequireLogin(); 
+            return;
+        }
+        console.log('인증됨 - 체크리스트 추가 모달 열기');
+        setIsAddModalOpen(true); 
+    };
+
     const handleUpdateChecklist = async (id, updatedData) => {
+        if (!isAuthenticated) {
+            onRequireLogin();
+            return;
+        }
+
         const success = await updateChecklist(id, updatedData);
         if (success) {
-            loadChecklists(); // 목록 갱신
-            setEditChecklist(null); // 수정 모달 닫기
-            //수정된 체크리스트 업데이트
+            loadChecklists(); 
+            setEditChecklist(null);
             const updatedChecklist = { id, ...updatedData };
             setSelectedChecklist(updatedChecklist);
             onUpdateChecklist(updatedChecklist);
         }
     };
 
-    // 체크리스트 삭제 (카테고리도 함께 초기화)
     const handleDeleteChecklist = async (id) => {
+        if (!isAuthenticated) {
+            onRequireLogin();
+            return;
+        }
+
         if (window.confirm("체크리스트에 포함된 모든 데이터가 삭제됩니다.\n 체크리스트를 삭제하시겠습니까?")) {
             const success = await deleteChecklist(id);
             if (success) {
-                fetchChecklists(checklists.filter((checklist) => checklist.id !== id)); // UI에서 삭제 반영
+                loadChecklists();
                 if (selectedChecklist && selectedChecklist.id === id) {
-                    setSelectedChecklist(null); // 선택된 체크리스트 초기화 (카테고리 목록 숨김)
-                    onSelectChecklist(null); // 부모 컴포넌트로 빈 값 전달하여 카테고리 목록 숨김
+                    setSelectedChecklist(null); 
+                    onSelectChecklist(null);
                 }
             }
         }
@@ -75,13 +101,23 @@ export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateC
     return (
         <div className="checklist-container">
             <h2>체크리스트</h2>
-            <button className="add-btn" onClick={handleAddChecklistClick}>체크리스트 추가</button>
+            <div className="checklist-header">
+                <button className="add-btn" onClick={handleAddChecklistClick}>체크리스트 추가</button>
+                {isAuthenticated && (
+                    <button className="refresh-btn" onClick={loadChecklists} disabled={isLoading}>
+                        {isLoading ? '새로고침 중...' : '새로고침'}
+                    </button>
+                )}
+            </div>
+            
+            {isLoading && <div>체크리스트 로딩 중...</div>}
+            
             <ul>
                 {checklists.map((list) => (
                     <li key={list.id}>
                         <span onClick={() => {
                             setSelectedChecklist(list);
-                            onSelectChecklist(list); // 선택된 체크리스트 업데이트
+                            onSelectChecklist(list); 
                         }}>
                             <div>
                             {list.title}
@@ -96,12 +132,21 @@ export default function Checklist({ onSelectChecklist, onRequireLogin, onUpdateC
                 ))}
             </ul>
 
+            {checklists.length === 0 && !isLoading && isAuthenticated && (
+                <div>등록된 체크리스트가 없습니다.</div>
+            )}
+
+            {!isAuthenticated && (
+                <div>로그인 후 체크리스트를 이용하실 수 있습니다.</div>
+            )}
+
             {/* 체크리스트 추가 모달 */}
             <ChecklistAddModal 
                 isOpen={isAddModalOpen} 
                 onClose={() => setIsAddModalOpen(false)}
                 onAdd={handleAddChecklist}
                 onRequireLogin={onRequireLogin}
+                isAuthenticated={isAuthenticated}
             />
 
             {/* 체크리스트 수정 모달 */}

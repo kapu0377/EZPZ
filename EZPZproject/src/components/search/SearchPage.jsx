@@ -3,9 +3,11 @@ import SearchInput from "../SearchInput";
 import SearchResults from "../SearchResults";
 import Login from "../Login"; 
 import { getUserSearchHistory, getUserSearchHistoryByDays } from "../../api/searchApi";
+import { useAuth } from "../../contexts/AuthContext";
 import "./SearchPage.css";
 
 const SearchPage = () => {
+  const { getCurrentUser, isAuthenticated } = useAuth();
   const [searchResults, setSearchResults] = useState(() => {
     const savedResults = sessionStorage.getItem('searchResults');
     return savedResults ? JSON.parse(savedResults) : [];
@@ -47,49 +49,69 @@ const SearchPage = () => {
   }, [searchResults]);  
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
-    setIsLoggedIn(!!username);
-    
-
-    const fetchUserHistory = async () => {
+    const initializePage = async () => {
       try {
-        setIsLoading(true);
-        if (username) {
-          const history = await getUserSearchHistoryByDays(username, historyDays);
-          setSearchHistory(history);
-          
-          const grouped = history.reduce((acc, item) => {
-            const date = new Date(item.searchDate).toLocaleDateString();
-            if (!acc[date]) {
-              acc[date] = [];
-            }
-            acc[date].push(item);
-            return acc;
-          }, {});
-          
-          setGroupedHistory(grouped);
+        const user = getCurrentUser();
+        const authenticated = isAuthenticated;
+        
+        console.log('SearchPage 인증 상태:', {
+          authenticated,
+          user,
+          userExists: !!user
+        });
+
+        if (authenticated && user) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
         }
-      } catch (error) {
-        console.error('검색 기록 로딩 실패:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (isLoggedIn) {
-      fetchUserHistory();
-    }
-  }, [historyDays, activeTab]);
-
-  useEffect(() => {
-    const handleLoginSuccess = () => {
-      setIsLoggedIn(true);
-      const username = localStorage.getItem('username');
-      if (username) {
+        
         const fetchUserHistory = async () => {
           try {
             setIsLoading(true);
-            const history = await getUserSearchHistoryByDays(username, historyDays);
+            if (user && user.username) {
+              const history = await getUserSearchHistoryByDays(user.username, historyDays);
+              setSearchHistory(history);
+              
+              const grouped = history.reduce((acc, item) => {
+                const date = new Date(item.searchDate).toLocaleDateString();
+                if (!acc[date]) {
+                  acc[date] = [];
+                }
+                acc[date].push(item);
+                return acc;
+              }, {});
+              
+              setGroupedHistory(grouped);
+            }
+          } catch (error) {
+            console.error('검색 기록 로딩 실패:', error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+
+        if (authenticated && user) {
+          await fetchUserHistory();
+        }
+      } catch (error) {
+        console.error('검색 페이지 초기화 실패:', error);
+      }
+    };
+
+    initializePage();
+  }, [getCurrentUser, isAuthenticated, historyDays, activeTab]);
+
+  useEffect(() => {
+    const handleLoginSuccess = () => {
+      const user = getCurrentUser();
+      setIsLoggedIn(isAuthenticated && !!user);
+      
+      if (user && user.username) {
+        const fetchUserHistory = async () => {
+          try {
+            setIsLoading(true);
+            const history = await getUserSearchHistoryByDays(user.username, historyDays);
             setSearchHistory(history);
             
             const grouped = history.reduce((acc, item) => {
@@ -115,15 +137,15 @@ const SearchPage = () => {
 
     window.addEventListener('login-success', handleLoginSuccess);
     return () => window.removeEventListener('login-success', handleLoginSuccess);
-  }, [historyDays]);
+  }, [getCurrentUser, isAuthenticated, historyDays]);
 
   useEffect(() => {
     const handleSearchHistoryUpdated = async () => {
-      const username = localStorage.getItem('username');
-      if (username) {
+      const user = getCurrentUser();
+      if (user && user.username) {
         try {
           setIsLoading(true);
-          const history = await getUserSearchHistoryByDays(username, historyDays);
+          const history = await getUserSearchHistoryByDays(user.username, historyDays);
           setSearchHistory(history);
           
           const grouped = history.reduce((acc, item) => {
@@ -146,7 +168,7 @@ const SearchPage = () => {
 
     window.addEventListener('search-history-updated', handleSearchHistoryUpdated);
     return () => window.removeEventListener('search-history-updated', handleSearchHistoryUpdated);
-  }, [historyDays]);
+  }, [getCurrentUser, historyDays]);
 
   const handleSearchResult = (result) => {
     setSearchResults(prev => {

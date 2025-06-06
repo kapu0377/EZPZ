@@ -1,9 +1,11 @@
 import { useState } from "react"
 import itemApi from "../api/itemApi"
 import { saveSearchHistory } from "../api/searchApi"
+import { useAuth } from "../contexts/AuthContext"
 import "./SearchInput.css"
 
 const SearchInput = ({ onSearchResult }) => {
+  const { getCurrentUser, isAuthenticated } = useAuth();
   const [inputValue, setInputValue] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showBatteryModal, setShowBatteryModal] = useState(false)
@@ -49,11 +51,14 @@ const SearchInput = ({ onSearchResult }) => {
     
     onSearchResult(newResult);
     
-    const username = localStorage.getItem('username');
-    if (username) {
-      saveSearchHistory(username, inputValue.trim());
-      window.dispatchEvent(new CustomEvent('search-history-updated'));
-    }
+          if (isAuthenticated) {
+        const user = getCurrentUser();
+        if (user?.username) {
+          saveSearchHistory(user.username, inputValue.trim()).catch(error => {
+            console.error('검색 기록 저장 실패:', error);
+          });
+        }
+      }
     
     setShowBatteryModal(false);
     setBatteryVoltage("");
@@ -182,12 +187,6 @@ const SearchInput = ({ onSearchResult }) => {
         onSearchResult(newResult);
         setInputValue("");
         
-        const username = localStorage.getItem('username');
-        if (username) {
-          await saveSearchHistory(username, inputValue.trim());
-          window.dispatchEvent(new CustomEvent('search-history-updated'));
-        }
-        
         try {
           const updatedRankings = await itemApi.getSearchRankings();
           if (updatedRankings && updatedRankings.length > 0) {
@@ -207,6 +206,7 @@ const SearchInput = ({ onSearchResult }) => {
       }
     }
   };
+
   return (
     <div className="search-input">
       <div className="search-input-header">

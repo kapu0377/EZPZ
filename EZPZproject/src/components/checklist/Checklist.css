@@ -20,13 +20,43 @@
 
 .checklist-container h2 {
     text-align: center;
+    margin-bottom: 15px;
 }
 
+.checklist-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.checklist-header .add-btn {
+    flex: 1;
+}
+
+.checklist-header .refresh-btn {
+    background-color: #28a745;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.checklist-header .refresh-btn:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.checklist-header .refresh-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
 
 .add-btn:hover {
     background-color: #0056b3;
 }
-
 
 /* 입력 필드 스타일 */
 .checklist-container input {

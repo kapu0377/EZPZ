@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const { user, updateUser, logout } = useAuth(); 
+    const { getCurrentUser, updateUser, logout, isAuthenticated } = useAuth(); 
     const [updatedUser, setUpdatedUser] = useState({
         name: "",
         phone: "",
@@ -26,19 +26,40 @@ const EditProfile = () => {
     
     const [showModal, setShowModal] = useState(false);
     const [currentPassword, setCurrentPassword] = useState(""); 
+    const [isLoading, setIsLoading] = useState(true);
 
+    // 페이지 초기화 로직
     useEffect(() => {
-        if (user) {
-            setUpdatedUser({
-                name: user.name || "",
-                phone: user.phone || "",
-                email: user.email || "",
-                address: user.address || "",
-                password: "", 
-            });
-            setNewPasswordConfirm(""); 
-        }
-    }, [user]); 
+        const initializePage = async () => {
+            try {
+                if (!isAuthenticated) {
+                    alert("로그인이 필요한 서비스입니다.");
+                    navigate("/");
+                    return;
+                }
+
+                const user = getCurrentUser();
+                if (user) {
+                    setUpdatedUser({
+                        name: user.name || "",
+                        phone: user.phone || "",
+                        email: user.email || "",
+                        address: user.address || "",
+                        password: "", 
+                    });
+                    setNewPasswordConfirm(""); 
+                }
+            } catch (error) {
+                console.error("페이지 초기화 실패:", error);
+                alert("페이지를 불러오는 중 오류가 발생했습니다.");
+                navigate("/");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        initializePage();
+    }, [getCurrentUser, isAuthenticated, navigate]);
 
     // 비밀번호 검증 함수
     const verifyPassword = useCallback(
@@ -155,11 +176,6 @@ const EditProfile = () => {
         setPasswordError("");
     };
 
-    useEffect(() => {
-        setUpdatedUser((prev) => ({ ...prev, password: "" }));
-        setNewPasswordConfirm("");
-    }, []);
-
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
         setPassword(newPassword);
@@ -230,6 +246,10 @@ const EditProfile = () => {
             setDbPasswordValid(false);
         }
     };
+
+    if (isLoading) {
+        return <div>로딩 중...</div>;
+    }
 
     return (
         <div className="edit-profile-container">

@@ -59,7 +59,7 @@ const RatingSection = ({ airport }) => {
   
     const fetchAverageRatings = async (airportId) => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/airports/${airportId}/ratings/average`);
+        const response = await axios.get(`${BASE_URL}/airports/${airportId}/ratings/average`);
         setAverageRatings(response.data);
       } catch (error) {
         console.error('평균 평점 조회 실패:', error);
@@ -84,7 +84,7 @@ const RatingSection = ({ airport }) => {
         };
         
         const response = await axios.post(
-            `${BASE_URL}/api/airports/${airport.id}/ratings`,
+            `${BASE_URL}/airports/${airport.id}/ratings`,
             ratingData,
           {
             headers: {

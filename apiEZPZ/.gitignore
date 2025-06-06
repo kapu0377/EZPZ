@@ -36,3 +36,64 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Heap Dumps ###
+*.hprof
+
+### Logs ###
+*.log
+logs/
+
+### Temporary files ###
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+### Java ###
+*.class
+
+### Spring Boot ###
+application.properties
+application-*.properties
+application.yml
+application-*.yml
+application.yaml
+application-*.yaml
+
+### Environment variables ###
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+### Gradle Wrapper ###
+!gradle/wrapper/gradle-wrapper.properties
+
+### OS generated files ###
+*.pid
+*.seed
+*.pid.lock
+
+### Coverage reports ###
+.nyc_output/
+coverage/
+
+### Build artifacts ###
+target/
+dist/
+
+### IDE generated files ###
+*.generated
+.kotlin/
+.cursor/
+
+### Documentation ###
+*.md
+
+### Git files ###
+.gitignore

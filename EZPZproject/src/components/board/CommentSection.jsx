@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getComments as getCommentsByPostId, createComment as addComment, updateComment as editComment, deleteComment } from "../../api/commentApi";
+import { checkAuthStatus, getUsernameFromRefreshToken } from "../../utils/authUtils";
 
 const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
@@ -7,7 +8,7 @@ const CommentSection = ({ postId }) => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState("");
   const [currentCommentPage, setCurrentCommentPage] = useState(1);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken"));
+  const [isLoggedIn, setIsLoggedIn] = useState(checkAuthStatus().isAuthenticated);
   const commentsPerPage = 4;
 
   useEffect(() => {
@@ -16,7 +17,7 @@ const CommentSection = ({ postId }) => {
 
   useEffect(() => {
     const checkLoginStatus = () => {
-      setIsLoggedIn(!!localStorage.getItem("accessToken"));
+      setIsLoggedIn(checkAuthStatus().isAuthenticated); 
     };
 
     checkLoginStatus();
@@ -42,7 +43,7 @@ const CommentSection = ({ postId }) => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const currentLoginStatus = !!localStorage.getItem("accessToken");
+      const currentLoginStatus = checkAuthStatus().isAuthenticated;
       if (isLoggedIn !== currentLoginStatus) {
         setIsLoggedIn(currentLoginStatus);
       }
@@ -175,7 +176,7 @@ const CommentSection = ({ postId }) => {
                     {new Date(comment.createdAt).toLocaleDateString("ko-KR")}
                   </span>
                 </div>
-                {comment.writer === localStorage.getItem("username") && isLoggedIn && (
+                {comment.writer === getUsernameFromRefreshToken() && isLoggedIn && (
                   <div className="comment-buttons">
                     <button
                       onClick={() => handleEditButtonClick(comment)}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../api/postService";
+import { checkAuthStatus } from "../../utils/authUtils";
 
 const PostList = ({ onAddClick }) => {
   const navigate = useNavigate();
@@ -104,7 +105,7 @@ const PostList = ({ onAddClick }) => {
         <button onClick={handleSearch} className="search-button">
           검색
         </button>
-        {localStorage.getItem("accessToken") && (
+        {checkAuthStatus().isAuthenticated && (
           <button onClick={onAddClick} className="add-button" title="글쓰기">
             글쓰기
           </button>

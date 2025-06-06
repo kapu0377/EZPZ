@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Sidebar = ({ menuOpen, setMenuOpen }) => {
-  const [subMenuOpen1, setSubMenuOpen1] = useState(false); // ✅ 서브메뉴1 상태 추가
-  const [subMenuOpen2, setSubMenuOpen2] = useState(false); // ✅ 서브메뉴2 상태 추가
+const Sidebar = React.memo(({ menuOpen, setMenuOpen }) => {
+  const [subMenuOpen1, setSubMenuOpen1] = useState(false);
+  const [subMenuOpen2, setSubMenuOpen2] = useState(false); 
 
   return (
     <div className={`sidebar-menu ${menuOpen ? "open" : ""}`}>
@@ -11,7 +11,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
         ✖
       </button>
       <nav className="sidebar-nav">
-        {/* ✅ 금지물품 메뉴 */}
+   
         <div
           className="sidebar-item"
           onClick={() => setSubMenuOpen1(!subMenuOpen1)}
@@ -58,6 +58,6 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
       </nav>
     </div>
   );
-};
+});
 
 export default Sidebar;

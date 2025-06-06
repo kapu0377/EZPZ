@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import Checklist from "./Checklist";
 import Category from "./Category";
 import "./Main.css";
-import Login from "../Login";   //로그인 컴포넌트 추가
+import Login from "../Login";  
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function App() {
-    const { user, fetchChecklists, checklists } = useAuth();
+    const { getCurrentUser, fetchChecklists, checklists, isAuthenticated } = useAuth();
     const [selectedChecklist, setSelectedChecklist] = useState(null);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 상태 추가
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleOpenLoginModal = () => {
         alert("로그인이 필요한 서비스입니다.\n로그인 후 다시 이용해주세요."); // 알림창 표시
@@ -20,10 +21,25 @@ export default function App() {
     };
 
     useEffect(() => {
-        if (user) {
-            fetchChecklists();
-        }
-    }, [user]);
+        const initializePage = async () => {
+            try {
+                const user = getCurrentUser();
+                if (user && isAuthenticated) {
+                    await fetchChecklists();
+                }
+            } catch (error) {
+                console.error("체크리스트 페이지 초기화 실패:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        initializePage();
+    }, []); 
+
+    if (isLoading) {
+        return <div>로딩 중...</div>;
+    }
 
     return (
         <div className="checklist-main-container">
