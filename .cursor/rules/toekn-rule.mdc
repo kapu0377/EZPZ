@@ -1,0 +1,42 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Token Management Rules
+
+### Authentication & Token Handling
+- Always use the centralized token management utilities from `utils/authUtils.js`
+- Use `checkAuthStatus()` function to verify authentication state instead of directly checking localStorage or cookies
+- Never directly access `localStorage.getItem('accessToken')` - use `getCookie('accessToken')` from authUtils instead
+- Use `requireAuth(onRequireLogin)` function for components that need authentication
+
+### API Calls & Token Refresh
+- Prefer using `axiosInstance` from `utils/axios.jsx` for all API calls to benefit from automatic token refresh
+- If using fetch API directly, always include `credentials: 'include'` in the request options
+- Never implement custom token refresh logic - let the axios interceptor handle it automatically
+- Use `registerTokenRefreshCallback()` and `unregisterTokenRefreshCallback()` for components that need to react to token refresh events
+
+### Token Storage & Cleanup
+- RefreshToken: Store in localStorage using `saveAuthTokens()` utility
+- AccessToken: Store in HTTP-only cookies (handled by server)
+- Use `clearAllAuthData()` for complete authentication cleanup during logout
+- Never manually clear tokens - use the provided utility functions
+
+### Error Handling
+- Token refresh is limited to 2 attempts maximum to prevent infinite loops
+- Authentication failures automatically redirect to login page
+- Use consistent error messages for authentication-related failures
+- Handle token expiration gracefully without disrupting user experience
+
+### Component Guidelines
+- Check authentication status using `isAuthenticated()` from AuthContext
+- For forms/actions requiring auth, use early return pattern with `requireAuth()`
+- Subscribe to login/logout events using window event listeners when needed
+- Clean up event listeners in component unmount to prevent memory leaks
+
+### Security Best Practices
+- Never log sensitive token information in console
+- Tokens are automatically included in requests via cookies and axios interceptors
+- Failed authentication attempts are logged for debugging purposes
+- Implement proper CSRF protection through credentials inclusion

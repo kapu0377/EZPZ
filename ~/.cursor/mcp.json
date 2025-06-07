@@ -1,0 +1,54 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "sbp_ea40657029e92540b2e7b8ecc91011dc89d09c2b"
+      ]
+    },
+    "taskmaster": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "task-master-ai"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "mem0-memory-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@mem0ai/mem0-memory-mcp",
+        "--key",
+        "a4b8c0e6-7b1c-4f64-a782-3bbcc6d194cb",
+        "--profile",
+        "lonely-donkey-ZLd2ay"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    }
+  }
+} 
