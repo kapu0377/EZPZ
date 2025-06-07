@@ -14,19 +14,36 @@ EZPZ/
 │   ├── src/
 │   ├── package.json
 │   └── ...
+├── setup_all.sh      # Linux/macOS용 MySQL 설정 스크립트
+├── setup_all.bat     # Windows용 MySQL 설정 스크립트
 └── README.md
 ```
 
-## 시작하기
+## 빠른 시작
 
-### 백엔드 실행
+### 자동 설정 (권장)
+
+**Linux/macOS:**
+```bash
+chmod +x setup_all.sh
+./setup_all.sh
+```
+
+**Windows:**
+```cmd
+setup_all.bat
+```
+
+### 수동 설정
+
+#### 백엔드 실행
 
 ```bash
 cd backend
 ./gradlew bootRun
 ```
 
-### 프론트엔드 실행
+#### 프론트엔드 실행
 
 ```bash
 cd frontend
@@ -41,7 +58,7 @@ npm run dev
 - Spring Boot 3.3.12
 - Spring Security
 - Spring Data JPA
-- MariaDB
+- MariaDB/MySQL
 - Redis
 - JWT
 
@@ -65,4 +82,13 @@ npm run dev
 - RSA-OAEP 암호화를 통한 토큰 보안
 - RSASSA-PSS 디지털 서명
 - 키 로테이션 시스템
-- Redis 기반 세션 관리 
+- Redis 기반 세션 관리
+
+## 데이터베이스 설정
+
+자동 설정 스크립트를 사용하면 다음 정보로 MySQL 데이터베이스가 구성됩니다:
+
+- **데이터베이스**: ezpz_db
+- **사용자**: ezpz_user  
+- **비밀번호**: 1234
+- **포트**: 3306
