@@ -227,7 +227,7 @@ function ProhibitedItems() {
                 <tr>
                   <th>번호</th>
                   <th>아이템명</th>
-                  <th>기내 반입 여부</th> {/* ✅ 기내 반입입 여부 컬럼 추가 */}
+                                              <th>기내 반입 여부</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,7 +236,7 @@ function ProhibitedItems() {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{item}</td>
-                      <td>허가</td> {/* ✅ 허가 여부 O 표시 */}
+                                                      <td>허가</td>
                     </tr>
                   )
                 )}

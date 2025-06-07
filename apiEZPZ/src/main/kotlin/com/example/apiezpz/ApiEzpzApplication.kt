@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.EnableAspectJAutoProxy
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.Transactional
@@ -19,6 +21,8 @@ import java.time.temporal.TemporalAdjusters
 @SpringBootApplication
 @EnableScheduling
 @EnableAspectJAutoProxy
+@EnableJpaRepositories(basePackages = ["com.example.apiezpz"])
+@EnableRedisRepositories(basePackages = ["com.example.apiezpz.nonexistent"])
 class ApiEzpzApplication(
     private val dailyRankRepository: DailyRankRepository,
     private val weeklyRankRepository: WeeklyRankRepository,

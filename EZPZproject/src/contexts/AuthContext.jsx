@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
     
     if (authStatus.needsRefresh && integrity.isValid) {
-      console.log('⚠️ accessToken이 없음 - axios interceptor가 자동 재발급 처리할 예정');
+              console.log('accessToken이 없음 - axios interceptor가 자동 재발급 처리할 예정');
     }
     
     return authStatus.isAuthenticated && integrity.isValid;

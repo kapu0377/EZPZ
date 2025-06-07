@@ -1,4 +1,4 @@
-/* ✅ `.prohibited-items`의 너비를 100%로 변경하여 반응형 적용 */
+/* `.prohibited-items`의 너비를 100%로 변경하여 반응형 적용 */
 .prohibited-items {
   width: 100%;
   max-width: 1200px;
@@ -237,7 +237,7 @@
   margin-bottom: 15px;
 }
 
-/* ✅ 설명 섹션 배경 이미지가 잘리지 않도록 조정 */
+/* 설명 섹션 배경 이미지가 잘리지 않도록 조정 */
 .description-section {
   font-size: 16px;
   color: white;
@@ -275,7 +275,7 @@
   width: 100%;
 }
 
-/* ✅ 드롭다운 메뉴가 배너보다 위로 오도록 설정 */
+/* 드롭다운 메뉴가 배너보다 위로 오도록 설정 */
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -287,7 +287,7 @@
   min-width: 180px;
   border-radius: 6px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* ✅ 배너보다 높은 값으로 설정 */
+  z-index: 1000; /* 배너보다 높은 값으로 설정 */
 }
 
 /* 모달 오버레이 */
@@ -621,7 +621,7 @@ tr:hover {
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ 공항 선택 메뉴 스타일 */
+/* 공항 선택 메뉴 스타일 */
 .airport-select-box {
   margin-bottom: 20px;
   text-align: center;
@@ -642,7 +642,7 @@ tr:hover {
   cursor: pointer;
 }
 
-/* ✅ 그래프 컨테이너 */
+/* 그래프 컨테이너 */
 .chart-container {
   width: 90%; /* 80%에서 90%로 증가 */
   max-width: 1000px; /* 600px에서 1000px로 증가 */
@@ -653,7 +653,7 @@ tr:hover {
   box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ 전체 컨테이너 스타일 */
+/* 전체 컨테이너 스타일 */
 .prohibited-items-container {
   margin: 0 auto;
   display: flex;
@@ -662,7 +662,7 @@ tr:hover {
   gap: 20px;
 }
 
-/* ✅ 사이드바 스타일 */
+/* 사이드바 스타일 */
 .sidebar {
   width: 200px;
   display: flex;
@@ -694,7 +694,7 @@ tr:hover {
   color: white;
 }
 
-/* ✅ 콘텐츠 영역 */
+/* 콘텐츠 영역 */
 .content {
   flex: 1;
   background: white;
@@ -705,7 +705,7 @@ tr:hover {
 
 /* 모달 스타일 유지 */
 
-/* ✅ 반응형 디자인 추가 */
+/* 반응형 디자인 추가 */
 @media (max-width: 1024px) {
   .prohibited-items {
     padding: 10px;

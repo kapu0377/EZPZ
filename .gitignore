@@ -39,3 +39,18 @@ EZPZproject/src/App_BACKUP_1661.jsx
 EZPZproject/src/App_BASE_1661.jsx
 EZPZproject/src/App_LOCAL_1661.jsx
 EZPZproject/src/App_REMOTE_1661.jsx
+
+### Security ###
+keystore/
+*.p12
+*.jks
+application-*.properties
+!application-prod.properties
+application-*.yml
+!application-prod.yml
+
+### Logs ###
+*.log
+
+### Environment ###
+.env

@@ -46,7 +46,7 @@ body {
   height: 140px; /* 높이 조정 */
 }
 
-/* ✅ Top-bar를 헤더 맨 위로 이동 */
+/* Top-bar를 헤더 맨 위로 이동 */
 .top-bar {
   width: 100%;
   background: var(--secondary-white);
@@ -56,7 +56,7 @@ body {
   color: var(--text-gray);
 }
 
-/* ✅ 헤더 컨테이너 스타일 - 1200px 내에서 중앙 정렬 */
+/* 헤더 컨테이너 스타일 - 1200px 내에서 중앙 정렬 */
 .header-content {
   display: flex;
   flex-direction: row; /* 가로 정렬 */
@@ -68,7 +68,7 @@ body {
   padding: 0 2rem; /* 좌우 패딩 */
 }
 
-/* ✅ 네비게이션 컨테이너 - 오른쪽 정렬 및 위치 조정 */
+/* 네비게이션 컨테이너 - 오른쪽 정렬 및 위치 조정 */
 .nav-container {
   display: flex;
   justify-content: flex-end; /* 오른쪽 정렬 */
@@ -181,7 +181,7 @@ body {
   margin-top: 5px;
 }
 
-/* ✅ 네비게이션 바 스타일 - 살짝 아래로 조정 */
+/* 네비게이션 바 스타일 - 살짝 아래로 조정 */
 .main-nav {
   display: flex;
   justify-content: flex-end; /* 오른쪽 정렬 */
@@ -193,7 +193,7 @@ body {
   padding-top: 5px; /* 아래로 조정 */
 }
 
-/* ✅ 네비게이션 링크 스타일 */
+/* 네비게이션 링크 스타일 */
 .main-nav a {
   text-decoration: none;
   color: var(--secondary-black);
@@ -204,7 +204,7 @@ body {
   align-items: center;
 }
 
-/* ✅ 호버 시 밑줄이 메뉴 이름 길이에 맞도록 조정 */
+/* 호버 시 밑줄이 메뉴 이름 길이에 맞도록 조정 */
 .main-nav a::after {
   content: "";
   position: absolute;
@@ -216,11 +216,11 @@ body {
   transition: width 0.3s ease-in-out;
 }
 
-/* ✅ 메뉴 이름 길이에 맞게 밑줄 조정 */
+/* 메뉴 이름 길이에 맞게 밑줄 조정 */
 .main-nav a:hover::after {
   width: 100%;
 }
-/* ✅ 모바일 메뉴 버튼 (햄버거 아이콘) */
+/* 모바일 메뉴 버튼 (햄버거 아이콘) */
 .menu-toggle {
   display: none;
   font-size: 24px;
@@ -231,7 +231,7 @@ body {
   justify-content: center;
 }
 
-/* ✅ 사이드바 스타일 */
+/* 사이드바 스타일 */
 .sidebar-menu {
   position: fixed;
   top: 0;
@@ -247,12 +247,12 @@ body {
   z-index: 1000;
 }
 
-/* ✅ 사이드바 활성화 */
+/* 사이드바 활성화 */
 .sidebar-menu.open {
   right: 0;
 }
 
-/* ✅ 사이드바 닫기 버튼 */
+/* 사이드바 닫기 버튼 */
 .close-btn {
   background: none;
   border: none;
@@ -261,7 +261,7 @@ body {
   align-self: flex-end;
 }
 
-/* ✅ 사이드바 메뉴 스타일 */
+/* 사이드바 메뉴 스타일 */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -297,7 +297,7 @@ body {
   color: #a1a1a1;
 }
 
-/* ✅ 서브메뉴 스타일 */
+/* 서브메뉴 스타일 */
 .sidebar-submenu {
   display: flex;
   flex-direction: column;
@@ -316,7 +316,7 @@ body {
   color: #000;
 }
 
-/* ✅ 화살표 스타일 */
+/* 화살표 스타일 */
 .arrow {
   font-size: 0.8rem;
   transition: transform 0.3s ease-in-out;
@@ -339,7 +339,7 @@ body {
   font-weight: 500;
 }
 
-/* ✅ 로고 스타일 - 메뉴와 겹치지 않게 간격 추가 */
+/* 로고 스타일 - 메뉴와 겹치지 않게 간격 추가 */
 .logo {
   display: flex;
   justify-content: center;
@@ -348,7 +348,7 @@ body {
   margin-bottom: 10px; /* 메뉴와 겹치지 않게 아래 여백 추가 */
 }
 
-/* ✅ 로고 스타일 - 모바일에서 왼쪽 정렬 */
+/* 로고 스타일 - 모바일에서 왼쪽 정렬 */
 .logo-container {
   display: flex;
   align-items: center;
@@ -508,7 +508,7 @@ body {
   padding: 20px;
 }
 
-/* ✅ content-box 크기 통일 */
+/* content-box 크기 통일 */
 .content-box {
   background-color: var(--primary-white);
   border-radius: 12px;
@@ -517,8 +517,8 @@ body {
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease-in-out;
-  min-height: 400px; /* ✅ 최소 높이 설정 */
-  height: 400px; /* ✅ 높이를 고정하여 균일하게 */
+  min-height: 400px; /* 최소 높이 설정 */
+  height: 400px; /* 높이를 고정하여 균일하게 */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -608,12 +608,12 @@ body {
   opacity: 0.8;
 }
 
-/* ✅ 작은 화면에서도 크기 유지 */
+/* 작은 화면에서도 크기 유지 */
 @media (max-width: 1024px) {
   .main-content {
     grid-template-columns: 1fr;
   }
-  /* ✅ 버튼 클릭 시 네비게이션 표시 */
+  /* 버튼 클릭 시 네비게이션 표시 */
   .nav-container.active {
     display: flex;
     flex-direction: column;
@@ -625,7 +625,7 @@ body {
     border-radius: 10px;
     padding: 1rem;
   }
-  /* ✅ 헤더 구조 조정 */
+  /* 헤더 구조 조정 */
   .header {
     display: flex;
     flex-direction: column; /* 탑바와 컨텐츠를 세로 정렬 */
@@ -637,7 +637,7 @@ body {
     margin: 0 auto;
   }
 
-  /* ✅ Top-bar 스타일 - 오른쪽 정렬 */
+  /* Top-bar 스타일 - 오른쪽 정렬 */
   .top-bar {
     display: flex;
     justify-content: flex-end; /* 오른쪽 정렬 */
@@ -645,7 +645,7 @@ body {
     width: 100%;
   }
 
-  /* ✅ 헤더 내부 정렬 */
+  /* 헤더 내부 정렬 */
   .header-content {
     display: flex;
     flex-direction: row;
@@ -656,7 +656,7 @@ body {
     height: 70px;
   }
 
-  /* ✅ 로고 스타일 - 왼쪽 정렬 */
+  /* 로고 스타일 - 왼쪽 정렬 */
   .logo-container {
     display: flex;
     align-items: center;
@@ -664,7 +664,7 @@ body {
     flex: 1;
   }
 
-  /* ✅ 햄버거 버튼 - 오른쪽 정렬 */
+  /* 햄버거 버튼 - 오른쪽 정렬 */
   .menu-toggle {
     display: flex;
     align-items: center;
@@ -672,12 +672,12 @@ body {
     flex: 1;
   }
 
-  /* ✅ 메인 네비게이션 숨김 */
+  /* 메인 네비게이션 숨김 */
   .main-nav {
     display: none;
   }
 
-  /* ✅ 검색 섹션 및 콘텐츠 정렬 */
+  /* 검색 섹션 및 콘텐츠 정렬 */
   .search-section {
     grid-template-columns: 1fr;
     max-width: 300px;
@@ -714,7 +714,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* ✅ 헤더 구조 조정 */
+  /* 헤더 구조 조정 */
   .header {
     display: flex;
     flex-direction: column; /* 탑바와 컨텐츠를 세로 정렬 */
@@ -726,7 +726,7 @@ body {
     margin: 0 auto;
   }
 
-  /* ✅ Top-bar 스타일 - 오른쪽 정렬 */
+  /* Top-bar 스타일 - 오른쪽 정렬 */
   .top-bar {
     display: flex;
     justify-content: flex-end; /* 오른쪽 정렬 */
@@ -734,7 +734,7 @@ body {
     width: 100%;
   }
 
-  /* ✅ 헤더 내부 정렬 */
+  /* 헤더 내부 정렬 */
   .header-content {
     display: flex;
     flex-direction: row;
@@ -745,7 +745,7 @@ body {
     height: 70px;
   }
 
-  /* ✅ 로고 스타일 - 왼쪽 정렬 */
+  /* 로고 스타일 - 왼쪽 정렬 */
   .logo-container {
     display: flex;
     align-items: center;
@@ -753,7 +753,7 @@ body {
     flex: 1;
   }
 
-  /* ✅ 햄버거 버튼 - 오른쪽 정렬 */
+  /* 햄버거 버튼 - 오른쪽 정렬 */
   .menu-toggle {
     display: flex;
     align-items: center;
@@ -761,12 +761,12 @@ body {
     flex: 1;
   }
 
-  /* ✅ 메인 네비게이션 숨김 */
+  /* 메인 네비게이션 숨김 */
   .main-nav {
     display: none;
   }
 
-  /* ✅ 검색 섹션 및 콘텐츠 정렬 */
+  /* 검색 섹션 및 콘텐츠 정렬 */
   .search-section {
     grid-template-columns: 1fr;
     max-width: 300px;

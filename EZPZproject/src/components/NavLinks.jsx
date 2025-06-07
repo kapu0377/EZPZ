@@ -22,7 +22,7 @@ const DropDownNav = React.memo(({ label, links }) => {
   );
 });
 
-const NavLinks = React.memo(() => {
+const NavLinks = () => {
   const { isAdmin, loading } = useAdminCheck();
   
   console.log('NavLinks: isAdmin =', isAdmin, ', loading =', loading);
@@ -53,6 +53,6 @@ const NavLinks = React.memo(() => {
       )}
     </>
   );
-});
+};
 
 export default NavLinks;

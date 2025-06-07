@@ -10,6 +10,8 @@ const TokenManagementPage = () => {
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [redisDebugInfo, setRedisDebugInfo] = useState(null);
+  const [showRedisDebug, setShowRedisDebug] = useState(false);
   const { isAuthenticated, logout } = useAuth();
 
   const fetchAllUserTokenInfo = async () => {
@@ -28,10 +30,14 @@ const TokenManagementPage = () => {
 
   const fetchActiveUsers = async () => {
     try {
+      console.log('활성 사용자 조회 요청 시작...');
       const response = await axiosInstance.get('/admin/token/admin/active-users');
+      console.log('활성 사용자 응답:', response.data);
       setActiveUsers(response.data);
     } catch (err) {
-      console.error('활성 사용자 조회 실패:', err);
+      console.error('활성 사용자 조회 실패 상세:', err);
+      console.error('응답 상태:', err.response?.status);
+      console.error('응답 데이터:', err.response?.data);
     }
   };
 
@@ -131,6 +137,54 @@ const TokenManagementPage = () => {
     }
   };
 
+  const fetchRedisDebugInfo = async () => {
+    try {
+      setActionLoading(true);
+      console.log('Redis 디버그 정보 요청 시작...');
+      const response = await axiosInstance.get('/admin/token/admin/redis-debug');
+      console.log('Redis 디버그 응답:', response.data);
+      setRedisDebugInfo(response.data);
+      setShowRedisDebug(true);
+    } catch (err) {
+      console.error('Redis 디버그 정보 조회 실패 상세:', err);
+      console.error('응답 상태:', err.response?.status);
+      console.error('응답 데이터:', err.response?.data);
+      console.error('요청 URL:', err.config?.url);
+      
+      let errorMessage = 'Redis 디버그 정보 조회에 실패했습니다.';
+      if (err.response?.status === 403) {
+        errorMessage += '\n관리자 권한이 필요합니다.';
+      } else if (err.response?.status === 404) {
+        errorMessage += '\nAPI 엔드포인트를 찾을 수 없습니다.';
+      } else if (err.response?.data?.error) {
+        errorMessage += `\n오류: ${err.response.data.error}`;
+      } else if (err.message) {
+        errorMessage += `\n오류: ${err.message}`;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const testRedisConnection = async () => {
+    try {
+      setActionLoading(true);
+      console.log('Redis 연결 테스트 시작...');
+      const response = await axiosInstance.get('/admin/token/admin/redis-test');
+      console.log('Redis 연결 테스트 응답:', response.data);
+      
+      const { redisWorking, message } = response.data;
+      alert(`Redis 연결 테스트 결과:\n${message}\n상태: ${redisWorking ? '정상' : '오류'}`);
+    } catch (err) {
+      console.error('Redis 연결 테스트 실패:', err);
+      alert(`Redis 연결 테스트 실패:\n${err.response?.data?.error || err.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchAllUserTokenInfo();
@@ -187,6 +241,20 @@ const TokenManagementPage = () => {
             className="admin-btn admin-btn-danger"
           >
             전체 강제 로그아웃
+          </button>
+          <button
+            onClick={fetchRedisDebugInfo}
+            disabled={actionLoading}
+            className="admin-btn admin-btn-primary"
+          >
+            Redis 디버그
+          </button>
+          <button
+            onClick={testRedisConnection}
+            disabled={actionLoading}
+            className="admin-btn admin-btn-secondary"
+          >
+            Redis 연결 테스트
           </button>
         </div>
       </div>
@@ -420,6 +488,118 @@ const TokenManagementPage = () => {
               </button>
               <button
                 onClick={() => setSelectedUser(null)}
+                className="modal-btn secondary-btn"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showRedisDebug && redisDebugInfo && (
+        <div className="modal-overlay" onClick={() => setShowRedisDebug(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Redis 디버그 정보</h3>
+              <button 
+                className="modal-close"
+                onClick={() => setShowRedisDebug(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="detail-section">
+                <h4>연결 상태</h4>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Redis 연결:</label>
+                    <span style={{color: redisDebugInfo.connectionStatus === 'Connected' ? 'green' : 'red'}}>
+                      {redisDebugInfo.connectionStatus}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <label>전체 키 개수:</label>
+                    <span>{redisDebugInfo.totalKeys}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h4>토큰 키 통계</h4>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>액세스 토큰 키:</label>
+                    <span>{redisDebugInfo.accessTokenKeys}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>리프레시 토큰 키:</label>
+                    <span>{redisDebugInfo.refreshTokenKeys}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>사용자 캐시 키:</label>
+                    <span>{redisDebugInfo.userCacheKeys}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>블랙리스트 키:</label>
+                    <span>{redisDebugInfo.blacklistKeys}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h4>액세스 토큰 상세</h4>
+                <div style={{maxHeight: '200px', overflowY: 'auto'}}>
+                  {redisDebugInfo.accessTokenDetails && redisDebugInfo.accessTokenDetails.length > 0 ? (
+                    redisDebugInfo.accessTokenDetails.map((token, index) => (
+                      <div key={index} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px'}}>
+                        <div><strong>사용자:</strong> {token.username}</div>
+                        <div><strong>키:</strong> {token.key}</div>
+                        <div><strong>TTL:</strong> {token.ttl}초</div>
+                        <div><strong>값 존재:</strong> {token.hasValue ? '예' : '아니오'}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>액세스 토큰이 없습니다.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h4>리프레시 토큰 상세</h4>
+                <div style={{maxHeight: '200px', overflowY: 'auto'}}>
+                  {redisDebugInfo.refreshTokenDetails && redisDebugInfo.refreshTokenDetails.length > 0 ? (
+                    redisDebugInfo.refreshTokenDetails.map((token, index) => (
+                      <div key={index} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px'}}>
+                        <div><strong>사용자:</strong> {token.username}</div>
+                        <div><strong>키:</strong> {token.key}</div>
+                        <div><strong>TTL:</strong> {token.ttl}초</div>
+                        <div><strong>값 존재:</strong> {token.hasValue ? '예' : '아니오'}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>리프레시 토큰이 없습니다.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h4>모든 Redis 키</h4>
+                <div style={{maxHeight: '150px', overflowY: 'auto', fontSize: '12px', fontFamily: 'monospace'}}>
+                  {redisDebugInfo.allKeys && redisDebugInfo.allKeys.length > 0 ? (
+                    redisDebugInfo.allKeys.map((key, index) => (
+                      <div key={index}>{key}</div>
+                    ))
+                  ) : (
+                    <p>Redis에 키가 없습니다.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                onClick={() => setShowRedisDebug(false)}
                 className="modal-btn secondary-btn"
               >
                 닫기

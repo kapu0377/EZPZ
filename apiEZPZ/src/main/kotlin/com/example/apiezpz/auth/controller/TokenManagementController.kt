@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -279,6 +281,10 @@ class TokenManagementController(
             val accessTokens = redisCacheService.getAllAccessTokens()
             val refreshTokens = redisCacheService.getAllRefreshTokens()
             
+            log.info("Redis 조회 결과 - 활성사용자: {}, 액세스토큰: {}, 리프레시토큰: {}", 
+                activeUsers.size, accessTokens.size, refreshTokens.size)
+            log.info("활성 사용자 목록: {}", activeUsers)
+            
             return ResponseEntity.ok(mapOf(
                 "activeUsers" to activeUsers,
                 "activeUserCount" to activeUsers.size,
@@ -289,6 +295,54 @@ class TokenManagementController(
         } catch (e: Exception) {
             log.error("활성 사용자 목록 조회 실패", e)
             return ResponseEntity.internalServerError().body(mapOf("error" to "활성 사용자 조회 실패"))
+        }
+    }
+
+    @GetMapping("/admin/redis-debug")
+    @PreAuthorize("isAuthenticated()")
+    fun getRedisDebugInfo(
+        @AuthenticationPrincipal userDetails: UserDetails
+    ): ResponseEntity<Map<String, Any>> {
+        return try {
+            log.info("Redis 디버그 정보 조회 요청 시작: {}", userDetails.username)
+            
+            checkAdminPermission(userDetails)
+            log.info("관리자 권한 확인 완료: {}", userDetails.username)
+            
+            val debugInfo = redisCacheService.getRedisDebugInfo()
+            log.info("Redis 디버그 정보 조회 완료: {} 개 항목", debugInfo.size)
+            
+            ResponseEntity.ok(debugInfo)
+        } catch (e: AccessDeniedException) {
+            log.error("관리자 권한 없음: {}", userDetails.username)
+            ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(mapOf<String, Any>("error" to "관리자 권한이 필요합니다"))
+        } catch (e: Exception) {
+            log.error("Redis 디버그 정보 조회 실패: {}", userDetails.username, e)
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(mapOf<String, Any>("error" to "Redis 디버그 정보 조회에 실패했습니다: ${e.message}"))
+        }
+    }
+
+    @GetMapping("/admin/redis-test")
+    @PreAuthorize("isAuthenticated()")
+    fun testRedisConnection(
+        @AuthenticationPrincipal userDetails: UserDetails
+    ): ResponseEntity<Map<String, Any>> {
+        return try {
+            log.info("Redis 연결 테스트 요청: {}", userDetails.username)
+            
+            checkAdminPermission(userDetails)
+            
+            val testResult = redisCacheService.testRedisConnection()
+            val resultWithTimestamp = testResult.toMutableMap()
+            resultWithTimestamp["timestamp"] = LocalDateTime.now()
+            
+            ResponseEntity.ok(resultWithTimestamp.toMap())
+        } catch (e: Exception) {
+            log.error("Redis 연결 테스트 실패: {}", userDetails.username, e)
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(mapOf<String, Any>("error" to "Redis 연결 테스트 실패: ${e.message}"))
         }
     }
 

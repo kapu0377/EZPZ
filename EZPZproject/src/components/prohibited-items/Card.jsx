@@ -6,4 +6,4 @@ const Card = ({ children }) => (
   </div>
 );
 
-export default Card;  // ✅ Default Export 추가
+export default Card;

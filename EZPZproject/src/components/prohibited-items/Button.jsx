@@ -8,4 +8,4 @@ const Button = ({ onClick, children }) => (
   </button>
 );
 
-export default Button;  // ✅ Default Export 추가
+export default Button;

@@ -305,4 +305,106 @@ class RedisCacheService(
         }
         return userTokenInfoList.sortedBy { it.username }
     }
+
+    fun getRedisDebugInfo(): Map<String, Any> {
+        val debugInfo = mutableMapOf<String, Any>()
+        
+        try {
+            // Redis 연결 상태 확인
+            val connectionInfo = try {
+                redisTemplate.connectionFactory?.connection?.ping()
+                "Connected"
+            } catch (e: Exception) {
+                "Disconnected: ${e.message ?: "알 수 없는 오류"}"
+            }
+            
+            // 모든 키 조회
+            val allKeys = redisTemplate.keys("*") ?: emptySet()
+            val accessTokenKeys = redisTemplate.keys("${ACCESS_TOKEN_PREFIX}*") ?: emptySet()
+            val refreshTokenKeys = redisTemplate.keys("${REFRESH_TOKEN_PREFIX}*") ?: emptySet()
+            val userCacheKeys = redisTemplate.keys("${USER_CACHE_PREFIX}*") ?: emptySet()
+            val blacklistKeys = redisTemplate.keys("${BLACKLIST_TOKEN_PREFIX}*") ?: emptySet()
+            
+            // 각 키의 TTL 정보
+            val accessTokenDetails = accessTokenKeys.map { key ->
+                val ttl = redisTemplate.getExpire(key)
+                val username = key.removePrefix(ACCESS_TOKEN_PREFIX)
+                mapOf(
+                    "key" to key,
+                    "username" to username,
+                    "ttl" to ttl,
+                    "hasValue" to redisTemplate.hasKey(key)
+                )
+            }
+            
+            val refreshTokenDetails = refreshTokenKeys.map { key ->
+                val ttl = redisTemplate.getExpire(key)
+                val username = key.removePrefix(REFRESH_TOKEN_PREFIX)
+                mapOf(
+                    "key" to key,
+                    "username" to username,
+                    "ttl" to ttl,
+                    "hasValue" to redisTemplate.hasKey(key)
+                )
+            }
+            
+            debugInfo["connectionStatus"] = connectionInfo
+            debugInfo["totalKeys"] = allKeys.size
+            debugInfo["allKeys"] = allKeys.toList()
+            debugInfo["accessTokenKeys"] = accessTokenKeys.size
+            debugInfo["refreshTokenKeys"] = refreshTokenKeys.size
+            debugInfo["userCacheKeys"] = userCacheKeys.size
+            debugInfo["blacklistKeys"] = blacklistKeys.size
+            debugInfo["accessTokenDetails"] = accessTokenDetails
+            debugInfo["refreshTokenDetails"] = refreshTokenDetails
+            debugInfo["prefixes"] = mapOf(
+                "ACCESS_TOKEN_PREFIX" to ACCESS_TOKEN_PREFIX,
+                "REFRESH_TOKEN_PREFIX" to REFRESH_TOKEN_PREFIX,
+                "USER_CACHE_PREFIX" to USER_CACHE_PREFIX,
+                "BLACKLIST_TOKEN_PREFIX" to BLACKLIST_TOKEN_PREFIX
+            )
+            
+            log.info("Redis 디버그 정보 - 전체키: {}, 액세스토큰키: {}, 리프레시토큰키: {}", 
+                allKeys.size, accessTokenKeys.size, refreshTokenKeys.size)
+            
+        } catch (e: Exception) {
+            log.error("Redis 디버그 정보 수집 실패", e)
+            debugInfo["error"] = e.message ?: "알 수 없는 오류"
+        }
+        
+        return debugInfo
+    }
+
+    fun testRedisConnection(): Map<String, Any> {
+        return try {
+            val testKey = "test:${System.currentTimeMillis()}"
+            val testValue = "test-value"
+            
+            // Redis에 값 저장
+            redisTemplate.opsForValue().set(testKey, testValue, java.time.Duration.ofSeconds(10))
+            
+            // Redis에서 값 조회
+            val retrievedValue = redisTemplate.opsForValue().get(testKey)
+            
+            // 테스트 키 삭제
+            redisTemplate.delete(testKey)
+            
+            val isWorking = testValue == retrievedValue
+            
+            mapOf<String, Any>(
+                "redisWorking" to isWorking,
+                "testKey" to testKey,
+                "testValue" to testValue,
+                "retrievedValue" to (retrievedValue ?: "null"),
+                "message" to if (isWorking) "Redis 연결 정상" else "Redis 연결 문제"
+            )
+        } catch (e: Exception) {
+            log.error("Redis 연결 테스트 실패", e)
+            mapOf<String, Any>(
+                "redisWorking" to false,
+                "error" to (e.message ?: "알 수 없는 오류"),
+                "message" to "Redis 연결 실패"
+            )
+        }
+    }
 } 

@@ -5,11 +5,11 @@ import axiosInstance from '../utils/axios';
 export const useAdminCheck = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      console.log('useAdminCheck: 관리자 상태 확인 시작, isAuthenticated:', isAuthenticated);
+      console.log('useAdminCheck: 관리자 상태 확인 시작, isAuthenticated:', isAuthenticated, 'user:', user);
       
       if (!isAuthenticated) {
         console.log('useAdminCheck: 인증되지 않음, 관리자 아님');
@@ -35,7 +35,7 @@ export const useAdminCheck = () => {
     };
 
     checkAdminStatus();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   return { isAdmin, loading };
 }; 

@@ -59,6 +59,8 @@ dependencies {
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
 
     implementation 'com.google.cloud:google-cloud-vision:3.62.0'
+
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 }
 
 tasks.named('test') {
