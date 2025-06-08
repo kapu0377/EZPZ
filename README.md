@@ -15,14 +15,12 @@ EZPZ/
 │   ├── package.json
 │   └── ...
 ├── setup_all.sh      # Linux/macOS용 MySQL 설정 스크립트
-├── setup_all.bat     # Windows용 MySQL 설정 스크립트
 └── README.md
 ```
 
 ## 빠른 시작
 
 ### 자동 설정 (권장)
-
 **Linux/macOS:**
 ```bash
 chmod +x setup_all.sh
@@ -82,7 +80,7 @@ npm run dev
 - RSA-OAEP 암호화를 통한 토큰 보안
 - RSASSA-PSS 디지털 서명
 - 키 로테이션 시스템
-- Redis 기반 세션 관리
+- Redis 기반 토큰관리
 
 ## 데이터베이스 설정
 
@@ -92,3 +90,41 @@ npm run dev
 - **사용자**: ezpz_user  
 - **비밀번호**: 1234
 - **포트**: 3306
+
+## Redis 설정 (도커 사용)
+
+프로젝트에서  토큰 관리를 위해 Redis를 사용합니다.
+
+### Redis 시작
+
+```bash
+# 레디스 도커 컨테이너 시작
+chmod +x scripts/start-redis.sh
+./scripts/start-redis.sh
+```
+
+### Redis 중지
+
+```bash
+# 레디스 도커 컨테이너 중지
+chmod +x scripts/stop-redis.sh
+./scripts/stop-redis.sh
+```
+
+### Redis 수동 실행
+
+```bash
+# 도커 컴포즈로 직접 실행
+docker-compose -f docker-compose.redis.yml up -d
+
+# 중지
+docker-compose -f docker-compose.redis.yml down
+```
+
+### Redis 접속 정보
+
+- **호스트**: localhost
+- **포트**: 6379
+- **비밀번호**: ezpz_redis_password
+- 임시로 지정해둔 값이므로 바꾸는것을 적극 권장
+

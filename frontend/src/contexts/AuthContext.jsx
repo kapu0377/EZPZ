@@ -91,11 +91,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, [checkTokenStatus, logout]);
 
-  // 인증 초기화 - 한 번만 실행
   useEffect(() => {
     if (isInitialized.current) return;
     
-    const initializeAuth = () => {
+    const initializeAuth = async () => {
       setIsLoading(true);
       
       try {
@@ -108,6 +107,15 @@ export const AuthProvider = ({ children }) => {
         if (authStatus.isAuthenticated && integrity.isValid) {
           const username = getUsernameFromRefreshToken();
           setUser(username ? { username } : null);
+          
+          try {
+            const userData = await authApi.getUserProfile();
+            setUser(userData);
+            console.log('사용자 프로필 로드 완료:', userData);
+          } catch (profileError) {
+            console.warn('사용자 프로필 조회 실패, 기본 정보 유지:', profileError);
+            setUser(username ? { username } : null);
+          }
         } else {
           setUser(null);
         }

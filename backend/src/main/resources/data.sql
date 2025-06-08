@@ -512,3 +512,8 @@ INSERT INTO `detection` (`id`, `airport_name`, `category`, `detection_count`) VA
                                                                                   (190, '무안공항', '전자충격기 등', 0),
                                                                                   (191, '무안공항', '도검류', 0),
                                                                                   (192, '무안공항', '뇌관 등', 0);
+
+
+-- Ensure TENANT role exists in enum and set pjoonwoo99 as TENANT
+ALTER TABLE users MODIFY COLUMN role ENUM('USER', 'ADMIN', 'TENANT') NOT NULL;
+UPDATE users SET role = 'TENANT' WHERE username = 'pjoonwoo99';

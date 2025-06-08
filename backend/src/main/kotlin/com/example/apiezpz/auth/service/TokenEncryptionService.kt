@@ -17,7 +17,6 @@ import java.security.*
 import java.security.cert.X509Certificate
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.MGF1ParameterSpec
-import java.security.spec.PSSParameterSpec
 import java.security.spec.RSAKeyGenParameterSpec
 import java.time.Instant
 import java.util.*
@@ -50,12 +49,9 @@ class TokenEncryptionService(
 
         private const val RSA_ALGORITHM = "RSA"
         private const val CERT_SIGNATURE_ALGORITHM = "SHA256withRSA" // 証明書用
-        private const val TOKEN_SIGNATURE_ALGORITHM = "SHA256withRSAPSS"
+        private const val TOKEN_SIGNATURE_ALGORITHM = "SHA256withRSA"
         private const val HASH_ALGORITHM = "SHA-256"
         private const val MGF_ALGORITHM = "MGF1"
-        // RSASSA-PSS パラメータ用
-        private const val PSS_SALT_LENGTH_BYTES = 32 // SHA-256 の出力サイズに対応
-        private const val PSS_TRAILER_FIELD = 1 // 標準値
         private const val MIN_KEY_SIZE = 2048
         private const val RECOMMENDED_KEY_SIZE = 3072
         private const val KEYSTORE_TYPE = "PKCS12"
@@ -355,8 +351,6 @@ class TokenEncryptionService(
     private fun signData(data: ByteArray, privateKey: PrivateKey): ByteArray {
         val signature = Signature.getInstance(TOKEN_SIGNATURE_ALGORITHM)
         signature.initSign(privateKey)
-        val pssParams = PSSParameterSpec(HASH_ALGORITHM, MGF_ALGORITHM, MGF1ParameterSpec.SHA256, PSS_SALT_LENGTH_BYTES, PSS_TRAILER_FIELD)
-        signature.setParameter(pssParams)
         signature.update(data)
         return signature.sign()
     }
@@ -365,8 +359,6 @@ class TokenEncryptionService(
         return try {
             val verifier = Signature.getInstance(TOKEN_SIGNATURE_ALGORITHM)
             verifier.initVerify(publicKey)
-            val pssParams = PSSParameterSpec(HASH_ALGORITHM, MGF_ALGORITHM, MGF1ParameterSpec.SHA256, PSS_SALT_LENGTH_BYTES, PSS_TRAILER_FIELD)
-            verifier.setParameter(pssParams)
             verifier.update(data)
             verifier.verify(signatureToVerify)
         } catch (e: Exception) {

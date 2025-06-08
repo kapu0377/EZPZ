@@ -1,11 +1,28 @@
 HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+*.log
+logs/
+.env
+.env.*
 
-### STS ###
+.DS_Store
+Thumbs.db
+._*
+*~
+*.swp
+*.swo
+*.tmp
+*.temp
+*.bak
+*.backup
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+
+.vscode/
+
 .apt_generated
 .classpath
 .factorypath
@@ -13,44 +30,58 @@ build/
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
 /nbproject/private/
 /nbbuild/
-/dist/
-/nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
-EZPZproject/src/App_BACKUP_1661.jsx
-EZPZproject/src/App_BASE_1661.jsx
-EZPZproject/src/App_LOCAL_1661.jsx
-EZPZproject/src/App_REMOTE_1661.jsx
+.cursor/
 
-### Security ###
-keystore/
-*.p12
-*.jks
+context7/
+
+build/
+
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.eslintcache
+frontend/.cache/
+
+backend/build/
+backend/.gradle/
+backend/out/
+backend/bin/
+backend/target/ # For Maven, if used
+backend/**/*.class
+backend/keystore/
+backend/*.p12
+backend/*.jks
+
+backend/.kotlin/ # Kotlin build cache
+backend/*.hprof # Heap dumps
+backend/*.pid
+backend/*.seed
+backend/*.pid.lock
+
+
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+.gradle/ # Root .gradle cache, if any (usually backend/.gradle/ is more specific)
+
+
 application-*.properties
 !application-prod.properties
 application-*.yml
 !application-prod.yml
 
-### Logs ###
-*.log
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*
 
-### Environment ###
-.env

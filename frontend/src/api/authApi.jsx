@@ -102,7 +102,7 @@ const authApi = {
 
   getUserProfile: async () => {
     try {
-      const response = await axiosInstance.get('/auth/me');
+      const response = await axiosInstance.get('/user/info');
       return response.data;
     } catch (error) {
       console.error("사용자 정보 불러오기 실패:", error);

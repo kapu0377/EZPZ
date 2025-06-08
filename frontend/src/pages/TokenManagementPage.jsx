@@ -1,47 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import axiosInstance from '../utils/axios';
 import './TokenManagementPage.css';
 
 const TokenManagementPage = () => {
   const [allUsers, setAllUsers] = useState([]);
-  const [activeUsers, setActiveUsers] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [redisDebugInfo, setRedisDebugInfo] = useState(null);
   const [showRedisDebug, setShowRedisDebug] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const [isTokenCheckActive, setIsTokenCheckActive] = useState(true);
+  const { isAuthenticated, user: currentUser, logout } = useAuth();
+
+  // 현재 사용자가 TENANT 역할인지 확인하는 함수
+  const isTenant = () => {
+    return currentUser?.role === 'TENANT';
+  };
+
+  // 현재 사용자가 ADMIN 이상의 권한을 가지는지 확인하는 함수
+  const hasAdminAccess = () => {
+    return currentUser?.role === 'ADMIN' || currentUser?.role === 'TENANT';
+  };
 
   const fetchAllUserTokenInfo = async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await axiosInstance.get('/admin/token/admin/all-users');
+      console.log('백엔드 응답 데이터:', response.data);
+      console.log('사용자 수:', response.data.length);
+      console.log('현재 사용자:', currentUser?.username);
+      console.log('응답에 포함된 사용자명들:', response.data.map(user => user.username));
       setAllUsers(response.data);
     } catch (err) {
-      setError('사용자 토큰 정보를 가져오는데 실패했습니다.');
+      let errorMessage = '사용자 토큰 정보를 가져오는데 실패했습니다.';
+      if (err.response?.status === 403) {
+        errorMessage = '접근 권한이 없습니다. 관리자 권한이 필요합니다.';
+      } else if (err.response?.status === 401) {
+        errorMessage = '인증이 만료되었습니다. 다시 로그인해주세요.';
+      } else if (err.response?.data?.error) {
+        errorMessage = `오류: ${err.response.data.error}`;
+      }
+      setError(errorMessage);
       console.error('사용자 토큰 정보 조회 실패:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchActiveUsers = async () => {
-    try {
-      console.log('활성 사용자 조회 요청 시작...');
-      const response = await axiosInstance.get('/admin/token/admin/active-users');
-      console.log('활성 사용자 응답:', response.data);
-      setActiveUsers(response.data);
-    } catch (err) {
-      console.error('활성 사용자 조회 실패 상세:', err);
-      console.error('응답 상태:', err.response?.status);
-      console.error('응답 데이터:', err.response?.data);
-    }
-  };
-
   const handleForceLogoutUser = async (username) => {
+    if (!hasAdminAccess()) {
+      alert("관리자 권한이 필요합니다.");
+      return;
+    }
+
+    if (username === currentUser?.username) {
+      alert("자기 자신은 강제 로그아웃할 수 없습니다.");
+      return;
+    }
+
+    // TENANT가 아닌 경우 다른 TENANT나 ADMIN을 로그아웃할 수 없도록 제한
+    const targetUser = allUsers.find(user => user.username === username);
+    if (!isTenant() && targetUser?.userInfo?.role && ['TENANT', 'ADMIN'].includes(targetUser.userInfo.role)) {
+      alert("상위 권한 사용자는 강제 로그아웃할 수 없습니다.");
+      return;
+    }
+
     if (!window.confirm(`정말로 ${username} 사용자를 강제 로그아웃하시겠습니까?`)) {
       return;
     }
@@ -51,9 +77,16 @@ const TokenManagementPage = () => {
       await axiosInstance.post(`/admin/token/admin/force-logout/${username}`);
       alert(`${username} 사용자가 강제 로그아웃되었습니다.`);
       fetchAllUserTokenInfo();
-      fetchActiveUsers();
     } catch (err) {
-      alert('강제 로그아웃에 실패했습니다.');
+      let errorMessage = '강제 로그아웃에 실패했습니다.';
+      if (err.response?.status === 403) {
+        errorMessage = '권한이 없습니다. 해당 사용자를 로그아웃할 수 없습니다.';
+      } else if (err.response?.status === 404) {
+        errorMessage = '사용자를 찾을 수 없습니다.';
+      } else if (err.response?.data?.error) {
+        errorMessage = `오류: ${err.response.data.error}`;
+      }
+      alert(errorMessage);
       console.error('강제 로그아웃 실패:', err);
     } finally {
       setActionLoading(false);
@@ -61,7 +94,12 @@ const TokenManagementPage = () => {
   };
 
   const handleForceLogoutAll = async () => {
-    if (!window.confirm('정말로 모든 사용자를 강제 로그아웃하시겠습니까? (관리자 제외)')) {
+    if (!isTenant()) {
+      alert("TENANT 권한이 필요합니다.");
+      return;
+    }
+
+    if (!window.confirm('정말로 모든 사용자를 강제 로그아웃하시겠습니까? (테넌트 및 본인 제외)')) {
       return;
     }
 
@@ -70,127 +108,148 @@ const TokenManagementPage = () => {
       const response = await axiosInstance.post('/admin/token/admin/force-logout-all');
       alert(`${response.data.loggedOutCount}명의 사용자가 강제 로그아웃되었습니다.`);
       fetchAllUserTokenInfo();
-      fetchActiveUsers();
     } catch (err) {
-      alert('전체 강제 로그아웃에 실패했습니다.');
+      let errorMessage = '전체 강제 로그아웃에 실패했습니다.';
+      if (err.response?.status === 403) {
+        errorMessage = 'TENANT 권한이 필요합니다.';
+      } else if (err.response?.data?.error) {
+        errorMessage = `오류: ${err.response.data.error}`;
+      }
+      alert(errorMessage);
       console.error('전체 강제 로그아웃 실패:', err);
     } finally {
       setActionLoading(false);
     }
   };
 
-  const handleClearUserCache = async (username) => {
-    if (!window.confirm(`정말로 ${username} 사용자의 캐시를 삭제하시겠습니까?`)) {
-      return;
-    }
-
-    try {
-      setActionLoading(true);
-      await axiosInstance.delete(`/admin/token/admin/clear-user-cache/${username}`);
-      alert(`${username} 사용자의 캐시가 삭제되었습니다.`);
-      fetchAllUserTokenInfo();
-      fetchActiveUsers();
-    } catch (err) {
-      alert('캐시 삭제에 실패했습니다.');
-      console.error('캐시 삭제 실패:', err);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const handleRefreshUserToken = async (username) => {
-    if (!window.confirm(`정말로 ${username} 사용자의 토큰을 갱신하시겠습니까?`)) {
+    if (!hasAdminAccess()) {
+      alert("관리자 권한이 필요합니다.");
+      return;
+    }
+
+    if (username === currentUser?.username) {
+      alert("자기 자신의 토큰은 이 버튼으로 강제 갱신할 수 없습니다. 필요한 경우 재로그인하세요.");
+      return;
+    }
+
+    // TENANT가 아닌 경우 다른 TENANT나 ADMIN의 토큰을 갱신할 수 없도록 제한
+    const targetUser = allUsers.find(user => user.username === username);
+    if (!isTenant() && targetUser?.userInfo?.role && ['TENANT', 'ADMIN'].includes(targetUser.userInfo.role)) {
+      alert("상위 권한 사용자의 토큰은 갱신할 수 없습니다.");
+      return;
+    }
+
+    if (!window.confirm(`정말로 ${username} 사용자의 토큰을 강제 갱신하시겠습니까? (해당 사용자는 재로그인 필요)`)) {
       return;
     }
 
     try {
       setActionLoading(true);
-      const response = await axiosInstance.post(`/admin/token/admin/refresh-user-token/${username}`);
-      alert(`${username} 사용자의 토큰이 갱신되었습니다.`);
+      await axiosInstance.post(`/admin/token/admin/refresh-token/${username}`);
+      alert(`${username} 사용자의 토큰이 강제 갱신되었습니다. 해당 사용자는 재로그인이 필요할 수 있습니다.`);
       fetchAllUserTokenInfo();
-      fetchActiveUsers();
     } catch (err) {
-      alert('토큰 갱신에 실패했습니다.');
+      let errorMessage = '토큰 갱신에 실패했습니다.';
+      if (err.response?.status === 403) {
+        errorMessage = '권한이 없습니다. 해당 사용자의 토큰을 갱신할 수 없습니다.';
+      } else if (err.response?.status === 404) {
+        errorMessage = '사용자를 찾을 수 없습니다.';
+      } else if (err.response?.data?.error) {
+        errorMessage = `오류: ${err.response.data.error}`;
+      }
+      alert(errorMessage);
       console.error('토큰 갱신 실패:', err);
     } finally {
       setActionLoading(false);
     }
   };
+  
+  const fetchRedisDebugInfo = async () => {
+    if (!isTenant()) {
+      alert("TENANT 권한이 필요합니다.");
+      return;
+    }
 
-  const handleCleanExpiredTokens = async () => {
-    if (!window.confirm('만료된/손상된 토큰을 정리하시겠습니까?')) {
+    if (showRedisDebug) {
+      setShowRedisDebug(false);
+      setRedisDebugInfo(null);
       return;
     }
 
     try {
       setActionLoading(true);
-      const response = await axiosInstance.post('/admin/token/admin/clean-expired-tokens');
-      const data = response.data;
-      alert(`토큰 정리가 완료되었습니다.\n제거된 액세스토큰: ${data.removedAccessTokens}개\n제거된 리프레시토큰: ${data.removedRefreshTokens}개`);
-      fetchAllUserTokenInfo();
-      fetchActiveUsers();
-    } catch (err) {
-      alert('토큰 정리에 실패했습니다.');
-      console.error('토큰 정리 실패:', err);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const fetchRedisDebugInfo = async () => {
-    try {
-      setActionLoading(true);
-      console.log('Redis 디버그 정보 요청 시작...');
       const response = await axiosInstance.get('/admin/token/admin/redis-debug');
-      console.log('Redis 디버그 응답:', response.data);
       setRedisDebugInfo(response.data);
       setShowRedisDebug(true);
     } catch (err) {
-      console.error('Redis 디버그 정보 조회 실패 상세:', err);
-      console.error('응답 상태:', err.response?.status);
-      console.error('응답 데이터:', err.response?.data);
-      console.error('요청 URL:', err.config?.url);
-      
       let errorMessage = 'Redis 디버그 정보 조회에 실패했습니다.';
       if (err.response?.status === 403) {
-        errorMessage += '\n관리자 권한이 필요합니다.';
-      } else if (err.response?.status === 404) {
-        errorMessage += '\nAPI 엔드포인트를 찾을 수 없습니다.';
+        errorMessage = 'TENANT 권한이 필요합니다.';
       } else if (err.response?.data?.error) {
-        errorMessage += `\n오류: ${err.response.data.error}`;
-      } else if (err.message) {
-        errorMessage += `\n오류: ${err.message}`;
+        errorMessage = `오류: ${err.response.data.error}`;
       }
-      
       alert(errorMessage);
+      console.error('Redis 디버그 정보 조회 실패:', err);
     } finally {
       setActionLoading(false);
     }
   };
 
-  const testRedisConnection = async () => {
-    try {
-      setActionLoading(true);
-      console.log('Redis 연결 테스트 시작...');
-      const response = await axiosInstance.get('/admin/token/admin/redis-test');
-      console.log('Redis 연결 테스트 응답:', response.data);
-      
-      const { redisWorking, message } = response.data;
-      alert(`Redis 연결 테스트 결과:\n${message}\n상태: ${redisWorking ? '정상' : '오류'}`);
-    } catch (err) {
-      console.error('Redis 연결 테스트 실패:', err);
-      alert(`Redis 연결 테스트 실패:\n${err.response?.data?.error || err.message}`);
-    } finally {
-      setActionLoading(false);
-    }
+  // 사용자 작업 버튼 활성화 여부를 결정하는 함수
+  const canPerformAction = (targetUser) => {
+    if (!hasAdminAccess()) return false;
+    if (targetUser.username === currentUser?.username) return false;
+    if (!isTenant() && targetUser.userInfo?.role && ['TENANT', 'ADMIN'].includes(targetUser.userInfo.role)) return false;
+    return true;
   };
+
+  const checkTokenStatus = useCallback(async () => {
+    if (!isAuthenticated || !isTokenCheckActive) return;
+    
+    try {
+      const response = await axiosInstance.get('/admin/token/admin/status');
+      
+      if (!response.data.hasAccessToken && !response.data.hasRefreshToken) {
+        console.log('강제 로그아웃 감지: 토큰이 모두 삭제됨');
+        setIsTokenCheckActive(false);
+        alert('관리자에 의해 강제 로그아웃되었습니다.');
+        logout();
+      }
+    } catch (err) {
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        console.log('토큰이 무효화되었습니다. 자동 로그아웃 처리합니다.');
+        setIsTokenCheckActive(false);
+        alert('인증이 만료되어 로그아웃되었습니다.');
+        logout();
+      }
+    }
+  }, [isAuthenticated, isTokenCheckActive, logout]);
+
+  // 주기적 토큰 상태 확인
+  useEffect(() => {
+    if (!isAuthenticated || !isTokenCheckActive) return;
+    
+    const interval = setInterval(checkTokenStatus, 5000); // 5초마다 확인
+    return () => clearInterval(interval);
+  }, [checkTokenStatus, isAuthenticated, isTokenCheckActive]);
 
   useEffect(() => {
     if (isAuthenticated) {
       fetchAllUserTokenInfo();
-      fetchActiveUsers();
     }
   }, [isAuthenticated]);
+
+  const getStatusBadge = (hasToken) => {
+    return hasToken 
+      ? <span className="status-badge active">유효</span> 
+      : <span className="status-badge inactive">없음/만료</span>;
+  };
+
+  const getRoleBadgeClass = (role) => {
+    const roleClass = (role || 'USER').toLowerCase();
+    return `role-badge role-${roleClass}`;
+  };
 
   if (!isAuthenticated) {
     return (
@@ -203,184 +262,140 @@ const TokenManagementPage = () => {
     );
   }
 
-  const formatDateTime = (dateTimeString) => {
-    if (!dateTimeString) return 'N/A';
-    return new Date(dateTimeString).toLocaleString('ko-KR');
-  };
-
-  const getStatusBadge = (hasToken) => {
-    return hasToken ? (
-      <span className="status-badge status-active">활성</span>
-    ) : (
-      <span className="status-badge status-inactive">비활성</span>
+  if (!hasAdminAccess()) {
+    return (
+      <div className="token-no-auth">
+        <div className="token-no-auth-content">
+          <h1 className="token-no-auth-title">관리자 권한 필요</h1>
+          <p className="token-no-auth-desc">이 페이지는 관리자 권한이 필요합니다.</p>
+          <p className="token-no-auth-desc">현재 권한: {currentUser?.role || 'USER'}</p>
+        </div>
+      </div>
     );
-  };
+  }
+  
+  if (loading) {
+    return <div className="token-loading">데이터를 불러오는 중...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="token-error">
+        <h2>오류 발생</h2>
+        <p>{error}</p>
+        <button onClick={fetchAllUserTokenInfo} className="action-btn primary-btn">다시 시도</button>
+      </div>
+    );
+  }
 
   return (
-    <div className="admin-token-management">
-      <div className="admin-header">
-        <h1 className="admin-title">관리자 토큰 관제 시스템</h1>
-        <div className="admin-actions">
-          <button
-            onClick={() => { fetchAllUserTokenInfo(); fetchActiveUsers(); }}
-            disabled={loading}
-            className="admin-btn admin-btn-primary"
-          >
-            {loading ? '새로고침 중...' : '새로고침'}
-          </button>
-          <button
-            onClick={handleCleanExpiredTokens}
-            disabled={actionLoading}
-            className="admin-btn admin-btn-warning"
-          >
-            만료토큰 정리
-          </button>
-          <button
-            onClick={handleForceLogoutAll}
-            disabled={actionLoading}
-            className="admin-btn admin-btn-danger"
-          >
-            전체 강제 로그아웃
-          </button>
-          <button
-            onClick={fetchRedisDebugInfo}
-            disabled={actionLoading}
-            className="admin-btn admin-btn-primary"
-          >
-            Redis 디버그
-          </button>
-          <button
-            onClick={testRedisConnection}
-            disabled={actionLoading}
-            className="admin-btn admin-btn-secondary"
-          >
-            Redis 연결 테스트
-          </button>
+    <div className={`token-management-page ${showRedisDebug ? 'debug-visible' : ''}`}>
+      <header className="page-header">
+        <h1>토큰 및 사용자 관리 대시보드</h1>
+        <div className="user-info-header">
+          <span className="current-user">현재 사용자: {currentUser?.username}</span>
+          <span className={getRoleBadgeClass(currentUser?.role)}>{currentUser?.role || 'USER'}</span>
         </div>
+        <div className="header-actions">
+          <button onClick={fetchAllUserTokenInfo} disabled={actionLoading} className="action-btn secondary-btn">
+            새로고침
+          </button>
+          {isTenant() && (
+            <button onClick={handleForceLogoutAll} disabled={actionLoading} className="action-btn danger-btn">
+              전체 강제 로그아웃 (본인/테넌트 제외)
+            </button>
+          )}
+        </div>
+      </header>
+
+      <div className="admin-actions-bar">
+        {isTenant() && (
+          <button onClick={fetchRedisDebugInfo} disabled={actionLoading} className="action-btn info-btn">
+            {showRedisDebug ? 'Redis 디버그 숨기기' : 'Redis 디버그 보기'}
+          </button>
+        )}
       </div>
 
-      <div className="admin-stats">
-        <div className="stat-card">
-          <h3>총 활성 사용자</h3>
-          <div className="stat-number">{activeUsers.activeUserCount || 0}</div>
-        </div>
-        <div className="stat-card">
-          <h3>액세스 토큰</h3>
-          <div className="stat-number">{activeUsers.accessTokenCount || 0}</div>
-        </div>
-        <div className="stat-card">
-          <h3>리프레시 토큰</h3>
-          <div className="stat-number">{activeUsers.refreshTokenCount || 0}</div>
-        </div>
-        <div className="stat-card">
-          <h3>마지막 업데이트</h3>
-          <div className="stat-time">{formatDateTime(activeUsers.timestamp)}</div>
-        </div>
-      </div>
-
-      {loading && (
-        <div className="admin-loading">
-          <div className="loading-spinner"></div>
-          <span>로딩 중...</span>
-        </div>
+      {showRedisDebug && redisDebugInfo && (
+        <section className="redis-debug-section">
+          <h2>Redis 디버그 정보 (TENANT 전용)</h2>
+          <pre>{JSON.stringify(redisDebugInfo, null, 2)}</pre>
+        </section>
       )}
 
-      {error && (
-        <div className="admin-error">
-          {error}
-        </div>
-      )}
-
-      {!loading && allUsers.length === 0 && (
-        <div className="admin-empty">
-          <h3>활성 사용자가 없습니다</h3>
-          <p>현재 로그인된 사용자가 없습니다.</p>
-        </div>
-      )}
-
-      {allUsers.length > 0 && (
-        <div className="users-table-container">
-          <h2 className="section-title">활성 사용자 목록</h2>
-          <div className="users-table">
+      {!loading && !error && (
+        <div className="users-section">
+          <h2 className="section-title">사용자 토큰 관리 ({allUsers.length}명)</h2>
+          <div className="table-container">
             <div className="table-header">
-              <div className="table-cell">사용자명</div>
-              <div className="table-cell">액세스 토큰</div>
-              <div className="table-cell">리프레시 토큰</div>
-              <div className="table-cell">사용자 정보</div>
-              <div className="table-cell">관리</div>
+              <div className="table-cell username">사용자명</div>
+              <div className="table-cell token-status">액세스 토큰</div>
+              <div className="table-cell token-status">리프레시 토큰</div>
+              <div className="table-cell user-info">사용자 정보</div>
+              <div className="table-cell actions">작업</div>
             </div>
-            {allUsers.map((user, index) => (
-              <div key={index} className="table-row">
-                <div className="table-cell">
-                  <div className="user-info">
-                    <strong>{user.username}</strong>
-                    {user.userInfo && (
-                      <div className="user-details">
-                        <small>ID: {user.userInfo.id}</small>
-                      </div>
-                    )}
-                  </div>
+            {console.log('렌더링할 사용자 목록:', allUsers)}
+            {allUsers.map((user) => (
+              <div className="table-row" key={user.username}>
+                <div className="table-cell username">
+                  {user.username}
+                  {user.username === currentUser?.username && <span className="self-indicator">(나)</span>}
                 </div>
-                <div className="table-cell">
-                  <div className="token-status">
-                    {getStatusBadge(user.hasAccessToken)}
-                    {user.accessToken && (
-                      <div className="token-preview" title={user.accessToken}>
-                        {user.accessToken}
-                      </div>
-                    )}
-                  </div>
+                <div className="table-cell token-status">
+                  {getStatusBadge(user.hasAccessToken)}
                 </div>
-                <div className="table-cell">
-                  <div className="token-status">
-                    {getStatusBadge(user.hasRefreshToken)}
-                    {user.refreshToken && (
-                      <div className="token-preview" title={user.refreshToken}>
-                        {user.refreshToken}
-                      </div>
-                    )}
-                  </div>
+                <div className="table-cell token-status">
+                  {getStatusBadge(user.hasRefreshToken)}
                 </div>
-                <div className="table-cell">
+                <div className="table-cell user-info">
                   {user.userInfo ? (
                     <div className="user-info-details">
+                      <div>ID: {user.userInfo.id}</div>
                       <div>이메일: {user.userInfo.email || 'N/A'}</div>
-                      <div>역할: {user.userInfo.role || 'USER'}</div>
+                      <div className={getRoleBadgeClass(user.userInfo.role)}>{user.userInfo.role || 'USER'}</div>
                     </div>
                   ) : (
-                    <span className="no-info">정보 없음</span>
+                    <span className="no-info">사용자 정보 없음</span>
                   )}
                 </div>
-                <div className="table-cell">
+                <div className="table-cell actions">
                   <div className="action-buttons">
                     <button
                       onClick={() => handleForceLogoutUser(user.username)}
-                      disabled={actionLoading}
-                      className="action-btn logout-btn"
-                      title="강제 로그아웃"
+                      disabled={actionLoading || !canPerformAction(user)}
+                      className="action-btn danger-btn" 
+                      title={
+                        user.username === currentUser?.username 
+                          ? "자기 자신은 강제 로그아웃 불가" 
+                          : !hasAdminAccess()
+                          ? "관리자 권한 필요"
+                          : !isTenant() && user.userInfo?.role && ['TENANT', 'ADMIN'].includes(user.userInfo.role)
+                          ? "상위 권한 사용자는 로그아웃 불가"
+                          : "강제 로그아웃"
+                      }
                     >
-                      로그아웃
+                      강제 로그아웃
                     </button>
                     <button
                       onClick={() => handleRefreshUserToken(user.username)}
-                      disabled={actionLoading}
+                      disabled={actionLoading || !canPerformAction(user)}
                       className="action-btn refresh-btn"
-                      title="토큰 갱신"
+                      title={
+                        user.username === currentUser?.username 
+                          ? "자기 자신 토큰 갱신 불가" 
+                          : !hasAdminAccess()
+                          ? "관리자 권한 필요"
+                          : !isTenant() && user.userInfo?.role && ['TENANT', 'ADMIN'].includes(user.userInfo.role)
+                          ? "상위 권한 사용자 토큰 갱신 불가"
+                          : "토큰 강제 갱신"
+                      }
                     >
-                      토큰갱신
-                    </button>
-                    <button
-                      onClick={() => handleClearUserCache(user.username)}
-                      disabled={actionLoading}
-                      className="action-btn cache-btn"
-                      title="캐시 삭제"
-                    >
-                      캐시삭제
+                      토큰 강제갱신
                     </button>
                     <button
                       onClick={() => setSelectedUser(user)}
                       className="action-btn detail-btn"
-                      title="상세 정보"
+                      title="상세 정보 보기"
                     >
                       상세
                     </button>
@@ -396,63 +411,35 @@ const TokenManagementPage = () => {
         <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>사용자 상세 정보: {selectedUser.username}</h3>
-              <button 
-                className="modal-close"
-                onClick={() => setSelectedUser(null)}
-              >
-                ×
-              </button>
+              <h3>{selectedUser.username} - 사용자 상세 정보</h3>
+              <button onClick={() => setSelectedUser(null)} className="modal-close-btn">&times;</button>
             </div>
             <div className="modal-body">
-              <div className="detail-section">
-                <h4>토큰 정보</h4>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>액세스 토큰 상태:</label>
-                    <span>{selectedUser.hasAccessToken ? '활성' : '비활성'}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>리프레시 토큰 상태:</label>
-                    <span>{selectedUser.hasRefreshToken ? '활성' : '비활성'}</span>
-                  </div>
-                  {selectedUser.accessToken && (
-                    <div className="detail-item full-width">
-                      <label>액세스 토큰:</label>
-                      <div className="token-full">{selectedUser.accessToken}</div>
-                    </div>
-                  )}
-                  {selectedUser.refreshToken && (
-                    <div className="detail-item full-width">
-                      <label>리프레시 토큰:</label>
-                      <div className="token-full">{selectedUser.refreshToken}</div>
-                    </div>
-                  )}
+              <p><strong>사용자명:</strong> {selectedUser.username}</p>
+              <p><strong>액세스 토큰 유무:</strong> {selectedUser.hasAccessToken ? '있음' : '없음/만료'}</p>
+              {selectedUser.accessToken && (
+                <div className="modal-token-details">
+                  <strong>액세스 토큰:</strong>
+                  <textarea readOnly value={selectedUser.accessToken} rows={3} />
                 </div>
-              </div>
-              
+              )}
+              <p><strong>리프레시 토큰 유무:</strong> {selectedUser.hasRefreshToken ? '있음' : '없음/만료'}</p>
+              {selectedUser.refreshToken && (
+                <div className="modal-token-details">
+                  <strong>리프레시 토큰:</strong>
+                  <textarea readOnly value={selectedUser.refreshToken} rows={3} />
+                </div>
+              )}
               {selectedUser.userInfo && (
-                <div className="detail-section">
-                  <h4>사용자 정보</h4>
-                  <div className="detail-grid">
-                    <div className="detail-item">
-                      <label>사용자 ID:</label>
-                      <span>{selectedUser.userInfo.id}</span>
-                    </div>
-                    <div className="detail-item">
-                      <label>이메일:</label>
-                      <span>{selectedUser.userInfo.email || 'N/A'}</span>
-                    </div>
-                    <div className="detail-item">
-                      <label>역할:</label>
-                      <span>{selectedUser.userInfo.role || 'USER'}</span>
-                    </div>
-                    <div className="detail-item">
-                      <label>생성일:</label>
-                      <span>{formatDateTime(selectedUser.userInfo.createdAt)}</span>
-                    </div>
-                  </div>
-                </div>
+                <>
+                  <p><strong>사용자 ID:</strong> {selectedUser.userInfo.id || 'N/A'}</p>
+                  <p><strong>이메일:</strong> {selectedUser.userInfo.email || 'N/A'}</p>
+                  <p><strong>역할:</strong> 
+                    <span className={getRoleBadgeClass(selectedUser.userInfo.role)}>
+                      {selectedUser.userInfo.role || 'USER'}
+                    </span>
+                  </p>
+                </>
               )}
             </div>
             <div className="modal-footer">
@@ -461,8 +448,17 @@ const TokenManagementPage = () => {
                   handleForceLogoutUser(selectedUser.username);
                   setSelectedUser(null);
                 }}
-                disabled={actionLoading}
+                disabled={actionLoading || !canPerformAction(selectedUser)}
                 className="modal-btn danger-btn"
+                title={
+                  selectedUser.username === currentUser?.username 
+                    ? "자기 자신은 강제 로그아웃 불가" 
+                    : !hasAdminAccess()
+                    ? "관리자 권한 필요"
+                    : !isTenant() && selectedUser.userInfo?.role && ['TENANT', 'ADMIN'].includes(selectedUser.userInfo.role)
+                    ? "상위 권한 사용자는 로그아웃 불가"
+                    : "강제 로그아웃"
+                }
               >
                 강제 로그아웃
               </button>
@@ -471,135 +467,22 @@ const TokenManagementPage = () => {
                   handleRefreshUserToken(selectedUser.username);
                   setSelectedUser(null);
                 }}
-                disabled={actionLoading}
+                disabled={actionLoading || !canPerformAction(selectedUser)}
                 className="modal-btn primary-btn"
+                title={
+                  selectedUser.username === currentUser?.username 
+                    ? "자기 자신 토큰 갱신 불가" 
+                    : !hasAdminAccess()
+                    ? "관리자 권한 필요"
+                    : !isTenant() && selectedUser.userInfo?.role && ['TENANT', 'ADMIN'].includes(selectedUser.userInfo.role)
+                    ? "상위 권한 사용자 토큰 갱신 불가"
+                    : "토큰 강제 갱신"
+                }
               >
-                토큰 갱신
-              </button>
-              <button
-                onClick={() => {
-                  handleClearUserCache(selectedUser.username);
-                  setSelectedUser(null);
-                }}
-                disabled={actionLoading}
-                className="modal-btn warning-btn"
-              >
-                캐시 삭제
+                토큰 강제갱신
               </button>
               <button
                 onClick={() => setSelectedUser(null)}
-                className="modal-btn secondary-btn"
-              >
-                닫기
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showRedisDebug && redisDebugInfo && (
-        <div className="modal-overlay" onClick={() => setShowRedisDebug(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Redis 디버그 정보</h3>
-              <button 
-                className="modal-close"
-                onClick={() => setShowRedisDebug(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="detail-section">
-                <h4>연결 상태</h4>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>Redis 연결:</label>
-                    <span style={{color: redisDebugInfo.connectionStatus === 'Connected' ? 'green' : 'red'}}>
-                      {redisDebugInfo.connectionStatus}
-                    </span>
-                  </div>
-                  <div className="detail-item">
-                    <label>전체 키 개수:</label>
-                    <span>{redisDebugInfo.totalKeys}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="detail-section">
-                <h4>토큰 키 통계</h4>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>액세스 토큰 키:</label>
-                    <span>{redisDebugInfo.accessTokenKeys}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>리프레시 토큰 키:</label>
-                    <span>{redisDebugInfo.refreshTokenKeys}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>사용자 캐시 키:</label>
-                    <span>{redisDebugInfo.userCacheKeys}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>블랙리스트 키:</label>
-                    <span>{redisDebugInfo.blacklistKeys}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="detail-section">
-                <h4>액세스 토큰 상세</h4>
-                <div style={{maxHeight: '200px', overflowY: 'auto'}}>
-                  {redisDebugInfo.accessTokenDetails && redisDebugInfo.accessTokenDetails.length > 0 ? (
-                    redisDebugInfo.accessTokenDetails.map((token, index) => (
-                      <div key={index} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px'}}>
-                        <div><strong>사용자:</strong> {token.username}</div>
-                        <div><strong>키:</strong> {token.key}</div>
-                        <div><strong>TTL:</strong> {token.ttl}초</div>
-                        <div><strong>값 존재:</strong> {token.hasValue ? '예' : '아니오'}</div>
-                      </div>
-                    ))
-                  ) : (
-                    <p>액세스 토큰이 없습니다.</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="detail-section">
-                <h4>리프레시 토큰 상세</h4>
-                <div style={{maxHeight: '200px', overflowY: 'auto'}}>
-                  {redisDebugInfo.refreshTokenDetails && redisDebugInfo.refreshTokenDetails.length > 0 ? (
-                    redisDebugInfo.refreshTokenDetails.map((token, index) => (
-                      <div key={index} style={{marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px'}}>
-                        <div><strong>사용자:</strong> {token.username}</div>
-                        <div><strong>키:</strong> {token.key}</div>
-                        <div><strong>TTL:</strong> {token.ttl}초</div>
-                        <div><strong>값 존재:</strong> {token.hasValue ? '예' : '아니오'}</div>
-                      </div>
-                    ))
-                  ) : (
-                    <p>리프레시 토큰이 없습니다.</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="detail-section">
-                <h4>모든 Redis 키</h4>
-                <div style={{maxHeight: '150px', overflowY: 'auto', fontSize: '12px', fontFamily: 'monospace'}}>
-                  {redisDebugInfo.allKeys && redisDebugInfo.allKeys.length > 0 ? (
-                    redisDebugInfo.allKeys.map((key, index) => (
-                      <div key={index}>{key}</div>
-                    ))
-                  ) : (
-                    <p>Redis에 키가 없습니다.</p>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                onClick={() => setShowRedisDebug(false)}
                 className="modal-btn secondary-btn"
               >
                 닫기

@@ -1,43 +1,58 @@
 #!/bin/bash
 
-echo "=========================================="
-echo "    EZPZ 프로젝트 MySQL 설정 스크립트"
-echo "=========================================="
+# 색상 정의
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
-# 실행 권한 부여
-chmod +x setup_mysql.sh
-chmod +x update_application_properties.sh
-chmod +x update_gradle.sh
+echo -e "${BLUE}EZPZ 프로젝트 자동 설정을 시작합니다...${NC}"
 
-echo ""
-echo "1. MySQL 설치 및 설정을 시작합니다..."
-./setup_mysql.sh
+# MySQL 설정
+echo -e "${YELLOW}MySQL 데이터베이스 설정 중...${NC}"
 
-echo ""
-echo "2. application.properties를 MySQL용으로 업데이트합니다..."
-./update_application_properties.sh
+# MySQL 서비스 시작 확인
+if ! systemctl is-active --quiet mysql; then
+    echo -e "${YELLOW}MySQL 서비스를 시작합니다...${NC}"
+    sudo systemctl start mysql
+fi
 
-echo ""
-echo "3. build.gradle을 MySQL용으로 업데이트합니다..."
-./update_gradle.sh
+# 데이터베이스 및 사용자 생성
+mysql -u root -p << EOF
+CREATE DATABASE IF NOT EXISTS ezpz_db;
+CREATE USER IF NOT EXISTS 'ezpz_user'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON ezpz_db.* TO 'ezpz_user'@'localhost';
+FLUSH PRIVILEGES;
+EOF
 
-echo ""
-echo "4. MariaDB 서비스를 중지합니다..."
-sudo systemctl stop mariadb
-sudo systemctl disable mariadb
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ MySQL 데이터베이스 설정 완료${NC}"
+else
+    echo -e "${RED}❌ MySQL 설정 실패${NC}"
+    exit 1
+fi
 
-echo ""
-echo "=========================================="
-echo "           설정 완료!"
-echo "=========================================="
-echo ""
-echo "다음 단계:"
-echo "1. cd apiEZPZ"
-echo "2. ./gradlew clean build"
-echo "3. ./gradlew bootRun"
-echo ""
-echo "데이터베이스 정보:"
-echo "- 데이터베이스: ezpz_db"
-echo "- 사용자: ezpz_user"
-echo "- 비밀번호: 1234"
-echo "- 포트: 3306 (MySQL 기본 포트)" 
+# Redis 도커 설정
+echo -e "${YELLOW}Redis 도커 컨테이너 설정 중...${NC}"
+
+# 스크립트 실행 권한 부여
+chmod +x scripts/*.sh
+
+# Redis 컨테이너 시작
+./scripts/start-redis.sh
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ Redis 도커 설정 완료${NC}"
+else
+    echo -e "${RED}❌ Redis 설정 실패${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}🎉 EZPZ 프로젝트 설정이 완료되었습니다!${NC}"
+echo -e "${BLUE}다음 단계:${NC}"
+echo -e "  1. 백엔드 실행: cd backend && ./gradlew bootRun"
+echo -e "  2. 프론트엔드 실행: cd frontend && npm install && npm run dev"
+echo -e "${YELLOW}Redis 관리:${NC}"
+echo -e "  - Redis 중지: ./scripts/stop-redis.sh"
+echo -e "  - Redis 시작: ./scripts/start-redis.sh" 

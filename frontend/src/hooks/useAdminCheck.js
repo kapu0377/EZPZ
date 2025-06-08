@@ -22,7 +22,7 @@ export const useAdminCheck = () => {
         console.log('useAdminCheck: /user/info 호출 중...');
         const response = await axiosInstance.get('/user/info');
         console.log('useAdminCheck: API 응답:', response.data);
-        const adminStatus = response.data.isAdmin || false;
+        const adminStatus = response.data.isAdmin || response.data.isTenant || false;
         console.log('useAdminCheck: 관리자 상태:', adminStatus);
         setIsAdmin(adminStatus);
       } catch (error) {

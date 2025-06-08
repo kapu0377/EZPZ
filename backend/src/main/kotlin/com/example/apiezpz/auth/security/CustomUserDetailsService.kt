@@ -1,6 +1,8 @@
 package com.example.apiezpz.auth.security
 
 import com.example.apiezpz.auth.repository.UserRepository
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -16,10 +18,13 @@ class CustomUserDetailsService(
         val user = userRepository.findByUsername(username)
             ?: throw UsernameNotFoundException("사용자를 찾을 수 없습니다: $username")
 
+        val authorities = mutableListOf<GrantedAuthority>()
+        authorities.add(SimpleGrantedAuthority("ROLE_" + user.role.name))
+
         return User.builder()
             .username(user.username)
             .password(user.password)
-            .authorities(emptyList())
+            .authorities(authorities)
             .build()
     }
 } 

@@ -29,11 +29,21 @@ data class User(
     var address: String = "",
 
     @Enumerated(EnumType.STRING)
-    var gender: Gender? = null
+    var gender: Gender? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    var role: Role = Role.USER // 기본값은 USER로 설정
 ) : Serializable {
 
     enum class Gender {
         MALE, FEMALE
+    }
+
+    enum class Role {
+        USER,  // 일반 사용자
+        ADMIN, // 일반 관리자 (테넌트에 의해 권한 부여)
+        TENANT // 시스템 최고 관리자 (최초 세팅 또는 특정 조건 만족 시)
     }
 
     companion object {
